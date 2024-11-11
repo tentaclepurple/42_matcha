@@ -11,6 +11,9 @@ down:
 exec:
 	docker exec -it backend bash
 
+run:
+	cd matcha_backend && python3 run.py
+
 env:
 	@if [ -f .env ]; then \
 		echo ".env file already exists. Skipping .env creation."; \
