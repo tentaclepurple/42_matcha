@@ -1,5 +1,5 @@
 from flask_pymongo import PyMongo
-from schemas import *
+from .schemas import *
 
 mongo = PyMongo()
 
@@ -29,11 +29,13 @@ def init_db():
         
 		# Indexes for profile views
         mongo.db.profile_views.create_index([("viewer_id", 1), ("viewed_id", 1)])
+        mongo.db.profile_views.create_index([("viewed_id", 1), ("viewed_at", -1)])
         mongo.db.profile_views.create_index("viewed_at")
 
         # Indexes for likes
-        mongo.db.likes.create_index([("from_user_id", 1), ("to_user_id", 1)], unique=True)
         mongo.db.likes.create_index("created_at")
+        mongo.db.likes.create_index([("from_user_id", 1), ("to_user_id", 1), ("type", 1)])
+        mongo.db.likes.create_index([("to_user_id", 1), ("type", 1)])
 
         print("Database initialized successfully")
         

@@ -127,6 +127,10 @@ USER_SCHEMA = {
                     "bsonType": "objectId"
                 },
                 "description": "array of blocked user IDs"
+            },
+            "reported": {
+                "bsonType": "bool",
+                "description": "whether the user has been reported as fake"
             }
         },
         "additionalProperties": False
@@ -163,26 +167,26 @@ PROFILE_VIEW_SCHEMA = {
 LIKE_SCHEMA = {
     "$jsonSchema": {
         "bsonType": "object",
-        "required": ["from_user_id", "to_user_id", "created_at"],
+        "required": ["from_user_id", "to_user_id", "created_at", "type"],
         "properties": {
             "_id": {
                 "bsonType": "objectId"
             },
             "from_user_id": {
                 "bsonType": "objectId",
-                "description": "ID of the user who gave the like"
+                "description": "ID of the user who gave the like/unlike"
             },
             "to_user_id": {
                 "bsonType": "objectId",
-                "description": "ID of the user who received the like"
+                "description": "ID of the user who received the like/unlike"
             },
             "created_at": {
                 "bsonType": "date",
-                "description": "When the like was given"
+                "description": "When the interaction happened"
             },
-            "active": {
-                "bsonType": "bool",
-                "description": "If the like is still active or was removed"
+            "type": {
+                "enum": ["like", "unlike"],
+                "description": "Type of interaction: like or unlike"
             }
         },
         "additionalProperties": False
