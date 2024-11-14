@@ -10,17 +10,18 @@ from werkzeug.security import (
     generate_password_hash, check_password_hash
     )
 
-
 from ..models.user import UserModel
 from ..utils.email import send_verification_email
 from ..utils.decorators import login_required
 from ..config.redis import redis_client
 
 from datetime import datetime, timedelta
+from os.path import join, abspath, dirname
 
 
 user_bp = Blueprint('user', __name__)
 
+DEFAULT = "static/default/default.png"
 
 @user_bp.route('/register', methods=['POST'])
 def register():
@@ -50,10 +51,13 @@ def register():
             
             # Profile (opcionales, inicializados a null o vacíos)
             "gender": None,
-            "sexual_preferences": [],
+            "sexual_preferences": None,
             "biography": "",
             "interests": [],
-            "photos": [],
+            "photos": [
+                {'url': DEFAULT, 'is_profile': i==0, 'uploaded_at': datetime.utcnow()}
+                for i in range(5)
+            ],
             "location": None,
             "fame_rating": 0,
             
