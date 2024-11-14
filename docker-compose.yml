@@ -57,6 +57,14 @@ services:
     networks:
       - matcha-network
 
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - "6380:6379"
+    networks:
+      - matcha-network
+
 networks:
   matcha-network:
     driver: bridge

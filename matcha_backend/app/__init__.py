@@ -1,8 +1,12 @@
 # app/__init__.py
 
 from flask import Flask
+from flask_jwt_extended import JWTManager
+from datetime import timedelta
+
 from .config.database import mongo, init_db
 from .routes.user_endpoints import user_bp
+
 from dotenv import load_dotenv
 import os
 
@@ -12,6 +16,10 @@ load_dotenv()
 
 def create_app():
     app = Flask(__name__)
+
+    app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(seconds=10)
+    
     
     app.config["MONGO_URI"] = (
     f"mongodb://{os.getenv('MONGO_ROOT_USERNAME')}:"
@@ -27,8 +35,8 @@ def create_app():
     app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 
 
-    # Inicializar MongoDB
     mongo.init_app(app)
+    jwt = JWTManager(app)
     
     # Registrar blueprints
     app.register_blueprint(user_bp, url_prefix='/api/users')

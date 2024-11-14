@@ -26,6 +26,8 @@ def init_db():
         mongo.db.users.create_index("fame_rating")
         mongo.db.users.create_index("online")    
         mongo.db.users.create_index("last_connection")
+        mongo.db.users.create_index("profile_completed")
+
         
 		# Indexes for profile views
         mongo.db.profile_views.create_index([("viewer_id", 1), ("viewed_id", 1)])

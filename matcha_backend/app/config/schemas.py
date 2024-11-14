@@ -57,13 +57,13 @@ USER_SCHEMA = {
             
             # profile
             "gender": {
-                "enum": ["male", "female", "other"],
+                "enum": ["male", "female", "other", None],
                 "description": "user gender"
             },
             "sexual_preferences": {
                 "bsonType": "array",
                 "items": {
-                    "enum": ["male", "female", "other"]
+                    "enum": ["male", "female", "bisexual", None]
                 },
                 "description": "array of gender preferences"
             },
@@ -98,7 +98,7 @@ USER_SCHEMA = {
                 }
             },
             "location": {
-                "bsonType": "object",
+                "bsonType": ["object", "null"],
                 "required": ["type", "coordinates"],
                 "properties": {
                     "type": {
@@ -122,7 +122,7 @@ USER_SCHEMA = {
             
             # Other
             "blocked_users": {
-                "bsonType": "array",
+                "bsonType": ["array", "null"],
                 "items": {
                     "bsonType": "objectId"
                 },

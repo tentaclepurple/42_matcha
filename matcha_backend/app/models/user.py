@@ -12,7 +12,6 @@ class UserModel:
         Returns: user_id
         Raises: ValueError if user already exists
         """
-        # Verificar si existe
         existing_user = mongo.db.users.find_one({
             "$or": [
                 {"username": user_data["username"]},
