@@ -23,6 +23,7 @@ def record_profile_view(user_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 @profile_view_bp.route('/profile/viewers', methods=['GET'])
 def get_profile_viewers():
     """Get list of users who viewed current user's profile"""
