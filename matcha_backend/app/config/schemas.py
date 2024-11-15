@@ -61,7 +61,7 @@ USER_SCHEMA = {
                 "description": "user gender"
             },
             "sexual_preferences": {
-                "enum": ["men", "women", "bisexual", None],
+                "enum": ["male", "female", "bisexual", None],
                 "description": "gender preferences"
             },
             "biography": {
@@ -187,5 +187,23 @@ LIKE_SCHEMA = {
             }
         },
         "additionalProperties": False
+    }
+}
+
+
+TAG_SCHEMA = {
+    "$jsonSchema": {
+        "bsonType": "object",
+        "required": ["name", "count"],
+        "properties": {
+            "name": {
+                "bsonType": "string",
+                "description": "tag name (without #)"
+            },
+            "count": {
+                "bsonType": "int",
+                "description": "number of users using this tag"
+            }
+        }
     }
 }

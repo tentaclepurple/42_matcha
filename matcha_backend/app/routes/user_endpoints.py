@@ -1,6 +1,5 @@
 # app/routes/user_endpoints.py
 
-
 import jwt
 from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import (
@@ -16,7 +15,6 @@ from ..utils.decorators import login_required
 from ..config.redis import redis_client
 
 from datetime import datetime, timedelta
-from os.path import join, abspath, dirname
 
 
 user_bp = Blueprint('user', __name__)
@@ -27,6 +25,15 @@ DEFAULT = "static/default/default.png"
 def register():
     try:
         data = request.get_json()
+
+        existing_user = UserModel.find_by_username(data['username'])
+        if existing_user:
+            return jsonify({'error': 'Username already exists'}), 409
+
+        existing_email = UserModel.find_by_email(data['email'])
+        if existing_email:
+            print("Email already exists but its ok for develpment")
+            #return jsonify({'error': 'Email already exists'}), 409
         
         # Verify required fields
         required_fields = ['username', 'email', 'password', 'first_name', 'last_name']
@@ -35,7 +42,7 @@ def register():
                 return jsonify({'error': f'Missing field: {field}'}), 400
 
         user = {
-            # Campos requeridos (definidos en required)
+            # Required
             "username": data["username"],
             "email": data["email"],
             "password": generate_password_hash(data["password"]),
@@ -44,12 +51,12 @@ def register():
             "verified": False,
             "created_at": datetime.utcnow(),
             
-            # Status (opcionales pero los inicializamos)
+            # Status
             "online": False,
             "last_connection": datetime.utcnow(),
             "profile_completed": False,
             
-            # Profile (opcionales, inicializados a null o vacíos)
+            # Profile
             "gender": None,
             "sexual_preferences": None,
             "biography": "",
@@ -61,7 +68,7 @@ def register():
             "location": None,
             "fame_rating": 0,
             
-            # Other (opcionales pero los inicializamos)
+            # Other
             "blocked_users": [],
             "reported": False
         }
