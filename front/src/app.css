@@ -1,0 +1,13 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+a {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+h1 {
+	font-size: 2rem;
+  font-weight: bold;
+}
