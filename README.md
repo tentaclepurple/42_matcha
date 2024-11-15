@@ -105,4 +105,22 @@ turns connected to true
     }
 
 
+## http://localhost:5000/api/profile/create_profile
 
+    header:
+
+    Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczMTU5Njg2MSwianRpIjoiZmJiMmIxZmYtNjc1ZC00MDZjLWJlNGItYjJkODIyYmI5MDQzIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjY3MzYxMTJhNzlkZmM2YzRkY2FjMDZkZSIsIm5iZiI6MTczMTU5Njg2MSwiY3NyZiI6ImYxMjM0NmU4LTYzMWYtNDZkZS1hYTZiLWE4N2U3OWFkNmRjZiIsImV4cCI6MTczMTYwMDQ2MX0.Gb5LkM_2_5RewOGVin5Jl7RPsHelPtl_JztQOlVGOBU
+
+    body:
+        {
+        "gender": "male",
+        "sexual_preferences": "women", 
+        "biography": "This is my user biography.",
+        "interests": ["#reading", "#travel", "#photography"],
+        "location": {
+            "type": "Point",
+            "coordinates": [-122.420679, 37.77493]
+        }
+    }
+
+fills the profile with mandatory data
