@@ -1,9 +1,9 @@
-version: '3.8'
+version: "3.8"
 
 services:
   backend:
     container_name: backend
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     ports:
@@ -65,8 +65,22 @@ services:
     networks:
       - matcha-network
 
+  frontend:
+    container_name: frontend
+    build:
+      context: ./
+      dockerfile: ./docker/front/Dockerfile
+    volumes:
+      - ./front:/front
+    ports:
+      - 5173:5173
+    networks:
+      - frontend-network
+
 networks:
   matcha-network:
+    driver: bridge
+  frontend-network:
     driver: bridge
 
 volumes:
