@@ -20,8 +20,9 @@ class UserModel:
         })
         
         if existing_user:
-            raise ValueError(f"User with username {user_data['username']} or email {user_data['email']} already exists")
-            
+            #raise ValueError(f"User with username {user_data['username']} or email {user_data['email']} already exists")
+            pass
+    
         result = mongo.db.users.insert_one(user_data)
         return str(result.inserted_id)
 
@@ -67,6 +68,36 @@ class UserModel:
         return result.modified_count > 0
 
     @staticmethod
+    def update_photo(user_id: str, index: int, photo_data: dict) -> bool:
+        """Update specific photo by index"""
+        result = mongo.db.users.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$set": {f"photos.{index}": photo_data}}
+        )
+        return result.modified_count > 0
+
+    @staticmethod
+    def set_profile_photo(user_id: str, index: int) -> bool:
+        """Set photo as profile photo"""
+        try:
+            # Primero poner todos is_profile a False
+            mongo.db.users.update_one(
+                {"_id": ObjectId(user_id)},
+                {"$set": {"photos.$[].is_profile": False}}
+            )
+            
+            # Luego marcar la foto seleccionada como perfil
+            result = mongo.db.users.update_one(
+                {"_id": ObjectId(user_id)},
+                {"$set": {f"photos.{index}.is_profile": True}}
+            )
+            
+            return result.modified_count > 0
+            
+        except Exception as e:
+            raise Exception(f"Error setting profile photo: {str(e)}")
+
+    @staticmethod
     def find_by_id(user_id: str) -> Optional[Dict[str, Any]]:
         """Find user by ID"""
         try:
@@ -110,3 +141,41 @@ class UserModel:
             {"verified": 1}
         )
         return user and user.get("verified", False)
+
+
+    @staticmethod
+    def update_interests(user_id: str, new_interests: list) -> bool:
+        try:
+            # get current interests
+            user = mongo.db.users.find_one(
+                {"_id": ObjectId(user_id)},
+                {"interests": 1}
+            )
+            current_interests = user.get('interests', [])
+
+            # Decrementar contador de tags que ya no se usan
+            for tag in current_interests:
+                if tag not in new_interests:
+                    mongo.db.tags.update_one(
+                        {"name": tag},
+                        {"$inc": {"count": -1}}
+                    )
+
+            # Incrementar/crear nuevos tags
+            for tag in new_interests:
+                mongo.db.tags.update_one(
+                    {"name": tag},
+                    {"$inc": {"count": 1}},
+                    upsert=True  # Crear si no existe
+                )
+
+            # Actualizar intereses del usuario
+            result = mongo.db.users.update_one(
+                {"_id": ObjectId(user_id)},
+                {"$set": {"interests": new_interests}}
+            )
+
+            return result.modified_count > 0
+
+        except Exception as e:
+            raise Exception(f"Error updating interests: {str(e)}")

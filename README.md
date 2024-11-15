@@ -19,7 +19,7 @@ MAIL_PORT=587
 MAIL_USERNAME=matcha42urduliz@gmail.com
 MAIL_PASSWORD=mktryfxjpafoeqcm
 
-
+<br><br>
 
 
 # ENDPOINTS
@@ -42,7 +42,7 @@ user follow the ling and verified=True
     "message": "User registered successfully. Please check your email to verify your account.",
     "user_id": "6735c74739e2fdd44cc4479b"
     }
-
+<br>
 
 ## http://localhost:5000/api/users/login
 
@@ -62,20 +62,20 @@ turns connected to true
         "user_id": "6735c74739e2fdd44cc4479b"
         }
     }
-.
+<br>
 
     400
     {
     "error": "Username and password are required"
     }
-.
+<br>
 
 
     401
     {
     "error": "Invalid credentials"
     }
-.
+<br>
     401
     {
     "error": "Email not verified"
@@ -89,21 +89,21 @@ turns connected to true
             'Content-Type': 'application/json'
         }
     })
-
+<br>
 
  ## http://localhost:5000/api/users/logout
     
     header:
 
     Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczMTU5Njg2MSwianRpIjoiZmJiMmIxZmYtNjc1ZC00MDZjLWJlNGItYjJkODIyYmI5MDQzIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjY3MzYxMTJhNzlkZmM2YzRkY2FjMDZkZSIsIm5iZiI6MTczMTU5Njg2MSwiY3NyZiI6ImYxMjM0NmU4LTYzMWYtNDZkZS1hYTZiLWE4N2U3OWFkNmRjZiIsImV4cCI6MTczMTYwMDQ2MX0.Gb5LkM_2_5RewOGVin5Jl7RPsHelPtl_JztQOlVGOBU
-.
+<br>
 
     returns:
 
     {
     "message": "Logged out successfully"
     }
-
+<br>
 
 ## http://localhost:5000/api/profile/create_profile
 
@@ -124,3 +124,9 @@ turns connected to true
     }
 
 fills the profile with mandatory data
+<br>
+
+
+photos
+
+tags
