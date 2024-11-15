@@ -7,14 +7,25 @@ mongo = PyMongo()
 def init_db():
     """Create the database collections with validation and indexes."""
     try:
-        # Create collections with validation
-        mongo.db.create_collection("users", validator=USER_SCHEMA)
-        mongo.db.create_collection("profile_views", validator=PROFILE_VIEW_SCHEMA)
-        mongo.db.create_collection("likes", validator=LIKE_SCHEMA)
+        collections_to_create = {
+            "users": USER_SCHEMA,
+            "profile_views": PROFILE_VIEW_SCHEMA,
+            "likes": LIKE_SCHEMA,
+            "tags": TAG_SCHEMA
+        }
+
+        # Create COLLECTIONS if they don't exist
+        existing_collections = mongo.db.list_collection_names()
         
-        # Unique indexes
+        for name, schema in collections_to_create.items():
+            if name not in existing_collections:
+                print(f"Creating collection: {name}")
+                mongo.db.create_collection(name, validator=schema)
+        
+        # INDEXES
+        # Unique indexes for users
         mongo.db.users.create_index("username", unique=True)
-        mongo.db.users.create_index("email", unique=True)
+        #mongo.db.users.create_index("email", unique=True)
         
         # Geospatial index for location
         mongo.db.users.create_index([("location", "2dsphere")])
@@ -38,6 +49,9 @@ def init_db():
         mongo.db.likes.create_index("created_at")
         mongo.db.likes.create_index([("from_user_id", 1), ("to_user_id", 1), ("type", 1)])
         mongo.db.likes.create_index([("to_user_id", 1), ("type", 1)])
+
+        # Indexes for tags
+        mongo.db.tags.create_index("name", unique=True)
 
         print("Database initialized successfully")
         
