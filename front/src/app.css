@@ -9,5 +9,12 @@ a {
 
 h1 {
 	font-size: 2rem;
-  font-weight: bold;
+	font-weight: bold;
+}
+
+form input {
+	display: block;
+	outline: 2px green solid;
+	padding: 4px 12px;
+	border-radius: 4px;
 }
