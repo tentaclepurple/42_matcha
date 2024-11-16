@@ -11,8 +11,6 @@
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		console.log('submitting form');
-
 		const form = e.target;
 		const formData = new FormData(form);
 
@@ -28,6 +26,9 @@
 			switch (response.status) {
 				case 409:
 					error = 'User and/or email already exists';
+					return;
+				default:
+					error = 'An error occurred. Please try again later.';
 					return;
 			}
 		}
@@ -45,25 +46,25 @@
 	<Form onSubmit={handleSubmit}>
 		<label>
 			Username
-			<input type="text" id="username" name="username" value="testuser" />
+			<input type="text" id="username" name="username" value="testuser" required minlength="5" maxlength="12" />
 		</label>
 
 		<label>
 			First name
-			<input type="text" id="first_name" name="first_name" value="Test" />
+			<input type="text" id="first_name" name="first_name" value="Test" required maxlength="30" />
 		</label>
 		<label>
 			Last name
-			<input type="text" id="last_name" name="last_name" value="User" />
+			<input type="text" id="last_name" name="last_name" value="User" required maxlength="30" />
 		</label>
 
 		<label>
 			Email
-			<input type="email" id="email" name="email" value="ibanmontero@gmail.com" />
+			<input type="email" id="email" name="email" value="ibanmontero@gmail.com" required />
 		</label>
 		<label>
 			Password
-			<PasswordInput id="password" name="password" value="test123" />
+			<PasswordInput id="password" name="password" value="test123" required />
 		</label>
 
 		<div>
