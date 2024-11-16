@@ -4,7 +4,7 @@
 USER_SCHEMA = {
     "$jsonSchema": {
         "bsonType": "object",
-        "required": ["username", "email", "password", "first_name", "last_name", "verified", "created_at"],
+        "required": ["username", "email", "password", "first_name", "last_name", "age", "verified", "created_at"],
         "properties": {
             "_id": {
                 "bsonType": "objectId",
@@ -32,6 +32,11 @@ USER_SCHEMA = {
                 "bsonType": "string",
                 "description": "must be a string and is required"
             },
+			"age": {
+				"bsonType": "int",
+				"minimum": 18,
+				"description": "must be an integer >= 18 and is required"
+			},
             "verified": {
                 "bsonType": "bool",
                 "description": "email verification status"

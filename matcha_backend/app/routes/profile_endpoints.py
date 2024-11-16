@@ -47,15 +47,15 @@ def update_profile():
               len(data['location']['coordinates']) != 2:
                return jsonify({'error': 'Invalid location format'}), 400
 
-       # Manejar intereses separadamente
+       # Manage interests
        interests = data.pop('interests')
        if not all(isinstance(tag, str) for tag in interests):
            return jsonify({'error': 'Invalid tag format'}), 400
        
-       # Actualizar intereses
+       # update interests
        UserModel.update_interests(current_user_id, interests)
 
-       # Actualizar resto del perfil
+       # update profile
        result = UserModel.update_profile(current_user_id, data)
 
        return jsonify({

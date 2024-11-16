@@ -27,3 +27,25 @@ def send_verification_email(email: str, token: str):
     except Exception as e:
         print(f"Error sending email: {e}")
         raise
+
+
+def send_reset_password_email(email: str, token: str):
+    """Send password reset email"""
+    reset_url = f"http://localhost:5000/reset_password/{token}"
+    
+    msg = MIMEText(f'Click here to reset your password: {reset_url}')
+    msg['Subject'] = 'Reset your password'
+    msg['From'] = current_app.config['MAIL_USERNAME']
+    msg['To'] = email
+
+    try:
+        with smtplib.SMTP(current_app.config['MAIL_SERVER'], current_app.config['MAIL_PORT']) as server:
+            server.starttls()
+            server.login(
+                current_app.config['MAIL_USERNAME'],
+                current_app.config['MAIL_PASSWORD']
+            )
+            server.send_message(msg)
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        raise
