@@ -1,9 +1,10 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
 	import Form from '$lib/components/Form.svelte';
+	import PasswordInput from '$lib/components/PasswordInput.svelte';
+	import { SERVER_BASE_URL } from '$lib/constants/api';
 
 	import { goto } from '$app/navigation';
-	import PasswordInput from '$lib/components/PasswordInput.svelte';
 
 	let error: string = '';
 
@@ -15,7 +16,7 @@
 		const form = e.target;
 		const formData = new FormData(form);
 
-		const response = await fetch('http://localhost:5000/api/users/register', {
+		const response = await fetch(`${SERVER_BASE_URL}/users/register`, {
 			method: 'POST',
 			body: JSON.stringify(Object.fromEntries(formData)),
 			headers: {
