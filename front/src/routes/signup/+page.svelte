@@ -7,8 +7,13 @@
 	import { goto } from '$app/navigation';
 
 	let error: string = '';
+	let isLoading: boolean = false;
 
 	const handleSubmit = async (e) => {
+		if (isLoading) return;
+
+		isLoading = true;
+
 		e.preventDefault();
 
 		const form = e.target;
@@ -26,11 +31,14 @@
 			switch (response.status) {
 				case 409:
 					error = 'User and/or email already exists';
-					return;
+					break;
 				default:
 					error = 'An error occurred. Please try again later.';
-					return;
+					break;
 			}
+
+			isLoading = false;
+			return;
 		}
 
 		goto('/signup/verify');
@@ -46,7 +54,15 @@
 	<Form onSubmit={handleSubmit}>
 		<label>
 			Username
-			<input type="text" id="username" name="username" value="testuser" required minlength="5" maxlength="12" />
+			<input
+				type="text"
+				id="username"
+				name="username"
+				value="testuser"
+				required
+				minlength="5"
+				maxlength="12"
+			/>
 		</label>
 
 		<label>
@@ -67,9 +83,9 @@
 			<PasswordInput id="password" name="password" value="test123" required />
 		</label>
 
-		<div>
+		<div class="flex items-baseline justify-center gap-2">
 			<Button type="button" level="secondary" onclick={handleCancel}>Cancel</Button>
-			<Button type="submit" level="primary">Sign up</Button>
+			<Button type="submit" level="primary" {isLoading}>Sign up</Button>
 		</div>
 	</Form>
 	{#if error}
