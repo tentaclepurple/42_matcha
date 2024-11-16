@@ -26,7 +26,7 @@
 		if (!response.ok) {
 			switch (response.status) {
 				case 409:
-					error = 'User already exists';
+					error = 'User and/or email already exists';
 					break;
 			}
 		}
