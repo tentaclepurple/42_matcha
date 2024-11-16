@@ -20,6 +20,7 @@ class UserModel:
         })
         
         if existing_user:
+            #DO NOT FORGET
             #raise ValueError(f"User with username {user_data['username']} or email {user_data['email']} already exists")
             pass
     
@@ -80,13 +81,13 @@ class UserModel:
     def set_profile_photo(user_id: str, index: int) -> bool:
         """Set photo as profile photo"""
         try:
-            # Primero poner todos is_profile a False
+            # first unmark all photos as profile
             mongo.db.users.update_one(
                 {"_id": ObjectId(user_id)},
                 {"$set": {"photos.$[].is_profile": False}}
             )
             
-            # Luego marcar la foto seleccionada como perfil
+            # then mark selected photo as profile
             result = mongo.db.users.update_one(
                 {"_id": ObjectId(user_id)},
                 {"$set": {f"photos.{index}.is_profile": True}}
@@ -153,7 +154,7 @@ class UserModel:
             )
             current_interests = user.get('interests', [])
 
-            # Decrementar contador de tags que ya no se usan
+            # decrement count of tags no longer in interests
             for tag in current_interests:
                 if tag not in new_interests:
                     mongo.db.tags.update_one(
@@ -161,15 +162,15 @@ class UserModel:
                         {"$inc": {"count": -1}}
                     )
 
-            # Incrementar/crear nuevos tags
+            # increment	count of new interests
             for tag in new_interests:
                 mongo.db.tags.update_one(
                     {"name": tag},
                     {"$inc": {"count": 1}},
-                    upsert=True  # Crear si no existe
+                    upsert=True  # create if not exists
                 )
 
-            # Actualizar intereses del usuario
+            # update user interests
             result = mongo.db.users.update_one(
                 {"_id": ObjectId(user_id)},
                 {"$set": {"interests": new_interests}}
@@ -179,3 +180,13 @@ class UserModel:
 
         except Exception as e:
             raise Exception(f"Error updating interests: {str(e)}")
+
+
+    @staticmethod
+    def update_password(user_id: str, new_password: str) -> bool:
+        """Update user password"""
+        result = mongo.db.users.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$set": {"password": new_password}}
+        )
+        return result.modified_count > 0

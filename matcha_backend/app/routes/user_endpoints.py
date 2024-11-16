@@ -3,18 +3,18 @@
 import jwt
 from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import (
-    create_access_token, jwt_required, get_jwt_identity, get_jwt
-    )
+    create_access_token, jwt_required, get_jwt_identity, get_jwt)
 from werkzeug.security import (
-    generate_password_hash, check_password_hash
-    )
+    generate_password_hash, check_password_hash)
 
 from ..models.user import UserModel
-from ..utils.email import send_verification_email
-from ..utils.decorators import login_required
+from ..utils.email import send_verification_email, send_reset_password_email
+from ..utils.services import get_location_by_ip, get_public_ip
+from ..utils.validators import validate_username, validate_password
 from ..config.redis import redis_client
 
 from datetime import datetime, timedelta
+import requests
 
 
 user_bp = Blueprint('user', __name__)
@@ -26,20 +26,45 @@ def register():
     try:
         data = request.get_json()
 
+        # Validate username
+        is_valid, error_msg = validate_username(data.get('username', ''))
+        if not is_valid:
+            return jsonify({'error': error_msg}), 400
+            
+        # Validate password
+        is_valid, error_msg = validate_password(data.get('password', ''))
+        if not is_valid:
+            return jsonify({'error': error_msg}), 400
+
         existing_user = UserModel.find_by_username(data['username'])
         if existing_user:
             return jsonify({'error': 'Username already exists'}), 409
 
         existing_email = UserModel.find_by_email(data['email'])
         if existing_email:
-            print("Email already exists but its ok for develpment")
-            #return jsonify({'error': 'Email already exists'}), 409
+            print("Email already exists")
+            return jsonify({'error': 'Email already exists'}), 409 # Comment this line for DEVELOPMENT
         
         # Verify required fields
-        required_fields = ['username', 'email', 'password', 'first_name', 'last_name']
+        required_fields = [
+            'username', 'email', 'password', 'first_name', 'last_name', 'age'
+            ]
         for field in required_fields:
             if not data.get(field):
                 return jsonify({'error': f'Missing field: {field}'}), 400
+        try:
+            age = int(data['age'])
+            if age < 18:
+                return jsonify({'error': 'Must be 18 or older'}), 400
+        except ValueError:
+            return jsonify({'error': 'Age must be a number'}), 400
+        
+        location = data.get('location')
+        # if location doesn't come from the frontend, get it from the IP
+        if not location:
+            # If no location provided, get it from IP
+            publicip = get_public_ip()
+            location = get_location_by_ip(publicip)
 
         user = {
             # Required
@@ -48,6 +73,7 @@ def register():
             "password": generate_password_hash(data["password"]),
             "first_name": data["first_name"],
             "last_name": data["last_name"],
+            "age": age,
             "verified": False,
             "created_at": datetime.utcnow(),
             
@@ -65,7 +91,7 @@ def register():
                 {'url': DEFAULT, 'is_profile': i==0, 'uploaded_at': datetime.utcnow()}
                 for i in range(5)
             ],
-            "location": None,
+            "location": location,
             "fame_rating": 0,
             
             # Other
@@ -130,11 +156,11 @@ def login():
         data = request.get_json()
         
         # Check required fields
-        if not data.get('username') or not data.get('password'):
-            return jsonify({'error': 'Username and password are required'}), 400
+        if not data.get('email') or not data.get('password'):
+            return jsonify({'error': 'Email and password are required'}), 400
             
         # Find user and check credentials
-        user = UserModel.find_by_username(data['username'])
+        user = UserModel.find_by_email(data['email'])
         if not user or not check_password_hash(user['password'], data['password']):
             return jsonify({'error': 'Invalid credentials'}), 401
             
@@ -190,3 +216,79 @@ def logout():
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+
+@user_bp.route('/forgot_password', methods=['POST'])
+def forgot_password():
+   try:
+       data = request.get_json()
+       email = data.get('email')
+       
+       if not email:
+           return jsonify({'error': 'Email is required'}), 400
+           
+       user = UserModel.find_by_email(email)
+       print("User: ", user)
+       if not user:
+           # for security reasons, we don't want to reveal if the email is registered
+           return jsonify({
+               'message': 'If your email is registered, you will receive a password reset link'
+           }), 200
+           
+       # Generate temporary token
+       reset_token = jwt.encode(
+           {
+               'user_id': str(user['_id']),
+               'exp': datetime.utcnow() + timedelta(hours=1)  # token expires in 1 hour
+           },
+           current_app.config['SECRET_KEY'],
+           algorithm='HS256'
+       )
+       
+       # send reset password email
+       send_reset_password_email(email, reset_token)
+       
+       return jsonify({
+           'message': 'If your email is registered, you will receive a password reset link'
+       }), 200
+       
+   except Exception as e:
+       return jsonify({'error': str(e)}), 500
+
+
+@user_bp.route('/reset_password/<token>', methods=['POST'])
+def reset_password(token):
+   try:
+       data = request.get_json()
+       new_password = data.get('password')
+
+       if not new_password:
+           return jsonify({'error': 'New password is required'}), 400
+       
+       # Validate new password
+       is_valid, error_msg = validate_password(new_password)
+       if not is_valid:
+            return jsonify({'error': error_msg}), 400
+          
+       # Verify token
+       try:
+           payload = jwt.decode(
+               token,
+               current_app.config['SECRET_KEY'],
+               algorithms=['HS256']
+           )
+       except jwt.ExpiredSignatureError:
+           return jsonify({'error': 'Reset link has expired'}), 400
+       except jwt.InvalidTokenError:
+           return jsonify({'error': 'Invalid reset link'}), 400
+           
+       # update password
+       user_id = payload['user_id']
+       hashed_password = generate_password_hash(new_password)
+       
+       UserModel.update_password(user_id, hashed_password)
+       
+       return jsonify({'message': 'Password updated successfully'}), 200
+       
+   except Exception as e:
+       return jsonify({'error': str(e)}), 500
