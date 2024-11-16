@@ -3,6 +3,7 @@
 	import Form from '$lib/components/Form.svelte';
 
 	import { goto } from '$app/navigation';
+	import PasswordInput from '$lib/components/PasswordInput.svelte';
 
 	let error: string = '';
 
@@ -59,7 +60,7 @@
 		</label>
 		<label>
 			Password
-			<input type="password" id="password" name="password" value="test123" />
+			<PasswordInput id="password" name="password" value="test123" />
 		</label>
 
 		<div>
@@ -68,6 +69,6 @@
 		</div>
 	</Form>
 	{#if error}
-		<p class="text-red-500 mt-4">{error}</p>
+		<p class="mt-4 text-red-500">{error}</p>
 	{/if}
 </div>
