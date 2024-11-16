@@ -2,6 +2,7 @@
 	import Button from '$lib/components/Button.svelte';
 	import Form from '$lib/components/Form.svelte';
 	import PasswordInput from '$lib/components/PasswordInput.svelte';
+	import { SERVER_BASE_URL } from '$lib/constants/api';
 
 	import { goto } from '$app/navigation';
 
@@ -12,7 +13,7 @@
 
 		const formData = new FormData(e.target);
 
-		const res = await fetch('http://localhost:5000/api/users/login', {
+		const res = await fetch(`${SERVER_BASE_URL}/users/login`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
