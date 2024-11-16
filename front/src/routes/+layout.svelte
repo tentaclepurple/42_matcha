@@ -12,7 +12,7 @@
 			</nav>
 
 			<div>
-				<a href="/signin">Sign in</a>
+				<a href="/login">Log in</a>
 			</div>
 		</header>
 	</div>
