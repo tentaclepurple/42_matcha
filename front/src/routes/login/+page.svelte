@@ -7,8 +7,13 @@
 	import { goto } from '$app/navigation';
 
 	let error: string = '';
+	let isLoading: boolean = false;
 
 	const handleSubmit = async (e) => {
+		if (isLoading) return;
+
+		isLoading = true;
+
 		e.preventDefault();
 
 		const formData = new FormData(e.target);
@@ -25,8 +30,14 @@
 			switch (res.status) {
 				case 401:
 					error = 'Your email address is not verified';
-					return;
+					break;
+				default:
+					error = 'An error occurred. Please try again later.';
+					break;
 			}
+
+			isLoading = false;
+			return;
 		}
 
 		const { access_token, user } = await res.json();
@@ -49,18 +60,18 @@
 	<div>
 		<Form onSubmit={handleSubmit}>
 			<label>
-				Username
-				<input type="text" id="username" name="username" value="testuser" />
+				E-mail
+				<input type="email" id="email" name="email" value="ibanmontero@gmail.com" required />
 			</label>
 
 			<label>
 				Password
-				<PasswordInput id="password" name="password" value="test123" />
+				<PasswordInput id="password" name="password" value="test123" required />
 			</label>
 
-			<div>
+			<div class="flex items-baseline justify-center gap-2">
 				<Button type="button" level="secondary" onclick={handleCancel}>Cancel</Button>
-				<Button type="submit">Log in</Button>
+				<Button type="submit" {isLoading}>Log in</Button>
 			</div>
 		</Form>
 		{#if error}
