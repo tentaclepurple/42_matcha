@@ -15,6 +15,6 @@
 			: 'bg-transparent hover:bg-green-500 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded';
 </script>
 
-<button {type} {...restProps} class={styles}>
+<button {type} {...restProps} class={`${styles} ${restProps.class}`}>
 	{@render children()}
 </button>

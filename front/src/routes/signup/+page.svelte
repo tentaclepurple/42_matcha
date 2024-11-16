@@ -27,9 +27,11 @@
 			switch (response.status) {
 				case 409:
 					error = 'User and/or email already exists';
-					break;
+					return;
 			}
 		}
+
+		goto('/signup/verify');
 	};
 
 	const handleCancel = () => {
