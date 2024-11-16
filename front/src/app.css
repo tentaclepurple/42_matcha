@@ -1,0 +1,24 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+a {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+h1 {
+	font-size: 2rem;
+	font-weight: bold;
+}
+
+form input {
+	display: block;
+	outline: 2px green solid;
+	padding: 4px 12px;
+	border-radius: 4px;
+
+	&:invalid {
+		outline: 2px red solid;
+	}
+}
