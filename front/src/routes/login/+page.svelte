@@ -25,13 +25,17 @@
 			switch (res.status) {
 				case 401:
 					error = 'Your email address is not verified';
-					break;
+					return;
 			}
 		}
 
-		const data = await res.json();
+		const { access_token, user } = await res.json();
 
-		console.log(data);
+		localStorage.setItem('access_token', access_token);
+
+		const { profile_completed: profileCompleted } = user;
+
+		return profileCompleted ? goto('/dashboard') : goto('/profile');
 	};
 
 	const handleCancel = () => {
