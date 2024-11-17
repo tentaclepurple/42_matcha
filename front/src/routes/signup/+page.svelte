@@ -13,11 +13,16 @@
 		if (isLoading) return;
 
 		isLoading = true;
-
 		e.preventDefault();
 
 		const form = e.target;
 		const formData = new FormData(form);
+
+		if (formData.get('password') !== formData.get('confirm')) {
+			error = 'Passwords do not match';
+			isLoading = false;
+			return;
+		}
 
 		const response = await fetch(`${SERVER_BASE_URL}/users/register`, {
 			method: 'POST',
@@ -58,7 +63,7 @@
 				type="text"
 				id="username"
 				name="username"
-				value="testuser"
+				value="ngasco"
 				required
 				minlength="5"
 				maxlength="12"
@@ -67,28 +72,41 @@
 
 		<label>
 			First name
-			<input type="text" id="first_name" name="first_name" value="Test" required maxlength="30" />
+			<input
+				type="text"
+				id="first_name"
+				name="first_name"
+				value="Nicolas"
+				required
+				maxlength="30"
+			/>
 		</label>
 		<label>
 			Last name
-			<input type="text" id="last_name" name="last_name" value="User" required maxlength="30" />
+			<input type="text" id="last_name" name="last_name" value="Gasco" required maxlength="30" />
 		</label>
 
 		<label>
 			Email
-			<input type="email" id="email" name="email" value="ibanmontero@gmail.com" required />
+			<input type="email" id="email" name="email" value="chiamatemi.nico@gmail.com" required />
 		</label>
+
 		<label>
 			Password
-			<PasswordInput id="password" name="password" value="test123" required />
+			<PasswordInput id="password" name="password" required />
 		</label>
+		<label>
+			Confirm password
+			<PasswordInput id="confirm" name="confirm" required />
+		</label>
+
+		{#if error}
+			<p class="text-red-500">{error}</p>
+		{/if}
 
 		<div class="flex items-baseline justify-center gap-2">
 			<Button type="button" level="secondary" onclick={handleCancel}>Cancel</Button>
 			<Button type="submit" level="primary" {isLoading}>Sign up</Button>
 		</div>
 	</Form>
-	{#if error}
-		<p class="mt-4 text-red-500">{error}</p>
-	{/if}
 </div>
