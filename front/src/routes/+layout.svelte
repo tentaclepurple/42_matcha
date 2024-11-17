@@ -7,7 +7,20 @@
 	let { children } = $props();
 
 	const handleLogOut = () => {
-		localStorage.removeItem('access_token');
+		const accessToken = localStorage.getItem('access_token');
+
+		if (accessToken) {
+			const res = fetch(`http://localhost:5000/api/users/logout`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('access_token')}`
+				}
+			});
+
+			localStorage.removeItem('access_token');
+		}
+
 		logout();
 		goto('/');
 	};
