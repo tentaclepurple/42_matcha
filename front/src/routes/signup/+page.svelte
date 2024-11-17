@@ -57,48 +57,50 @@
 <h1>Create a new account</h1>
 <div>
 	<Form onSubmit={handleSubmit}>
-		<label>
-			Username
-			<input
-				type="text"
-				id="username"
-				name="username"
-				value="ngasco"
-				required
-				minlength="5"
-				maxlength="12"
-			/>
-		</label>
+		<fieldset disabled={isLoading}>
+			<label>
+				Username
+				<input
+					type="text"
+					id="username"
+					name="username"
+					value="ngasco"
+					required
+					minlength="5"
+					maxlength="12"
+				/>
+			</label>
 
-		<label>
-			First name
-			<input
-				type="text"
-				id="first_name"
-				name="first_name"
-				value="Nicolas"
-				required
-				maxlength="30"
-			/>
-		</label>
-		<label>
-			Last name
-			<input type="text" id="last_name" name="last_name" value="Gasco" required maxlength="30" />
-		</label>
+			<label>
+				First name
+				<input
+					type="text"
+					id="first_name"
+					name="first_name"
+					value="Nicolas"
+					required
+					maxlength="30"
+				/>
+			</label>
+			<label>
+				Last name
+				<input type="text" id="last_name" name="last_name" value="Gasco" required maxlength="30" />
+			</label>
 
-		<label>
-			Email
-			<input type="email" id="email" name="email" value="chiamatemi.nico@gmail.com" required />
-		</label>
+			<label>
+				Email
+				<input type="email" id="email" name="email" value="chiamatemi.nico@gmail.com" required />
+			</label>
 
-		<label>
-			Password
-			<PasswordInput id="password" name="password" value="ciao" required />
-		</label>
-		<label>
-			Confirm password
-			<PasswordInput id="confirm" name="confirm" value="ciao" required />
-		</label>
+			<label>
+				Password
+				<PasswordInput id="password" name="password" value="ciao" required />
+			</label>
+			<label>
+				Confirm password
+				<PasswordInput id="confirm" name="confirm" value="ciao" required />
+			</label>
+		</fieldset>
 
 		{#if error}
 			<p class="text-red-500">{error}</p>
