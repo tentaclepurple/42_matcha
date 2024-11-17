@@ -22,7 +22,7 @@
 </script>
 
 <div class="flex min-h-screen flex-col justify-between">
-	<div class="flex items-center justify-center bg-lime-300 p-4">
+	<div class="flex items-center justify-center bg-teal-300 p-4">
 		<header class="flex w-full max-w-screen-2xl items-baseline justify-between">
 			<nav class="flex items-baseline justify-center gap-2">
 				<a href="/">Home</a>
