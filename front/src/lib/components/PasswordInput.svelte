@@ -2,7 +2,6 @@
 	export let id: string;
 	export let name: string;
 	export let required: boolean;
-	export let value: string;
 
 	let showPassword = false;
 
@@ -12,7 +11,7 @@
 </script>
 
 <div class="flex items-baseline justify-center gap-4">
-	<input type={showPassword ? 'text' : 'password'} {id} {name} {value} {required} />
+	<input type={showPassword ? 'text' : 'password'} {id} {name} {required} />
 	<button
 		type="button"
 		onclick={handleShowPassword}
