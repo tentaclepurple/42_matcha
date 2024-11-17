@@ -29,7 +29,7 @@
 		if (!res.ok) {
 			switch (res.status) {
 				case 401:
-					error = 'Your email address is not verified';
+					error = 'Invalid e-mail or password.';
 					break;
 				default:
 					error = 'An error occurred. Please try again later.';
@@ -61,12 +61,12 @@
 		<Form onSubmit={handleSubmit}>
 			<label>
 				E-mail
-				<input type="email" id="email" name="email" value="chiamamtemi.nico@gmail.com" required />
+				<input type="email" id="email" name="email" value="chiamatemi.nico@gmail.com" required />
 			</label>
 
 			<label>
 				Password
-				<PasswordInput id="password" name="password" value="test123" required />
+				<PasswordInput id="password" name="password" value="Ciaociao1!" required />
 			</label>
 
 			<div class="flex items-baseline justify-center gap-2">
