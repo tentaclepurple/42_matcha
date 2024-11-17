@@ -7,7 +7,20 @@
 	let { children } = $props();
 
 	const handleLogOut = () => {
-		localStorage.removeItem('access_token');
+		const accessToken = localStorage.getItem('access_token');
+
+		if (accessToken) {
+			const res = fetch(`http://localhost:5000/api/users/logout`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('access_token')}`
+				}
+			});
+
+			localStorage.removeItem('access_token');
+		}
+
 		logout();
 		goto('/');
 	};
@@ -22,7 +35,7 @@
 </script>
 
 <div class="flex min-h-screen flex-col justify-between">
-	<div class="flex items-center justify-center bg-lime-300 p-4">
+	<div class="flex items-center justify-center bg-teal-300 p-4">
 		<header class="flex w-full max-w-screen-2xl items-baseline justify-between">
 			<nav class="flex items-baseline justify-center gap-2">
 				<a href="/">Home</a>
