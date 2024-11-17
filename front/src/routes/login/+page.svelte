@@ -61,7 +61,7 @@
 		<Form onSubmit={handleSubmit}>
 			<label>
 				E-mail
-				<input type="email" id="email" name="email" value="ibanmontero@gmail.com" required />
+				<input type="email" id="email" name="email" value="chiamamtemi.nico@gmail.com" required />
 			</label>
 
 			<label>
