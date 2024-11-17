@@ -15,8 +15,8 @@
 
 	let styles =
 		level === 'primary'
-			? 'rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700'
-			: 'bg-transparent hover:bg-green-500 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded';
+			? 'rounded bg-teal-500 px-4 py-2 font-bold text-white hover:bg-teal-700'
+			: 'bg-transparent hover:bg-teal-500 text-teal-700 font-semibold hover:text-white py-2 px-4 border border-teal-500 hover:border-transparent rounded';
 </script>
 
 <button {type} {...restProps} class={`${styles} ${restProps.class} flex justify-center items-center gap-2`}>
