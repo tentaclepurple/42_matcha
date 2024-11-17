@@ -1,0 +1,9 @@
+<script lang="ts">
+	export let children: () => any;
+</script>
+
+<div class="flex flex-1 justify-center p-4">
+	<main class="w-full max-w-screen-2xl flex-1">
+		{@render children()}
+	</main>
+</div>

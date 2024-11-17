@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import PageWrapper from '$lib/components/PageWrapper.svelte';
 	const error = $page.url.searchParams.get('error');
 
 	let title = '';
@@ -17,7 +18,7 @@
 	}
 </script>
 
-<div class="error-page">
+<PageWrapper>
 	<h1>{title}</h1>
 	<p>{message}</p>
-</div>
+</PageWrapper>
