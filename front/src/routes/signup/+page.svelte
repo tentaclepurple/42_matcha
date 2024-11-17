@@ -93,11 +93,11 @@
 
 		<label>
 			Password
-			<PasswordInput id="password" name="password" required />
+			<PasswordInput id="password" name="password" value="ciao" required />
 		</label>
 		<label>
 			Confirm password
-			<PasswordInput id="confirm" name="confirm" required />
+			<PasswordInput id="confirm" name="confirm" value="ciao" required />
 		</label>
 
 		{#if error}

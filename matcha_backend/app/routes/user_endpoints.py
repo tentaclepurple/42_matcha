@@ -113,7 +113,7 @@ def register():
         )
         
         # send verification email
-        send_verification_email(data["email"], token)
+        send_verification_email(data["email"], token, user['first_name'])
         
         return jsonify({
             "message": "User registered successfully. "
