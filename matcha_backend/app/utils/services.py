@@ -6,7 +6,6 @@ def get_location_by_ip(ip_address):
     print("IP Address en getlocation: ", ip_address)
     try:
         response = requests.get(f'http://ip-api.com/json/{ip_address}')
-        print("Response:" , response)
         data = response.json()
         print("Data: ", data)
         if data['status'] == 'success':

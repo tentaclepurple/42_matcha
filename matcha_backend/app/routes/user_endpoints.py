@@ -43,7 +43,7 @@ def register():
         existing_email = UserModel.find_by_email(data['email'])
         if existing_email:
             print("Email already exists")
-            return jsonify({'error': 'Email already exists'}), 409 # Comment this line for DEVELOPMENT
+            #return jsonify({'error': 'Email already exists'}), 409 # Comment this line for DEVELOPMENT
         
         # Verify required fields
         required_fields = [
