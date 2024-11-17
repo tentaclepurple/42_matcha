@@ -1,6 +1,24 @@
 <script lang="ts">
+	import { isAuthenticated, login, logout } from '$lib/stores/auth';
+	import { onMount } from 'svelte';
+
 	import '../app.css';
+	import { goto } from '$app/navigation';
 	let { children } = $props();
+
+	const handleLogOut = () => {
+		localStorage.removeItem('access_token');
+		logout();
+		goto('/');
+	};
+
+	onMount(() => {
+		const accessToken = localStorage.getItem('access_token');
+
+		if (accessToken) {
+			login();
+		}
+	});
 </script>
 
 <div class="flex min-h-screen flex-col justify-between">
@@ -11,23 +29,15 @@
 			</nav>
 
 			<div>
-				<a href="/login">Log in</a>
+				{#if $isAuthenticated}
+					<a href="/profile">Profile</a>
+					<button type="button" onclick={handleLogOut}>Log out</button>
+				{:else}
+					<a href="/login">Sign in</a>
+				{/if}
 			</div>
 		</header>
 	</div>
 
-	<div class="flex flex-1 justify-center p-4">
-		<main class="w-full max-w-screen-2xl flex-1">
-			{@render children()}
-		</main>
-	</div>
-
-	<div class="flex items-center justify-center bg-lime-500 p-4">
-		<footer class="w-full max-w-screen-2xl">
-			<nav class="flex items-baseline justify-between gap-2">
-				<a href="/about">About</a>
-				This is the footer. Here we can mention something about ourselves.
-			</nav>
-		</footer>
-	</div>
+	{@render children()}
 </div>
