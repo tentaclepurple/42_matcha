@@ -81,3 +81,39 @@ def set_profile_photo(index):
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@profile_bp.route('/my_profile_info', methods=['GET'])
+@jwt_required()
+def my_profile_info():
+   try:
+       current_user_id = get_jwt_identity()
+       user = UserModel.find_by_id(current_user_id)
+       
+       if not user:
+           return jsonify({'error': 'User not found'}), 404
+           
+       profile_info = {
+           # Profile
+           'gender': user.get('gender'),
+           'sexual_preferences': user.get('sexual_preferences'),
+           'biography': user.get('biography'),
+           'interests': user.get('interests', []),
+           'photos': user.get('photos', []),
+           'location': user.get('location'),
+           'fame_rating': user.get('fame_rating'),
+           
+           # Other
+           'blocked_users': user.get('blocked_users', []),
+           'reported': user.get('reported', False),
+           
+           # Status
+           'online': user.get('online'),
+           'last_connection': user.get('last_connection'),
+           'profile_completed': user.get('profile_completed'),
+       }
+       
+       return jsonify(profile_info), 200
+       
+   except Exception as e:
+       return jsonify({'error': str(e)}), 500
