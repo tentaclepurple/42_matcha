@@ -1,5 +1,12 @@
 # app/models/like.py
 
+
+from ..config.database import mongo
+from bson import ObjectId
+from datetime import datetime
+from typing import Optional, Dict, Any
+
+
 class LikeModel:
     @staticmethod
     def add_like(from_user_id: str, to_user_id: str, like_type: str):
@@ -70,3 +77,42 @@ class LikeModel:
         ]
         
         return list(mongo.db.likes.aggregate(pipeline))
+    
+    @staticmethod
+    def check_like_status(from_user_id: str, to_user_id: str) -> dict:
+        """
+        Check all like/unlike interactions between users
+        Returns: dict with like and unlike status
+        """
+        like_exists = mongo.db.likes.find_one({
+            "from_user_id": ObjectId(from_user_id),
+            "to_user_id": ObjectId(to_user_id),
+            "type": "like"
+        })
+        
+        unlike_exists = mongo.db.likes.find_one({
+            "from_user_id": ObjectId(from_user_id),
+            "to_user_id": ObjectId(to_user_id),
+            "type": "unlike"
+        })
+        
+        return {
+            "has_like": bool(like_exists),
+            "has_unlike": bool(unlike_exists)
+        }
+
+    @staticmethod
+    def get_mutual_status(user1_id: str, user2_id: str) -> dict:
+        """
+        Get complete like/unlike status between two users
+        """
+        outgoing = LikeModel.check_like_status(user1_id, user2_id)
+        incoming = LikeModel.check_like_status(user2_id, user1_id)
+        
+        return {
+            "liked_by_me": outgoing["has_like"],
+            "likes_me": outgoing["has_unlike"],
+            "unliked_by_me": incoming["has_like"],
+            "unlikes_me": incoming["has_unlike"],
+            "is_match": outgoing["has_like"] and incoming["has_like"]
+        }
