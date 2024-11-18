@@ -10,6 +10,7 @@ from .routes.profile_endpoints import profile_bp
 from .routes.tag_endpoints import tags_bp
 from .routes.interaction_endpoints import interaction_bp
 from .routes.match_endpoints import match_bp
+from .routes.notification_endpoints import notification_bp
 
 from dotenv import load_dotenv
 import os
@@ -48,7 +49,7 @@ def create_app():
     app.register_blueprint(tags_bp, url_prefix='/api/tags')
     app.register_blueprint(interaction_bp, url_prefix='/api/interactions')
     app.register_blueprint(match_bp, url_prefix='/api/match')
-    
+    app.register_blueprint(notification_bp, url_prefix='/api/notifications')
 
     with app.app_context():
         init_db()

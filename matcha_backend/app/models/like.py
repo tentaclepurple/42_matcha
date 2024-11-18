@@ -4,7 +4,6 @@
 from ..config.database import mongo
 from bson import ObjectId
 from datetime import datetime
-from typing import Optional, Dict, Any
 
 
 class LikeModel:
