@@ -1,8 +1,8 @@
 <script lang="ts">
 	export let id: string;
 	export let name: string;
+	export let value: string | undefined;
 	export let required: boolean;
-	export let value: string;
 
 	let showPassword = false;
 
@@ -12,7 +12,7 @@
 </script>
 
 <div class="flex items-baseline justify-center gap-4">
-	<input type={showPassword ? 'text' : 'password'} {id} {name} {value} {required} />
+	<input type={showPassword ? 'text' : 'password'} {id} {name} {required} {value} />
 	<button
 		type="button"
 		onclick={handleShowPassword}
