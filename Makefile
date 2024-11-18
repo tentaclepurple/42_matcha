@@ -24,5 +24,8 @@ env:
 		echo ".env file has been downloaded."; \
 	fi
 
+test:
+	py matcha_backend/app/scripts/generate_test_users.py
+
 clean: down
 	yes | docker system prune -a
