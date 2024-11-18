@@ -8,6 +8,8 @@ from bson import ObjectId
 
 from werkzeug.utils import secure_filename
 from ..models.user import UserModel
+from ..models.profile_view import ProfileViewModel
+from ..models.like import LikeModel
 
 
 UPLOAD_FOLDER = 'app/static/uploads'
@@ -133,29 +135,35 @@ def get_user_profile(user_identifier):
     try:
         current_user_id = get_jwt_identity()
         
-        # Primero intentamos buscar por ID (si el identificador tiene el formato de ObjectId)
+        # first try to find by ID (for ObjectId)
         user = None
         try:
-            if len(user_identifier) == 24:  # Longitud de un ObjectId
+            if len(user_identifier) == 24:  # id length
                 user = UserModel.find_by_id(user_identifier)
         except:
             pass
             
-        # Si no se encontró por ID, buscamos por username
+        # if not found, try to find by username
         if not user:
             user = UserModel.find_by_username(user_identifier)
             
         if not user:
             return jsonify({'error': 'User not found'}), 404
             
-        # Verificar si el usuario actual está bloqueado por el usuario del perfil
+        # Verify if user is blocked
         if ObjectId(current_user_id) in user.get('blocked_users', []):
             return jsonify({'error': 'Profile not available'}), 403
-            
-        # Registrar la visita al perfil
-        # Aquí puedes agregar la lógica para registrar la visita y crear la notificación
+
+        user_id = str(user['_id'])
+        is_own_profile = user_id == current_user_id
+
+        ProfileViewModel.record_view(
+            viewer_id=current_user_id,
+            viewed_id=str(user['_id'])
+        )
         
-        # Preparar la información del perfil (excluyendo datos sensibles)
+        like_status = LikeModel.get_mutual_status(current_user_id, user_id)
+
         profile_info = {
             'user_id': str(user['_id']),
             'username': user['username'],
@@ -172,8 +180,12 @@ def get_user_profile(user_identifier):
             'online': user.get('online'),
             'last_connection': user.get('last_connection'),
             'profile_completed': user.get('profile_completed', False),
+            'blocked_users': user.get('blocked_users', []),
+            'reported': user.get('reported', False),
+            'verified': user.get('verified', False),
+            'created_at': user.get('created_at'),
+            'like_info': like_status if not is_own_profile else None,
             
-            # Verificar si es el propio perfil del usuario
             'is_own_profile': str(user['_id']) == current_user_id
         }
         
