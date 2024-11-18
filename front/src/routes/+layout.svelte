@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { isAuthenticated, login, logout } from '$lib/stores/auth';
 	import { onMount } from 'svelte';
+	import { SERVER_BASE_URL } from '$lib/constants/api';
 
 	import '../app.css';
 	import { goto } from '$app/navigation';
@@ -10,7 +11,7 @@
 		const accessToken = localStorage.getItem('access_token');
 
 		if (accessToken) {
-			const res = fetch(`http://localhost:5000/api/users/logout`, {
+			const res = fetch(`${SERVER_BASE_URL}/api/users/logout`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
