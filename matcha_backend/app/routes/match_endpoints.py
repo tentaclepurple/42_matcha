@@ -20,31 +20,31 @@ def get_suggestions():
         if not current_user:
             return jsonify({'error': 'User not found'}), 404
 
-        # Obtener parámetros de filtrado y ordenamiento
+        # Get filtering and sorting parameters
         min_age = request.args.get('min_age', type=int)
         max_age = request.args.get('max_age', type=int)
         min_fame = request.args.get('min_fame', type=float)
         max_fame = request.args.get('max_fame', type=float)
-        max_distance = request.args.get('max_distance', type=float)  # en km
+        max_distance = request.args.get('max_distance', type=float)  # in km
         min_common_tags = request.args.get('min_common_tags', type=int)
         sort_by = request.args.get('sort_by', 'distance')  # distance, age, fame_rating, common_tags
-        sort_order = request.args.get('sort_order', 'asc')  # asc o desc
+        sort_order = request.args.get('sort_order', 'asc')  
 
-        # Determinar preferencias de género y filtrado mutuo
+        # Get user gender preferences
         user_gender = current_user.get('gender')
         user_preferences = current_user.get('sexual_preferences')
 
-        # Construir el filtro de género
+        # Build gender query
         gender_query = {
             '$or': [
-                # Si es bisexual, acepta male y female
+                # If bisexual, accepts male and female
                 {
                     'sexual_preferences': 'bisexual',
                     'gender': {'$in': ['male', 'female']}
                 },
-                # O si tiene preferencia por mi género específico
+                # Or if has preference for my specific gender
                 {'sexual_preferences': user_gender},
-                # O si tiene preferencia 'other' y soy 'other'
+                # Or if has 'other' preference and I'm 'other'
                 {
                     'sexual_preferences': 'other',
                     'gender': 'other'
@@ -52,7 +52,7 @@ def get_suggestions():
             ]
         }
 
-        # Ajustar según preferencias del usuario actual
+        # Adjust based on current user preferences
         if user_preferences == 'male':
             gender_query['gender'] = 'male'
         elif user_preferences == 'female':
@@ -61,10 +61,10 @@ def get_suggestions():
             gender_query['gender'] = 'other'
         elif user_preferences == 'bisexual':
             gender_query['gender'] = {'$in': ['male', 'female']}
-        else:  # Si es None, se considera bisexual
+        else:  # If None, consider as bisexual
             gender_query['gender'] = {'$in': ['male', 'female']}
 
-        # Pipeline con $geoNear primero
+        # Pipeline with $geoNear first
         pipeline = [
             {
                 '$geoNear': {
@@ -72,17 +72,21 @@ def get_suggestions():
                     'distanceField': 'distance',
                     'spherical': True,
                     'query': {
-						'$and': [
-							{'_id': {'$ne': ObjectId(current_user_id)}},
-							{'_id': {'$nin': current_user.get('blocked_users', [])}},
-							{'verified': True},
-							{'profile_completed': True}
-						],
-						**gender_query
-					}
+                        '$and': [
+                            # Exclude users who have blocked current user
+                            {'blocked_users': {'$ne': ObjectId(current_user_id)}},
+                            # Only verified and completed profiles
+                            {'verified': True},
+                            {'profile_completed': True},
+                            # Different user than current
+                            {'_id': {'$ne': ObjectId(current_user_id)}},
+                            # Apply gender filters
+                            gender_query
+                        ]
+                    }
                 }
             },
-            # Calcular tags en común
+            # Calculate common tags
             {
                 '$addFields': {
                     'common_tags': {
@@ -94,10 +98,10 @@ def get_suggestions():
             }
         ]
 
-        # Aplicar filtros
+        # Apply filters
         match_conditions = {}
 
-        # Filtro de edad
+        # Age filter
         if min_age is not None or max_age is not None:
             match_conditions['age'] = {}
             if min_age is not None:
@@ -105,7 +109,7 @@ def get_suggestions():
             if max_age is not None:
                 match_conditions['age']['$lte'] = max_age
 
-        # Filtros de fame rating
+        # Fame rating filters
         if min_fame is not None or max_fame is not None:
             match_conditions['fame_rating'] = {}
             if min_fame is not None:
@@ -113,21 +117,21 @@ def get_suggestions():
             if max_fame is not None:
                 match_conditions['fame_rating']['$lte'] = max_fame
 
-        # Filtro de distancia
-        if max_distance is not None:  # Si se especifica un max_distance
+        # Distance filter
+        if max_distance is not None:
             if max_distance == 0:
-                match_conditions['distance'] = 0  # Exactamente misma ubicación
+                match_conditions['distance'] = 0  # Exact same location
             else:
-                match_conditions['distance'] = {'$lte': max_distance * 1000}  # Convertir a metros
+                match_conditions['distance'] = {'$lte': max_distance * 1000}  # Convert to meters
 
-        # Otros filtros
+        # Other filters
         if min_common_tags:
             match_conditions['common_tags'] = {'$gte': min_common_tags}
 
         if match_conditions:
             pipeline.append({'$match': match_conditions})
 
-        # Ordenamiento
+        # Sorting
         sort_direction = 1 if sort_order == 'asc' else -1
         sort_field = {
             'distance': 'distance',
@@ -138,10 +142,10 @@ def get_suggestions():
 
         pipeline.append({'$sort': {sort_field: sort_direction}})
 
-        # Obtener resultados
+        # Get results
         matches = list(mongo.db.users.aggregate(pipeline))
 
-        # Formatear respuesta
+        # Format response
         return jsonify({
             'current_user_info': {
                 'gender': current_user.get('gender'),
@@ -173,10 +177,10 @@ def get_suggestions():
                 'interests': match.get('interests', []),
                 'fame_rating': match['fame_rating'],
                 'profile_photo': next(
-					(photo['url'] for photo in match.get('photos', []) 
-					if photo.get('is_profile')), 
-					None
-				)
+                    (photo['url'] for photo in match.get('photos', []) 
+                     if photo.get('is_profile')), 
+                    None
+                )
             } for match in matches]
         }), 200
 
@@ -194,21 +198,21 @@ def advanced_search():
         if not current_user:
             return jsonify({'error': 'User not found'}), 404
 
-        # Obtener todos los parámetros de búsqueda
+        # Get all search parameters
         min_age = request.args.get('min_age', type=int)
         max_age = request.args.get('max_age', type=int)
         min_fame = request.args.get('min_fame', type=float)
         max_fame = request.args.get('max_fame', type=float)
         max_distance = request.args.get('max_distance', type=float)
-        interests = request.args.getlist('interests')  # Puede recibir múltiples tags
+        interests = request.args.getlist('interests')  # Can receive multiple tags
         gender = request.args.get('gender')  # male, female, other
         sexual_preference = request.args.get('sexual_preference')  # male, female, bisexual, other
         
-        # Parámetros de ordenamiento
+        # Sorting parameters
         sort_by = request.args.get('sort_by', 'distance')  # distance, age, fame_rating
         sort_order = request.args.get('sort_order', 'asc')
 
-        # Construir pipeline
+        # Build pipeline
         pipeline = [
             {
                 '$geoNear': {
@@ -216,21 +220,24 @@ def advanced_search():
                     'distanceField': 'distance',
                     'spherical': True,
                     'query': {
-						'$and': [
-							{'_id': {'$ne': ObjectId(current_user_id)}},
-							{'_id': {'$nin': current_user.get('blocked_users', [])}},
-							{'verified': True},
-							{'profile_completed': True}
-						]
-					}
+                        '$and': [
+                            # Exclude users who have blocked current user
+                            {'blocked_users': {'$ne': ObjectId(current_user_id)}},
+                            # Only verified and completed profiles
+                            {'verified': True},
+                            {'profile_completed': True},
+                            # Different user than current
+                            {'_id': {'$ne': ObjectId(current_user_id)}}
+                        ]
+                    }
                 }
             }
         ]
 
-        # Construir condiciones de búsqueda
+        # Build search conditions
         match_conditions = {}
 
-        # Filtros de edad
+        # Age filters
         if min_age is not None or max_age is not None:
             match_conditions['age'] = {}
             if min_age is not None:
@@ -238,7 +245,7 @@ def advanced_search():
             if max_age is not None:
                 match_conditions['age']['$lte'] = max_age
 
-        # Filtros de fame rating
+        # Fame rating filters
         if min_fame is not None or max_fame is not None:
             match_conditions['fame_rating'] = {}
             if min_fame is not None:
@@ -246,25 +253,25 @@ def advanced_search():
             if max_fame is not None:
                 match_conditions['fame_rating']['$lte'] = max_fame
 
-        # Filtro de género y preferencias
+        # Gender and preferences filters
         if gender:
             match_conditions['gender'] = gender
         if sexual_preference:
             match_conditions['sexual_preferences'] = sexual_preference
 
-        # Filtro de distancia
+        # Distance filter
         if max_distance:
             match_conditions['distance'] = {'$lte': max_distance * 1000}
 
-        # Filtro de intereses
+        # Interests filter
         if interests:
             match_conditions['interests'] = {'$in': interests}
 
-        # Añadir match conditions al pipeline
+        # Add match conditions to pipeline
         if match_conditions:
             pipeline.append({'$match': match_conditions})
 
-        # Ordenamiento
+        # Sorting
         sort_direction = 1 if sort_order == 'asc' else -1
         sort_field = {
             'distance': 'distance',
@@ -274,10 +281,10 @@ def advanced_search():
 
         pipeline.append({'$sort': {sort_field: sort_direction}})
 
-        # Obtener resultados
+        # Get results
         results = list(mongo.db.users.aggregate(pipeline))
 
-        # Formatear respuesta
+        # Format response
         return jsonify({
             'search_params': {
                 'min_age': min_age,

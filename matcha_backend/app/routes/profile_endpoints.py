@@ -4,6 +4,8 @@ import os
 from datetime import datetime
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from bson import ObjectId
+
 from werkzeug.utils import secure_filename
 from ..models.user import UserModel
 
@@ -117,3 +119,65 @@ def my_profile_info():
        
    except Exception as e:
        return jsonify({'error': str(e)}), 500
+
+
+@profile_bp.route('/profile_info/<user_identifier>', methods=['GET'])
+@jwt_required()
+def get_user_profile(user_identifier):
+    """
+    Obtiene el perfil público de un usuario por su ID o username
+    
+    Args:
+        user_identifier: Puede ser el ObjectId o el username del usuario
+    """
+    try:
+        current_user_id = get_jwt_identity()
+        
+        # Primero intentamos buscar por ID (si el identificador tiene el formato de ObjectId)
+        user = None
+        try:
+            if len(user_identifier) == 24:  # Longitud de un ObjectId
+                user = UserModel.find_by_id(user_identifier)
+        except:
+            pass
+            
+        # Si no se encontró por ID, buscamos por username
+        if not user:
+            user = UserModel.find_by_username(user_identifier)
+            
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
+            
+        # Verificar si el usuario actual está bloqueado por el usuario del perfil
+        if ObjectId(current_user_id) in user.get('blocked_users', []):
+            return jsonify({'error': 'Profile not available'}), 403
+            
+        # Registrar la visita al perfil
+        # Aquí puedes agregar la lógica para registrar la visita y crear la notificación
+        
+        # Preparar la información del perfil (excluyendo datos sensibles)
+        profile_info = {
+            'user_id': str(user['_id']),
+            'username': user['username'],
+            'first_name': user['first_name'],
+            'last_name': user['last_name'],
+            'age': user.get('age'),
+            'gender': user.get('gender'),
+            'sexual_preferences': user.get('sexual_preferences'),
+            'biography': user.get('biography'),
+            'interests': user.get('interests', []),
+            'photos': user.get('photos', []),
+            'location': user.get('location'),
+            'fame_rating': user.get('fame_rating'),
+            'online': user.get('online'),
+            'last_connection': user.get('last_connection'),
+            'profile_completed': user.get('profile_completed', False),
+            
+            # Verificar si es el propio perfil del usuario
+            'is_own_profile': str(user['_id']) == current_user_id
+        }
+        
+        return jsonify(profile_info), 200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
