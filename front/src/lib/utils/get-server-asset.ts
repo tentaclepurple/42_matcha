@@ -1,3 +1,5 @@
+import { SERVER_BASE_URL } from '$lib/constants/api';
+
 /**
  * Retrieves the URL for a server asset.
  *
@@ -5,5 +7,5 @@
  * @returns The full URL to the asset on the server.
  */
 export default function getServerAsset(assetName: string): string {
-	return `http://localhost:5000/${assetName}`;
+	return `${SERVER_BASE_URL}/${assetName}`;
 }

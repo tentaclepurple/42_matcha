@@ -11,7 +11,7 @@ export const load: PageLoad = async ({ fetch }) => {
 		throw redirect(302, '/');
 	}
 
-	const res = await fetch(`${SERVER_BASE_URL}/users/my_user_info`, {
+	const res = await fetch(`${SERVER_BASE_URL}/api/users/my_user_info`, {
 		method: 'GET',
 		headers: {
 			Authorization: `Bearer ${accessToken}`
