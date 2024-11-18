@@ -212,3 +212,37 @@ TAG_SCHEMA = {
         }
     }
 }
+
+
+NOTIFICATION_SCHEMA = {
+    "$jsonSchema": {
+        "bsonType": "object",
+        "required": ["user_id", "type", "created_at", "read"],
+        "properties": {
+            "_id": {
+                "bsonType": "objectId"
+            },
+            "user_id": {
+                "bsonType": "objectId",
+                "description": "User who receives the notification"
+            },
+            "from_user_id": {
+                "bsonType": "objectId",
+                "description": "User who triggered the notification"
+            },
+            "type": {
+                "enum": ["profile_view", "like", "unlike", "match", "message"],
+                "description": "Type of notification"
+            },
+            "created_at": {
+                "bsonType": "date",
+                "description": "When the notification was created"
+            },
+            "read": {
+                "bsonType": "bool",
+                "description": "Whether the notification has been read"
+            }
+        },
+        "additionalProperties": False
+    }
+}

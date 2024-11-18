@@ -6,6 +6,7 @@ from bson import ObjectId
 from ..config.database import mongo
 from ..models.user import UserModel
 from ..models.like import LikeModel
+from ..models.notification import NotificationModel
 
 
 interaction_bp = Blueprint('interaction', __name__)
@@ -147,8 +148,41 @@ def toggle_like(user_identifier):
            
        # Add new like
        LikeModel.add_like(current_user_id, to_user_id, "like")
-       return jsonify({'message': 'Like added'}), 200
+        # Create like notification
        
+       NotificationModel.create(
+           user_id=to_user_id,
+           type="like",
+           from_user_id=current_user_id
+        )
+       
+       # Check if match occurs (if the other user had already liked us)
+        
+       other_user_like = mongo.db.likes.find_one({
+            "from_user_id": ObjectId(to_user_id),
+            "to_user_id": ObjectId(current_user_id),
+            "type": "like"
+        })
+        
+       is_match = bool(other_user_like)
+       if is_match:
+            # Create match notifications for both users
+            NotificationModel.create(
+                user_id=to_user_id,
+                type="match",
+                from_user_id=current_user_id
+            )
+            NotificationModel.create(
+                user_id=current_user_id,
+                type="match",
+                from_user_id=to_user_id
+            )
+       
+       return jsonify({
+           'message': 'Like added',
+            'is_match': is_match
+       }), 200
+
    except Exception as e:
        return jsonify({'error': str(e)}), 500
 
@@ -188,6 +222,14 @@ def toggle_unlike(user_identifier):
            
        # Add new unlike
        LikeModel.add_like(current_user_id, to_user_id, "unlike")
+
+       # Create unlike notification
+       NotificationModel.create(
+            user_id=to_user_id,
+            type="unlike",
+            from_user_id=current_user_id
+        )
+       
        return jsonify({'message': 'Unlike added'}), 200
        
    except Exception as e:

@@ -2,12 +2,15 @@
 
 import sys
 import os
-from datetime import datetime, timedelta, UTC
 import random
 from bson import ObjectId
 from dotenv import load_dotenv
 from flask import Flask
 from flask_pymongo import PyMongo
+
+from datetime import datetime, timedelta, timezone
+UTC = timezone.utc
+
 
 # Load environment variables
 load_dotenv()
@@ -19,6 +22,7 @@ app.config["MONGO_URI"] = (
     f"{os.getenv('MONGO_ROOT_PASSWORD')}@localhost:27017/"
     f"{os.getenv('MONGO_DATABASE')}?authSource=admin"
 )
+
 mongo = PyMongo(app)
 
 def generate_test_users(num_users=50):

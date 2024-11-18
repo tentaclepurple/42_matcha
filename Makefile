@@ -25,7 +25,7 @@ env:
 	fi
 
 test:
-	py matcha_backend/app/scripts/generate_test_users.py
+	cd matcha_backend/app/scripts/ && python3 generate_test_users.py
 
 clean: down
 	yes | docker system prune -a

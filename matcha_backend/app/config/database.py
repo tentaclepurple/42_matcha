@@ -11,7 +11,8 @@ def init_db():
             "users": USER_SCHEMA,
             "profile_views": PROFILE_VIEW_SCHEMA,
             "likes": LIKE_SCHEMA,
-            "tags": TAG_SCHEMA
+            "tags": TAG_SCHEMA,
+            "notifications": NOTIFICATION_SCHEMA
         }
 
         # Create COLLECTIONS if they don't exist
@@ -39,7 +40,6 @@ def init_db():
         mongo.db.users.create_index("last_connection")
         mongo.db.users.create_index("profile_completed")
 
-        
 		# Indexes for profile views
         mongo.db.profile_views.create_index([("viewer_id", 1), ("viewed_id", 1)])
         mongo.db.profile_views.create_index([("viewed_id", 1), ("viewed_at", -1)])
@@ -52,6 +52,11 @@ def init_db():
 
         # Indexes for tags
         mongo.db.tags.create_index("name", unique=True)
+        
+		# Indexes for notifications
+        mongo.db.notifications.create_index([("user_id", 1), ("read", 1)])
+        mongo.db.notifications.create_index([("user_id", 1), ("created_at", -1)])
+        mongo.db.notifications.create_index("from_user_id")
 
         print("Database initialized successfully")
         

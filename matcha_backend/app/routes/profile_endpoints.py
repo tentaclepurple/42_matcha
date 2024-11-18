@@ -10,6 +10,7 @@ from werkzeug.utils import secure_filename
 from ..models.user import UserModel
 from ..models.profile_view import ProfileViewModel
 from ..models.like import LikeModel
+from ..models.notification import NotificationModel
 
 
 UPLOAD_FOLDER = 'app/static/uploads'
@@ -160,6 +161,12 @@ def get_user_profile(user_identifier):
         ProfileViewModel.record_view(
             viewer_id=current_user_id,
             viewed_id=str(user['_id'])
+        )
+        
+        NotificationModel.create(
+            user_id=user_id,
+            type="profile_view",
+            from_user_id=current_user_id
         )
         
         like_status = LikeModel.get_mutual_status(current_user_id, user_id)
