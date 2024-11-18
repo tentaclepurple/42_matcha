@@ -3,7 +3,9 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from bson import ObjectId
+from ..config.database import mongo
 from ..models.user import UserModel
+from ..models.like import LikeModel
 
 
 interaction_bp = Blueprint('interaction', __name__)
@@ -108,3 +110,85 @@ def unblock_user(user_identifier):
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@interaction_bp.route('/like/<user_identifier>', methods=['POST'])
+@jwt_required()
+def toggle_like(user_identifier):
+   try:
+       current_user_id = get_jwt_identity()
+       user = get_user_by_identifier(user_identifier)
+       if not user:
+           return jsonify({'error': 'User not found'}), 404
+           
+       to_user_id = str(user['_id'])
+       
+       # Check existing interactions
+       existing_like = mongo.db.likes.find_one({
+           "from_user_id": ObjectId(current_user_id),
+           "to_user_id": ObjectId(to_user_id),
+           "type": "like"
+       })
+       
+       existing_unlike = mongo.db.likes.find_one({
+           "from_user_id": ObjectId(current_user_id),
+           "to_user_id": ObjectId(to_user_id),
+           "type": "unlike"
+       })
+       
+       if existing_like:
+           # If like exists, remove it
+           mongo.db.likes.delete_one({"_id": existing_like["_id"]})
+           return jsonify({'message': 'Like removed'}), 200
+           
+       # Remove unlike if exists and add like
+       if existing_unlike:
+           mongo.db.likes.delete_one({"_id": existing_unlike["_id"]})
+           
+       # Add new like
+       LikeModel.add_like(current_user_id, to_user_id, "like")
+       return jsonify({'message': 'Like added'}), 200
+       
+   except Exception as e:
+       return jsonify({'error': str(e)}), 500
+
+
+@interaction_bp.route('/unlike/<user_identifier>', methods=['POST'])
+@jwt_required()
+def toggle_unlike(user_identifier):
+   try:
+       current_user_id = get_jwt_identity()
+       user = get_user_by_identifier(user_identifier)
+       if not user:
+           return jsonify({'error': 'User not found'}), 404
+           
+       to_user_id = str(user['_id'])
+       
+       # Check existing interactions
+       existing_unlike = mongo.db.likes.find_one({
+           "from_user_id": ObjectId(current_user_id),
+           "to_user_id": ObjectId(to_user_id),
+           "type": "unlike"
+       })
+       
+       existing_like = mongo.db.likes.find_one({
+           "from_user_id": ObjectId(current_user_id),
+           "to_user_id": ObjectId(to_user_id),
+           "type": "like"
+       })
+       
+       if existing_unlike:
+           # If unlike exists, remove it
+           mongo.db.likes.delete_one({"_id": existing_unlike["_id"]})
+           return jsonify({'message': 'Unlike removed'}), 200
+           
+       # Remove like if exists and add unlike
+       if existing_like:
+           mongo.db.likes.delete_one({"_id": existing_like["_id"]})
+           
+       # Add new unlike
+       LikeModel.add_like(current_user_id, to_user_id, "unlike")
+       return jsonify({'message': 'Unlike added'}), 200
+       
+   except Exception as e:
+       return jsonify({'error': str(e)}), 500
