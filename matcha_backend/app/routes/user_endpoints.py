@@ -6,13 +6,11 @@ from flask_jwt_extended import (
     create_access_token, jwt_required, get_jwt_identity, get_jwt)
 from werkzeug.security import (
     generate_password_hash, check_password_hash)
-
 from ..models.user import UserModel
 from ..utils.email import send_verification_email, send_reset_password_email
 from ..utils.services import get_location_by_ip, get_public_ip
 from ..utils.validators import validate_username, validate_password
 from ..config.redis import redis_client
-
 from datetime import datetime, timedelta
 import requests
 
@@ -289,6 +287,91 @@ def reset_password(token):
        UserModel.update_password(user_id, hashed_password)
        
        return jsonify({'message': 'Password updated successfully'}), 200
+       
+   except Exception as e:
+       return jsonify({'error': str(e)}), 500
+
+
+@user_bp.route('/my_user_info', methods=['GET'])
+@jwt_required()
+def my_user_info():
+   try:
+       current_user_id = get_jwt_identity()
+       user = UserModel.find_by_id(current_user_id)
+       
+       if not user:
+           return jsonify({'error': 'User not found'}), 404
+           
+       # find profile photo
+       profile_photo = next(
+           (photo for photo in user.get('photos', []) if photo.get('is_profile')),
+           None  # default value if not found
+       )
+
+       user_info = {
+           'username': user.get('username'),
+           'first_name': user.get('first_name'),
+           'last_name': user.get('last_name'),
+           'email': user.get('email'),
+           'profile_photo': profile_photo.get('url') if profile_photo else None
+       }
+       
+       return jsonify(user_info), 200
+       
+   except Exception as e:
+       return jsonify({'error': str(e)}), 500
+
+
+@user_bp.route('/update_user', methods=['PUT'])
+@jwt_required()
+def update_user():
+   try:
+       current_user_id = get_jwt_identity()
+       data = request.get_json()
+       
+       # verify user
+       user = UserModel.find_by_id(current_user_id)
+       if not user:
+           return jsonify({'error': 'User not found'}), 404
+
+       # validate fields
+       if 'username' in data:
+           # verify length
+           if len(data['username']) > 12:
+               return jsonify({'error': 'Username must be 12 characters or less'}), 400
+           # veryfy username is not in use
+           existing = UserModel.find_by_username(data['username'])
+           if existing and str(existing['_id']) != current_user_id:
+               return jsonify({'error': 'Username already exists'}), 400
+
+       if 'email' in data:
+           # Verify email is not in use
+           existing = UserModel.find_by_email(data['email'])
+           if existing and str(existing['_id']) != current_user_id:
+               return jsonify({'error': 'Email already exists'}), 400
+
+       if 'password' in data:
+           # validate password
+           is_valid, error_msg = validate_password(data['password'])
+           if not is_valid:
+               return jsonify({'error': error_msg}), 400
+           # Hash password
+           data['password'] = generate_password_hash(data['password'])
+
+       # allowed fields to update
+       allowed_fields = ['username', 'first_name', 'last_name', 'email', 'password']
+       update_data = {k: v for k, v in data.items() if k in allowed_fields}
+
+       if not update_data:
+           return jsonify({'error': 'No valid fields to update'}), 400
+
+       # update user
+       result = UserModel.update_profile(current_user_id, update_data)
+       
+       return jsonify({
+           'message': 'User updated successfully',
+           'updated_fields': list(update_data.keys())
+       }), 200
        
    except Exception as e:
        return jsonify({'error': str(e)}), 500

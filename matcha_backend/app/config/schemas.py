@@ -66,7 +66,7 @@ USER_SCHEMA = {
                 "description": "user gender"
             },
             "sexual_preferences": {
-                "enum": ["male", "female", "bisexual", None],
+                "enum": ["male", "female", "bisexual", "other", None],
                 "description": "gender preferences"
             },
             "biography": {

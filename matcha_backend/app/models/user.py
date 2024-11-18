@@ -143,7 +143,6 @@ class UserModel:
         )
         return user and user.get("verified", False)
 
-
     @staticmethod
     def update_interests(user_id: str, new_interests: list) -> bool:
         try:
@@ -181,12 +180,29 @@ class UserModel:
         except Exception as e:
             raise Exception(f"Error updating interests: {str(e)}")
 
-
     @staticmethod
     def update_password(user_id: str, new_password: str) -> bool:
         """Update user password"""
         result = mongo.db.users.update_one(
             {"_id": ObjectId(user_id)},
             {"$set": {"password": new_password}}
+        )
+        return result.modified_count > 0
+    
+    @staticmethod
+    def block_user(user_id: str, blocked_user_id: str) -> bool:
+        """Add user to blocked list"""
+        result = mongo.db.users.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$addToSet": {"blocked_users": ObjectId(blocked_user_id)}}
+        )
+        return result.modified_count > 0
+
+    @staticmethod
+    def unblock_user(user_id: str, blocked_user_id: str) -> bool:
+        """Remove user from blocked list"""
+        result = mongo.db.users.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$pull": {"blocked_users": ObjectId(blocked_user_id)}}
         )
         return result.modified_count > 0
