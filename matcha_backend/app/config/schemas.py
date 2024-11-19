@@ -246,3 +246,41 @@ NOTIFICATION_SCHEMA = {
         "additionalProperties": False
     }
 }
+
+
+CHAT_MESSAGE_SCHEMA = {
+    "$jsonSchema": {
+        "bsonType": "object",
+        "required": ["from_user_id", "to_user_id", "content", "type", "created_at", "read"],
+        "properties": {
+            "_id": {
+                "bsonType": "objectId"
+            },
+            "from_user_id": {
+                "bsonType": "objectId",
+                "description": "ID of the user sending the message"
+            },
+            "to_user_id": {
+                "bsonType": "objectId",
+                "description": "ID of the user receiving the message"
+            },
+            "content": {
+                "bsonType": "string",
+                "description": "Message content or image URL"
+            },
+            "type": {
+                "enum": ["text", "image"],
+                "description": "Type of message"
+            },
+            "created_at": {
+                "bsonType": "date",
+                "description": "When the message was sent"
+            },
+            "read": {
+                "bsonType": "bool",
+                "description": "Whether the message has been read"
+            }
+        },
+        "additionalProperties": False
+    }
+}
