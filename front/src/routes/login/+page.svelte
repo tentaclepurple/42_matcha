@@ -81,6 +81,8 @@
 					</label>
 				</fieldset>
 
+				<a href="/forget-password">Forgot your password?</a>
+
 				<div class="flex items-baseline justify-center gap-2">
 					<Button type="button" level="secondary" onclick={handleCancel}>Cancel</Button>
 					<Button type="submit" {isLoading}>Log in</Button>
