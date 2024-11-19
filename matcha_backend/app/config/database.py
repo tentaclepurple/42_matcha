@@ -12,7 +12,8 @@ def init_db():
             "profile_views": PROFILE_VIEW_SCHEMA,
             "likes": LIKE_SCHEMA,
             "tags": TAG_SCHEMA,
-            "notifications": NOTIFICATION_SCHEMA
+            "notifications": NOTIFICATION_SCHEMA,
+            "chat_messages": CHAT_MESSAGE_SCHEMA
         }
 
         # Create COLLECTIONS if they don't exist
@@ -57,6 +58,15 @@ def init_db():
         mongo.db.notifications.create_index([("user_id", 1), ("read", 1)])
         mongo.db.notifications.create_index([("user_id", 1), ("created_at", -1)])
         mongo.db.notifications.create_index("from_user_id")
+        
+		# Indexes for chat messages
+        mongo.db.chat_messages.create_index([
+            ("from_user_id", 1), ("to_user_id", 1), ("created_at", -1)
+            ])
+        mongo.db.chat_messages.create_index([
+            ("to_user_id", 1), ("read", 1)
+            ])
+        mongo.db.chat_messages.create_index("created_at")
 
         print("Database initialized successfully")
         
