@@ -19,7 +19,11 @@
 			: 'bg-transparent hover:bg-teal-500 text-teal-700 font-semibold hover:text-white py-2 px-4 border border-teal-500 hover:border-transparent rounded';
 </script>
 
-<button {type} {...restProps} class={`${styles} ${restProps.class} flex justify-center items-center gap-2`}>
+<button
+	{type}
+	{...restProps}
+	class={`${styles} ${restProps.class} flex items-center justify-center gap-2`}
+>
 	{@render children()}
 	{#if isLoading === true}
 		<div class="w-5">

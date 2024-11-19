@@ -244,7 +244,7 @@ def forgot_password():
        )
        
        # send reset password email
-       send_reset_password_email(email, reset_token)
+       send_reset_password_email(email, reset_token, user['first_name'])
        
        return jsonify({
            'message': 'If your email is registered, you will receive a password reset link'
