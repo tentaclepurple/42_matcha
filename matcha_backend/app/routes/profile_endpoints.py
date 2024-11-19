@@ -159,16 +159,17 @@ def get_user_profile(user_identifier):
         user_id = str(user['_id'])
         is_own_profile = user_id == current_user_id
 
-        ProfileViewModel.record_view(
-            viewer_id=current_user_id,
-            viewed_id=str(user['_id'])
-        )
-        
-        NotificationModel.create(
-            user_id=user_id,
-            type="profile_view",
-            from_user_id=current_user_id
-        )
+        if not is_own_profile:
+            ProfileViewModel.record_view(
+                viewer_id=current_user_id,
+                viewed_id=str(user['_id'])
+            )
+            
+            NotificationModel.create(
+                user_id=user_id,
+                type="profile_view",
+                from_user_id=current_user_id
+            )
         
         like_status = LikeModel.get_mutual_status(current_user_id, user_id)
 
@@ -194,7 +195,7 @@ def get_user_profile(user_identifier):
             'created_at': user.get('created_at'),
             'like_info': like_status if not is_own_profile else None,
             
-            'is_own_profile': str(user['_id']) == current_user_id
+            'is_own_profile': is_own_profile
         }
         
         return jsonify(profile_info), 200
