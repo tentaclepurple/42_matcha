@@ -45,14 +45,29 @@ def send_verification_email(email: str, token: str, first_name: str):
         raise
 
 
-def send_reset_password_email(email: str, token: str):
+def send_reset_password_email(email: str, token: str, first_name: str):
     """Send password reset email"""
-    reset_url = f"http://localhost:5000/reset_password/{token}"
-    
-    msg = MIMEText(f'Click here to reset your password: {reset_url}')
+    reset_url = f"http://localhost:5173/forget-password/new?token={token}"
+
+    msg = MIMEMultipart()
     msg['Subject'] = 'Reset your password'
     msg['From'] = current_app.config['MAIL_USERNAME']
     msg['To'] = email
+
+    html = f'''
+            <html>
+                <body>
+                    <p>Hi {first_name},</p>
+                    <br>
+                    <p>Click following link to set a new password: <a href="{reset_url}" target="_blank" rel="noopener noreferrer">{reset_url}</a></p>
+                    <br>
+                    <p>Thanks,</p>
+                    <p>Your Matcha team</p>
+                </body>
+            </html>
+            '''
+    html_content = MIMEText(html, 'html')
+    msg.attach(html_content)
 
     try:
         with smtplib.SMTP(current_app.config['MAIL_SERVER'], current_app.config['MAIL_PORT']) as server:
