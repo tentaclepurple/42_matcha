@@ -20,7 +20,7 @@
 
 		const formData = new FormData(e.target);
 
-		const res = await fetch(`${SERVER_BASE_URL}/users/login`, {
+		const res = await fetch(`${SERVER_BASE_URL}/api/users/login`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

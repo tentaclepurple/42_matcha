@@ -42,7 +42,7 @@
 		const age = new Date().getFullYear() - birthYear;
 		formData.set('age', age.toString());
 
-		const response = await fetch(`${SERVER_BASE_URL}/users/register`, {
+		const response = await fetch(`${SERVER_BASE_URL}/api/users/register`, {
 			method: 'POST',
 			body: JSON.stringify(Object.fromEntries(formData)),
 			headers: {
