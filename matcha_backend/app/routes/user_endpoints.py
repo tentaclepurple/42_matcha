@@ -17,7 +17,7 @@ import requests
 
 user_bp = Blueprint('user', __name__)
 
-DEFAULT = "static/default/default.png"
+DEFAULT = "static/default/default.svg"
 
 @user_bp.route('/register', methods=['POST'])
 def register():
