@@ -21,10 +21,10 @@
 
 	<div>
 		<div class="flex items-center gap-4">
-			<RoundedAvatar src={getServerAsset(data.profilePictureUrl)} alt="" class="w-16" />
+			<RoundedAvatar src={getServerAsset(data.profilePictureUrl)} alt="" size="l" />
 			<div>
+				<p class="mb-3">{data.username}</p>
 				<h2>{data.firstName} {data.lastName}</h2>
-				<p>{data.username}</p>
 				<p>{data.email}</p>
 			</div>
 		</div>
