@@ -1,11 +1,16 @@
 <script lang="ts">
+	export let profilePhoto: string | null = null;
+	export let children;
+
 	import { isAuthenticated, login, logout } from '$lib/stores/auth';
 	import { onMount } from 'svelte';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
 
 	import '../app.css';
 	import { goto } from '$app/navigation';
-	let { children } = $props();
+	import RoundedAvatar from '$lib/components/RoundedAvatar.svelte';
+	import { fetchUserData } from '$lib/stores/user-data';
+	import getServerAsset from '$lib/utils/get-server-asset';
 
 	const handleLogOut = () => {
 		const accessToken = localStorage.getItem('access_token');
@@ -26,11 +31,23 @@
 		goto('/');
 	};
 
-	onMount(() => {
+	onMount(async () => {
 		const accessToken = localStorage.getItem('access_token');
 
 		if (accessToken) {
 			login();
+		}
+
+		try {
+			const res = await fetchUserData();
+
+			if (!res) {
+				throw new Error('Error fetching user data');
+			}
+
+			profilePhoto = res.profilePhoto;
+		} catch (e: unknown) {
+			console.log('Error fetching user data: ', e);
 		}
 	});
 </script>
@@ -42,9 +59,20 @@
 				<a href="/">Home</a>
 			</nav>
 
-			<div>
+			<div class="flex items-center justify-center gap-4">
 				{#if $isAuthenticated}
-					<a href="/profile">Profile</a>
+					<button
+						onclick={() => {
+							goto('/profile');
+						}}
+						aria-label="Settings"
+					>
+						{#if profilePhoto}
+							<RoundedAvatar src={getServerAsset(profilePhoto)} alt="" size="s" />
+						{:else}
+							Settings
+						{/if}
+					</button>
 					<button type="button" onclick={handleLogOut}>Log out</button>
 				{:else}
 					<a href="/login">Sign in</a>
