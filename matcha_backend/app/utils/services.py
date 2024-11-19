@@ -7,7 +7,6 @@ def get_location_by_ip(ip_address):
     try:
         response = requests.get(f'http://ip-api.com/json/{ip_address}')
         data = response.json()
-        print("Data: ", data)
         if data['status'] == 'success':
             return {
                 "type": "Point",

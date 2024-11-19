@@ -24,6 +24,7 @@ def register():
     try:
         data = request.get_json()
 
+        #print("Data: ", data['email'].lower())
         # Validate username
         is_valid, error_msg = validate_username(data.get('username', ''))
         if not is_valid:
@@ -38,10 +39,10 @@ def register():
         if existing_user:
             return jsonify({'error': 'Username already exists'}), 409
 
-        existing_email = UserModel.find_by_email(data['email'])
+        existing_email = UserModel.find_by_email(data['email'].lower())
         if existing_email:
             print("Email already exists")
-            #return jsonify({'error': 'Email already exists'}), 409 # Comment this line for DEVELOPMENT
+            return jsonify({'error': 'Email already exists'}), 409 # Comment this line for DEVELOPMENT
         
         # Verify required fields
         required_fields = [
@@ -67,7 +68,7 @@ def register():
         user = {
             # Required
             "username": data["username"],
-            "email": data["email"],
+            "email": data["email"].lower(),
             "password": generate_password_hash(data["password"]),
             "first_name": data["first_name"],
             "last_name": data["last_name"],
@@ -158,7 +159,7 @@ def login():
             return jsonify({'error': 'Email and password are required'}), 400
             
         # Find user and check credentials
-        user = UserModel.find_by_email(data['email'])
+        user = UserModel.find_by_email(data['email'].lower())
         if not user or not check_password_hash(user['password'], data['password']):
             return jsonify({'error': 'Invalid credentials'}), 401
             
@@ -220,7 +221,7 @@ def logout():
 def forgot_password():
    try:
        data = request.get_json()
-       email = data.get('email')
+       email = data.get('email').lower()
        
        if not email:
            return jsonify({'error': 'Email is required'}), 400
@@ -345,6 +346,7 @@ def update_user():
                return jsonify({'error': 'Username already exists'}), 400
 
        if 'email' in data:
+           data['email'] = data['email'].lower()
            # Verify email is not in use
            existing = UserModel.find_by_email(data['email'])
            if existing and str(existing['_id']) != current_user_id:
