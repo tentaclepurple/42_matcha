@@ -100,6 +100,7 @@ def my_profile_info():
            
        profile_info = {
            # Profile
+           'username': user.get('username'),
            'gender': user.get('gender'),
            'sexual_preferences': user.get('sexual_preferences'),
            'biography': user.get('biography'),

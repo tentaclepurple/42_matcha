@@ -32,7 +32,7 @@ class NotificationModel:
             return False
 
     @staticmethod
-    def get_unread(user_id: str, limit: int = 50):
+    def get_unread(user_id: str):
         """Get unread notifications for a user"""
         try:
             pipeline = [
@@ -51,30 +51,39 @@ class NotificationModel:
                     }
                 },
                 {
-                    "$unwind": {
-                        "path": "$from_user",
-                        "preserveNullAndEmpty": True
+                    "$addFields": {
+                        "from_user": {
+                            "$cond": {
+                                "if": {"$eq": [{"$size": "$from_user"}, 0]},
+                                "then": None,
+                                "else": {"$arrayElemAt": ["$from_user", 0]}
+                            }
+                        }
                     }
                 },
                 {
                     "$project": {
+                        "_id": {"$toString": "$_id"},  # Convertir a string
                         "type": 1,
                         "created_at": 1,
                         "read": 1,
                         "from_user": {
-                            "_id": 1,
-                            "username": 1
+                            "$cond": {
+                                "if": {"$eq": ["$from_user", None]},
+                                "then": None,
+                                "else": {
+                                    "_id": {"$toString": "$from_user._id"},  # Convertir a string
+                                    "username": "$from_user.username"
+                                }
+                            }
                         }
                     }
                 },
                 {
                     "$sort": {"created_at": -1}
-                },
-                {
-                    "$limit": limit
                 }
             ]
-            
+                
             return list(mongo.db.notifications.aggregate(pipeline))
             
         except Exception as e:
