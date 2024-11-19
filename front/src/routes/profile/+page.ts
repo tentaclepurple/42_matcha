@@ -1,35 +1,28 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
-import { SERVER_BASE_URL } from '$lib/constants/api';
+import { fetchUserData } from '$lib/stores/user-data';
 
 export const ssr = false;
 
-export const load: PageLoad = async ({ fetch }) => {
-	const accessToken = localStorage.getItem('access_token');
+export const load: PageLoad = async () => {
+	try {
+		const res = await fetchUserData();
 
-	if (!accessToken) {
-		throw redirect(302, '/');
-	}
-
-	const res = await fetch(`${SERVER_BASE_URL}/api/users/my_user_info`, {
-		method: 'GET',
-		headers: {
-			Authorization: `Bearer ${accessToken}`
+		if (!res) {
+			throw new Error('Error fetching user data');
 		}
-	});
 
-	if (!res.ok) {
+		const { email, firstName, lastName, profilePhoto, username } = res;
+
+		return {
+			email,
+			firstName,
+			lastName,
+			profilePictureUrl: profilePhoto,
+			username
+		};
+	} catch (e: unknown) {
+		console.error('Error fetching user data: ', e);
 		throw redirect(302, '/');
 	}
-
-	const profileData = await res.json();
-	const { email, first_name, last_name, profile_photo, username } = profileData;
-
-	return {
-		email,
-		firstName: first_name,
-		lastName: last_name,
-		profilePictureUrl: profile_photo,
-		username
-	};
 };
