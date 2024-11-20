@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import RoundedAvatar from '$lib/components/RoundedAvatar.svelte';
+	import RoundAvatar from '$lib/components/RoundAvatar.svelte';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
 	import { AVATAR_MAX_SIZE } from '$lib/constants/files';
 	import type UserData from '$lib/interfaces/user-data.interface';
@@ -65,7 +65,7 @@
 
 <h2>Avatar</h2>
 <div class="gap-42 flex max-w-sm items-center gap-4">
-	<RoundedAvatar src={getServerAsset(currentUserData.profilePhoto)} alt="" size="l" />
+	<RoundAvatar src={getServerAsset(currentUserData.profilePhoto)} alt="" size="l" />
 	<div>
 		<fieldset class="flex flex-col items-start gap-4">
 			<label
