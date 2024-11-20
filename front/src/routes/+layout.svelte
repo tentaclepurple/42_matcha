@@ -60,7 +60,7 @@
 				{#if $isAuthenticated}
 					<button
 						onclick={() => {
-							goto('/profile');
+							goto('/account');
 						}}
 						aria-label="Settings"
 					>
