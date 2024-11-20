@@ -27,7 +27,7 @@
 </script>
 
 <div
-	class={`flex items-center justify-center rounded-full border-2 border-teal-500 bg-gray-200 ${wrapperStyles}`}
+	class={`flex items-center justify-center rounded-full border-2 border-teal-500 bg-gray-200 ${wrapperStyles} shrink-0`}
 >
 	<img {src} {alt} class={pictureStyles} />
 </div>

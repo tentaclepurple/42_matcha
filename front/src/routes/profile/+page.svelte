@@ -2,10 +2,9 @@
 	import { goto } from '$app/navigation';
 	import Button from '$lib/components/Button.svelte';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
-	import RoundedAvatar from '$lib/components/RoundedAvatar.svelte';
 	import type UserData from '$lib/interfaces/user-data.interface';
 	import { userData } from '$lib/stores/user-data';
-	import getServerAsset from '$lib/utils/get-server-asset';
+	import ProfileAvatar from './ProfileAvatar.svelte';
 
 	let currentUserData: UserData;
 
@@ -23,8 +22,8 @@
 	<p class="mb-16">This is where you can complete your profile</p>
 
 	<div>
-		<div class="flex items-center gap-4">
-			<RoundedAvatar src={getServerAsset(currentUserData.profilePhoto)} alt="" size="l" />
+		<div class="flex flex-col items-start gap-4">
+			<ProfileAvatar {currentUserData} />
 			<div>
 				<p class="mb-3">{currentUserData.username}</p>
 				<h2>{currentUserData.firstName} {currentUserData.lastName}</h2>
