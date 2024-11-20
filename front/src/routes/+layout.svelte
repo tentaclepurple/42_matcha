@@ -64,11 +64,13 @@
 						}}
 						aria-label="Settings"
 					>
-						{#if currentUserData?.profilePhoto}
-							<RoundedAvatar src={getServerAsset(currentUserData.profilePhoto)} alt="" size="s" />
-						{:else}
-							Settings
-						{/if}
+						<RoundedAvatar
+							src={currentUserData?.profilePhoto
+								? getServerAsset(currentUserData.profilePhoto)
+								: '/icons/avatar.svg'}
+							alt=""
+							size="s"
+						/>
 					</button>
 					<button type="button" onclick={handleLogOut}>Log out</button>
 				{:else}
