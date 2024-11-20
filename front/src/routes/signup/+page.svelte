@@ -15,9 +15,10 @@
 
 	const handleSubmit = async (e) => {
 		if (isLoading) return;
+		e.preventDefault();
 
 		isLoading = true;
-		e.preventDefault();
+		error = '';
 
 		const form = e.target;
 		const formData = new FormData(form);
@@ -42,29 +43,33 @@
 		const age = new Date().getFullYear() - birthYear;
 		formData.set('age', age.toString());
 
-		const response = await fetch(`${SERVER_BASE_URL}/api/users/register`, {
-			method: 'POST',
-			body: JSON.stringify(Object.fromEntries(formData)),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
+		try {
+			const response = await fetch(`${SERVER_BASE_URL}/api/users/register`, {
+				method: 'POST',
+				body: JSON.stringify(Object.fromEntries(formData)),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
 
-		if (!response.ok) {
-			switch (response.status) {
-				case 409:
-					error = 'User and/or email already exists';
-					break;
-				default:
-					error = 'An error occurred. Please try again later.';
-					break;
+			if (!response.ok) {
+				switch (response.status) {
+					case 409:
+						error = 'User and/or email already exists';
+						break;
+					default:
+						error = 'An error occurred. Please try again later.';
+						break;
+				}
+				return;
 			}
 
+			goto('/signup/verify');
+		} catch (err) {
+			error = 'An error occurred. Please try again later.';
+		} finally {
 			isLoading = false;
-			return;
 		}
-
-		goto('/signup/verify');
 	};
 
 	const handleCancel = () => {
