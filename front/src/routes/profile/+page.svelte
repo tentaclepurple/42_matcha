@@ -1,18 +1,21 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import Button from '$lib/components/Button.svelte';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
 	import RoundedAvatar from '$lib/components/RoundedAvatar.svelte';
+	import type UserData from '$lib/interfaces/user-data.interface';
+	import { userData } from '$lib/stores/user-data';
 	import getServerAsset from '$lib/utils/get-server-asset';
 
-	interface ProfileData {
-		profilePictureUrl: string;
-		firstName: string;
-		lastName: string;
-		username: string;
-		email: string;
-	}
+	let currentUserData: UserData;
 
-	let { data }: { data: ProfileData } = $props();
+	userData.subscribe((value) => {
+		if (!value) {
+			return goto('/', { replaceState: true });
+		} else {
+			currentUserData = value;
+		}
+	});
 </script>
 
 <PageWrapper>
@@ -21,11 +24,11 @@
 
 	<div>
 		<div class="flex items-center gap-4">
-			<RoundedAvatar src={getServerAsset(data.profilePictureUrl)} alt="" size="l" />
+			<RoundedAvatar src={getServerAsset(currentUserData.profilePhoto)} alt="" size="l" />
 			<div>
-				<p class="mb-3">{data.username}</p>
-				<h2>{data.firstName} {data.lastName}</h2>
-				<p>{data.email}</p>
+				<p class="mb-3">{currentUserData.username}</p>
+				<h2>{currentUserData.firstName} {currentUserData.lastName}</h2>
+				<p>{currentUserData.email}</p>
 			</div>
 		</div>
 		<Button type="button" level="primary" class="mt-8">Edit password</Button>

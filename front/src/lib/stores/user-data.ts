@@ -1,7 +1,10 @@
 import { SERVER_BASE_URL } from '$lib/constants/api';
 import type UserData from '$lib/interfaces/user-data.interface';
+import { writable, type Writable } from 'svelte/store';
 
-export async function fetchUserData(): Promise<UserData | undefined> {
+export const userData: Writable<UserData | null> = writable(null);
+
+export async function fetchUserData(): Promise<void> {
 	try {
 		const accessToken = localStorage.getItem('access_token');
 
@@ -14,14 +17,14 @@ export async function fetchUserData(): Promise<UserData | undefined> {
 
 		const { email, first_name, last_name, profile_photo, username } = await res.json();
 
-		return {
+		userData.set({
 			email,
 			firstName: first_name,
 			lastName: last_name,
 			profilePhoto: profile_photo,
 			username: username
-		};
+		});
 	} catch (error: unknown) {
-		if (error instanceof Error) throw new Error('Error fetching user data: ', error);
+		console.error(error);
 	}
 }

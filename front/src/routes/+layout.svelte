@@ -9,14 +9,21 @@
 	import '../app.css';
 	import { goto } from '$app/navigation';
 	import RoundedAvatar from '$lib/components/RoundedAvatar.svelte';
-	import { fetchUserData } from '$lib/stores/user-data';
+	import { fetchUserData, userData } from '$lib/stores/user-data';
 	import getServerAsset from '$lib/utils/get-server-asset';
+	import type UserData from '$lib/interfaces/user-data.interface';
+
+	let currentUserData: UserData | null = null;
+
+	userData.subscribe((value) => {
+		currentUserData = value;
+	});
 
 	const handleLogOut = () => {
 		const accessToken = localStorage.getItem('access_token');
 
 		if (accessToken) {
-			const res = fetch(`${SERVER_BASE_URL}/api/users/logout`, {
+			fetch(`${SERVER_BASE_URL}/api/users/logout`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -38,17 +45,7 @@
 			login();
 		}
 
-		try {
-			const res = await fetchUserData();
-
-			if (!res) {
-				throw new Error('Error fetching user data');
-			}
-
-			profilePhoto = res.profilePhoto;
-		} catch (e: unknown) {
-			console.log('Error fetching user data: ', e);
-		}
+		await fetchUserData();
 	});
 </script>
 
@@ -67,8 +64,8 @@
 						}}
 						aria-label="Settings"
 					>
-						{#if profilePhoto}
-							<RoundedAvatar src={getServerAsset(profilePhoto)} alt="" size="s" />
+						{#if currentUserData?.profilePhoto}
+							<RoundedAvatar src={getServerAsset(currentUserData.profilePhoto)} alt="" size="s" />
 						{:else}
 							Settings
 						{/if}
