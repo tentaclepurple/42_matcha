@@ -8,7 +8,7 @@
 
 	import '../app.css';
 	import { goto } from '$app/navigation';
-	import RoundedAvatar from '$lib/components/RoundedAvatar.svelte';
+	import RoundAvatar from '$lib/components/RoundAvatar.svelte';
 	import { fetchUserData, userData } from '$lib/stores/user-data';
 	import getServerAsset from '$lib/utils/get-server-asset';
 	import type UserData from '$lib/interfaces/user-data.interface';
@@ -64,7 +64,7 @@
 						}}
 						aria-label="Settings"
 					>
-						<RoundedAvatar
+						<RoundAvatar
 							src={currentUserData?.profilePhoto
 								? getServerAsset(currentUserData.profilePhoto)
 								: '/icons/avatar.svg'}

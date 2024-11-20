@@ -1,11 +1,11 @@
 <script lang="ts">
-	interface RoundedAvatarProps {
+	interface RoundAvatarProps {
 		alt?: string;
 		size?: 's' | 'm' | 'l';
 		src: string;
 	}
 
-	const { alt = '', size, src }: RoundedAvatarProps = $props();
+	const { alt = '', size, src }: RoundAvatarProps = $props();
 
 	let wrapperStyles = $state('');
 	let pictureStyles = $state('');
@@ -17,7 +17,7 @@
 			break;
 		case 'm':
 			wrapperStyles = 'p-0';
-			pictureStyles = 'w-20';	
+			pictureStyles = 'w-20';
 			break;
 		case 'l':
 			wrapperStyles = 'p-0';
