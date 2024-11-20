@@ -1,17 +1,29 @@
 <script lang="ts">
+	export let profilePhoto: string | null = null;
+	export let children;
+
 	import { isAuthenticated, login, logout } from '$lib/stores/auth';
 	import { onMount } from 'svelte';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
 
 	import '../app.css';
 	import { goto } from '$app/navigation';
-	let { children } = $props();
+	import RoundedAvatar from '$lib/components/RoundedAvatar.svelte';
+	import { fetchUserData, userData } from '$lib/stores/user-data';
+	import getServerAsset from '$lib/utils/get-server-asset';
+	import type UserData from '$lib/interfaces/user-data.interface';
+
+	let currentUserData: UserData | null = null;
+
+	userData.subscribe((value) => {
+		currentUserData = value;
+	});
 
 	const handleLogOut = () => {
 		const accessToken = localStorage.getItem('access_token');
 
 		if (accessToken) {
-			const res = fetch(`${SERVER_BASE_URL}/api/users/logout`, {
+			fetch(`${SERVER_BASE_URL}/api/users/logout`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -26,12 +38,14 @@
 		goto('/');
 	};
 
-	onMount(() => {
+	onMount(async () => {
 		const accessToken = localStorage.getItem('access_token');
 
 		if (accessToken) {
 			login();
 		}
+
+		await fetchUserData();
 	});
 </script>
 
@@ -42,10 +56,25 @@
 				<a href="/">Home</a>
 			</nav>
 
-			<div>
+			<div class="flex items-center justify-center gap-4">
 				{#if $isAuthenticated}
-					<a href="/profile">Profile</a>
-					<button type="button" onclick={handleLogOut}>Log out</button>
+					<button
+						onclick={() => {
+							goto('/account');
+						}}
+						aria-label="Settings"
+					>
+						<RoundedAvatar
+							src={currentUserData?.profilePhoto
+								? getServerAsset(currentUserData.profilePhoto)
+								: '/icons/avatar.svg'}
+							alt=""
+							size="s"
+						/>
+					</button>
+					<button type="button" onclick={handleLogOut} aria-label="Log out">
+						<img src="/icons/exit.svg" alt="" class="w-6" />
+					</button>
 				{:else}
 					<a href="/login">Sign in</a>
 				{/if}
