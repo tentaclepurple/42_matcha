@@ -7,6 +7,7 @@
 
 	import { goto } from '$app/navigation';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
+	import { fetchUserData } from '$lib/stores/user-data';
 
 	let error: string = '';
 	let isLoading: boolean = false;
@@ -47,6 +48,7 @@
 
 			localStorage.setItem('access_token', access_token);
 			login();
+			await fetchUserData();
 
 			const { profile_completed: profileCompleted } = user;
 			return profileCompleted ? goto('/dashboard') : goto('/profile');
