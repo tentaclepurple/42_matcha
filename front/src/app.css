@@ -12,6 +12,11 @@ h1 {
 	font-weight: bold;
 }
 
+h2 {
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+
 form input {
 	display: block;
 	outline: 2px teal solid;
@@ -20,5 +25,9 @@ form input {
 
 	&:invalid {
 		outline: 2px red solid;
+	}
+
+	&:read-only {
+		background: #f4f4f4;
 	}
 }
