@@ -121,6 +121,9 @@ def toggle_like(user_identifier):
        user = get_user_by_identifier(user_identifier)
        if not user:
            return jsonify({'error': 'User not found'}), 404
+       
+       if current_user_id in [str(blocked_id) for blocked_id in user.get('blocked_users', [])]:
+           return jsonify({'error': 'This user had blocked you'}), 400
            
        to_user_id = str(user['_id'])
        
@@ -200,6 +203,9 @@ def toggle_unlike(user_identifier):
        if not user:
            return jsonify({'error': 'User not found'}), 404
            
+       if current_user_id in [str(blocked_id) for blocked_id in user.get('blocked_users', [])]:
+           return jsonify({'error': 'This user had blocked you'}), 400
+
        to_user_id = str(user['_id'])
 
        # check if trying to unlike self

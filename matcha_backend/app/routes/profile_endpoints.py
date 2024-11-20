@@ -72,6 +72,64 @@ def update_profile():
        return jsonify({'error': str(e)}), 500
 
 
+@profile_bp.route('/update_photo/<int:index>', methods=['PUT'])
+@jwt_required()
+def update_photo(index):
+    if not 0 <= index <= 4:
+        return jsonify({'error': 'Invalid index'}), 400
+        
+    try:
+        current_user_id = get_jwt_identity()
+        
+        print("photo index\n", index)
+        print("files\n", request.files)
+        if 'photo' not in request.files:
+            return jsonify({'error': 'No photo provided'}), 400
+            
+        photo = request.files['photo']
+        
+        # Validar archivo
+        if not photo or not allowed_file(photo.filename):
+            return jsonify({'error': 'Invalid file type'}), 400
+            
+        # Validar tamaño
+        if request.content_length > MAX_FILE_SIZE:
+            return jsonify({'error': 'File too large. Maximum size is 5MB'}), 400
+            
+        # Obtener usuario y su foto actual
+        user = UserModel.find_by_id(current_user_id)
+        current_photo = user['photos'][index]['url']
+        
+        # Si la foto actual no es la default, borrarla
+        if 'default' not in current_photo:
+            try:
+                os.remove(os.path.join(UPLOAD_FOLDER, current_photo))
+            except:
+                pass  # Si falla el borrado, continuamos igual
+        
+        # Guardar nueva foto
+        filename = secure_filename(f"{current_user_id}_{index}_{photo.filename}")
+        path = os.path.join(UPLOAD_FOLDER, filename)
+        photo.save(path)
+        
+        # Actualizar en base de datos
+        photo_data = {
+            'url': path,
+            'is_profile': user['photos'][index]['is_profile'],
+            'uploaded_at': datetime.utcnow()
+        }
+        
+        UserModel.update_photo(current_user_id, index, photo_data)
+        
+        return jsonify({
+            'message': 'Photo updated successfully',
+            'photo': photo_data
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @profile_bp.route('/update_avatar/<int:index>', methods=['PUT'])
 @jwt_required()
 def set_profile_photo(index):
