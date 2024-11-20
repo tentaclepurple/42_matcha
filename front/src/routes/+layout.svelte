@@ -72,7 +72,9 @@
 							size="s"
 						/>
 					</button>
-					<button type="button" onclick={handleLogOut}>Log out</button>
+					<button type="button" onclick={handleLogOut} aria-label="Log out">
+						<img src="/icons/exit.svg" alt="" class="w-6" />
+					</button>
 				{:else}
 					<a href="/login">Sign in</a>
 				{/if}
