@@ -12,22 +12,22 @@
 
 	switch (size) {
 		case 's':
-			wrapperStyles = 'p-3';
-			pictureStyles = 'w-6';
-			break;
-		case 'm':
-			wrapperStyles = 'p-4';
+			wrapperStyles = 'p-0';
 			pictureStyles = 'w-12';
 			break;
+		case 'm':
+			wrapperStyles = 'p-0';
+			pictureStyles = 'w-20';	
+			break;
 		case 'l':
-			wrapperStyles = 'p-4';
-			pictureStyles = 'w-16';
+			wrapperStyles = 'p-0';
+			pictureStyles = 'w-28';
 			break;
 	}
 </script>
 
 <div
-	class={`flex items-center justify-center rounded-full border-2 border-teal-500 bg-gray-200 ${wrapperStyles} shrink-0`}
+	class={`flex items-center justify-center rounded-full border-2 border-teal-500 bg-gray-200 ${wrapperStyles} shrink-0 overflow-hidden`}
 >
 	<img {src} {alt} class={pictureStyles} />
 </div>
