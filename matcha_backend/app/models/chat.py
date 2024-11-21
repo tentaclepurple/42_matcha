@@ -4,6 +4,7 @@ from ..config.database import mongo
 from bson import ObjectId
 from datetime import datetime
 from typing import Optional, Dict, Any, List
+from .notification import NotificationModel
 
 
 class ChatModel:
@@ -30,6 +31,14 @@ class ChatModel:
             }
             
             result = mongo.db.chat_messages.insert_one(message)
+            
+			# Create notification
+            NotificationModel.create(
+				user_id=to_user_id,
+				type="message",
+				from_user_id=from_user_id
+			)
+
             return bool(result.inserted_id)
             
         except Exception as e:

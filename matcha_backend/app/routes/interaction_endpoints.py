@@ -7,6 +7,7 @@ from ..config.database import mongo
 from ..models.user import UserModel
 from ..models.like import LikeModel
 from ..models.notification import NotificationModel
+from ..models.iamatcha import BotModel
 
 
 interaction_bp = Blueprint('interaction', __name__)
@@ -126,17 +127,21 @@ def toggle_like(user_identifier):
            return jsonify({'error': 'This user had blocked you'}), 400
            
        to_user_id = str(user['_id'])
-       
+
        # Check if trying to like self
        if to_user_id == current_user_id:
            return jsonify({'error': 'Cannot like yourself'}), 400
-       
+
        # Check existing interactions
        existing_like = mongo.db.likes.find_one({
            "from_user_id": ObjectId(current_user_id),
            "to_user_id": ObjectId(to_user_id),
            "type": "like"
        })
+
+       if to_user_id == str(BotModel.BOT_ID) and not existing_like:
+            # Inicia conversación
+            BotModel.handle_user_like(current_user_id)
        
        existing_unlike = mongo.db.likes.find_one({
            "from_user_id": ObjectId(current_user_id),
