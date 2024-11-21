@@ -12,6 +12,7 @@ from .routes.interaction_endpoints import interaction_bp
 from .routes.match_endpoints import match_bp
 from .routes.notification_endpoints import notification_bp
 from .routes.chat_endpoints import chat_bp
+from .models.iamatcha import BotModel
 
 from dotenv import load_dotenv
 import os
@@ -44,7 +45,7 @@ def create_app():
     mongo.init_app(app)
     jwt = JWTManager(app)
     
-    # Registrar blueprints
+    # Register blueprints
     app.register_blueprint(user_bp, url_prefix='/api/users')
     app.register_blueprint(profile_bp, url_prefix='/api/profile')
     app.register_blueprint(tags_bp, url_prefix='/api/tags')
@@ -55,5 +56,7 @@ def create_app():
 
     with app.app_context():
         init_db()
+        
+    BotModel.check_and_create_bot()
         
     return app

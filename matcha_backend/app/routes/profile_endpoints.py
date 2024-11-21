@@ -11,6 +11,7 @@ from ..models.user import UserModel
 from ..models.profile_view import ProfileViewModel
 from ..models.like import LikeModel
 from ..models.notification import NotificationModel
+from ..models.iamatcha import BotModel
 
 
 UPLOAD_FOLDER = 'app/static/uploads'
@@ -80,9 +81,7 @@ def update_photo(index):
         
     try:
         current_user_id = get_jwt_identity()
-        
-        print("photo index\n", index)
-        print("files\n", request.files)
+
         if 'photo' not in request.files:
             return jsonify({'error': 'No photo provided'}), 400
             

@@ -13,7 +13,8 @@ def init_db():
             "likes": LIKE_SCHEMA,
             "tags": TAG_SCHEMA,
             "notifications": NOTIFICATION_SCHEMA,
-            "chat_messages": CHAT_MESSAGE_SCHEMA
+            "chat_messages": CHAT_MESSAGE_SCHEMA,
+            "conversations": CONVERSATION_SCHEMA
         }
 
         # Create COLLECTIONS if they don't exist
@@ -41,7 +42,7 @@ def init_db():
         mongo.db.users.create_index("last_connection")
         mongo.db.users.create_index("profile_completed")
 
-		# Indexes for profile views
+        # Indexes for profile views
         mongo.db.profile_views.create_index([("viewer_id", 1), ("viewed_id", 1)])
         mongo.db.profile_views.create_index([("viewed_id", 1), ("viewed_at", -1)])
         mongo.db.profile_views.create_index("viewed_at")
@@ -54,12 +55,12 @@ def init_db():
         # Indexes for tags
         mongo.db.tags.create_index("name", unique=True)
         
-		# Indexes for notifications
+        # Indexes for notifications
         mongo.db.notifications.create_index([("user_id", 1), ("read", 1)])
         mongo.db.notifications.create_index([("user_id", 1), ("created_at", -1)])
         mongo.db.notifications.create_index("from_user_id")
         
-		# Indexes for chat messages
+        # Indexes for chat messages
         mongo.db.chat_messages.create_index([
             ("from_user_id", 1), ("to_user_id", 1), ("created_at", -1)
             ])
@@ -67,6 +68,17 @@ def init_db():
             ("to_user_id", 1), ("read", 1)
             ])
         mongo.db.chat_messages.create_index("created_at")
+
+        # Indexes for conversations
+        mongo.db.conversations.create_index([
+                ("from_user_id", 1),
+                ("to_user_id", 1),
+                ("updated_at", -1)
+            ])
+
+        mongo.db.conversations.create_index([
+            ("messages.timestamp", -1)
+        ])
 
         print("Database initialized successfully")
         

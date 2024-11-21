@@ -6,6 +6,7 @@ from ..models.chat import ChatModel
 from ..models.user import UserModel
 from ..models.like import LikeModel
 from ..models.notification import NotificationModel
+from ..models.iamatcha import BotModel
 from bson import ObjectId
 from datetime import datetime
 
@@ -170,6 +171,21 @@ def send_message(user_identifier):
             
         if not recipient:
             return jsonify({'error': 'Recipient not found'}), 404
+        
+		# Si el mensaje es para Maria
+        if str(recipient['_id']) == str(BotModel.BOT_ID):
+            ChatModel.send_message(
+                from_user_id=current_user_id,
+                to_user_id=str(BotModel.BOT_ID),
+                content=content,
+                msg_type='text'
+            )
+            
+            # Procesar respuesta del bot
+            if BotModel.handle_user_message(current_user_id, content):
+                return jsonify({'message': 'Message sent and processed'}), 200
+            else:
+                return jsonify({'error': 'Failed to process message'}), 500
             
         recipient_id = str(recipient['_id'])
         
@@ -189,13 +205,6 @@ def send_message(user_identifier):
         if not success:
             return jsonify({'error': 'Failed to send message'}), 500
             
-        # Create notification
-        NotificationModel.create(
-            user_id=recipient_id,
-            type='message',
-            from_user_id=current_user_id
-        )
-        
         return jsonify({'message': 'Message sent successfully'}), 200
         
     except Exception as e:

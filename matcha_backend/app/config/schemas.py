@@ -284,3 +284,58 @@ CHAT_MESSAGE_SCHEMA = {
         "additionalProperties": False
     }
 }
+
+
+CONVERSATION_SCHEMA = {
+    "$jsonSchema": {
+        "bsonType": "object",
+        "required": ["from_user_id", "to_user_id", "context", "messages", "created_at", "updated_at"],
+        "properties": {
+            "_id": {
+                "bsonType": "objectId"
+            },
+            "from_user_id": {
+                "bsonType": "objectId"
+            },
+            "to_user_id": {
+                "bsonType": "objectId"
+            },
+            "context": {
+                "bsonType": "string"
+            },
+            "messages": {
+                "bsonType": "array",
+                "items": {
+                    "bsonType": "object",
+                    "required": ["from_id", "to_id", "content", "timestamp", "read"],
+                    "properties": {
+                        "from_id": {
+                            "bsonType": "objectId"
+                        },
+                        "to_id": {
+                            "bsonType": "objectId"
+                        },
+                        "content": {
+                            "bsonType": "string"
+                        },
+                        "timestamp": {
+                            "bsonType": "date"
+                        },
+                        "read": {
+                            "bsonType": "bool"
+                        }
+                    }
+                }
+            },
+            "created_at": {
+                "bsonType": "date"
+            },
+            "updated_at": {
+                "bsonType": "date"
+            },
+            "status": {
+                "enum": ["active", "archived", "blocked"]
+            }
+        }
+    }
+}
