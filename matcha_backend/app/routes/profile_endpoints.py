@@ -130,6 +130,38 @@ def update_photo(index):
         return jsonify({'error': str(e)}), 500
 
 
+@profile_bp.route('/delete_photo/<int:index>', methods=['DELETE'])
+@jwt_required()
+def delete_photo(index):
+    if not 0 <= index <= 4:
+        return jsonify({'error': 'Invalid index'}), 400
+        
+    try:
+        current_user_id = get_jwt_identity()
+        
+        # get user and current photo
+        user = UserModel.find_by_id(current_user_id)
+        current_photo = user['photos'][index]['url']
+        
+        # create default photo data
+        default_photo_data = {
+            'url': 'default_photo.jpg',  # Ajusta esto al nombre de tu foto default
+            'is_profile': user['photos'][index]['is_profile'],
+            'uploaded_at': datetime.utcnow()
+        }
+        
+        # update in database
+        UserModel.update_photo(current_user_id, index, default_photo_data)
+        
+        return jsonify({
+            'message': 'Photo deleted and reset to default successfully',
+            'photo': default_photo_data
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @profile_bp.route('/update_avatar/<int:index>', methods=['PUT'])
 @jwt_required()
 def set_profile_photo(index):
