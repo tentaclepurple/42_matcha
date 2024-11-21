@@ -8,15 +8,23 @@
 	import { goto } from '$app/navigation';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
 	import { fetchUserData } from '$lib/stores/user-data';
+	import { writable } from 'svelte/store';
+	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
 
-	let error: string = '';
+	let error = writable('');
+	error.subscribe(() => {
+		setTimeout(() => {
+			error.set('');
+		}, DEFAULT_TIMEOUT);
+	});
+
 	let isLoading: boolean = false;
 
 	const handleSubmit = async (e) => {
 		if (isLoading) return;
 
 		isLoading = true;
-		error = '';
+		error.set('');
 
 		e.preventDefault();
 
@@ -34,10 +42,10 @@
 			if (!res.ok) {
 				switch (res.status) {
 					case 401:
-						error = 'Invalid e-mail or password.';
+						error.set('Invalid e-mail or password');
 						break;
 					default:
-						error = 'An error occurred. Please try again later.';
+						error.set('An error occurred. Please try again later.');
 						break;
 				}
 
@@ -53,7 +61,7 @@
 			const { profile_completed: profileCompleted } = user;
 			return profileCompleted ? goto('/dashboard') : goto('/account');
 		} catch (err) {
-			error = 'An error occurred. Please try again later.';
+			error.set('An error occurred. Please try again later.');
 			return;
 		} finally {
 			isLoading = false;
@@ -103,8 +111,8 @@
 					<Button type="submit" {isLoading}>Log in</Button>
 				</div>
 
-				{#if error}
-					<p class="mt-2 text-red-500">{error}</p>
+				{#if $error}
+					<p class="mt-2 text-red-500">{$error}</p>
 				{/if}
 			</Form>
 		</div>
