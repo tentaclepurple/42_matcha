@@ -52,6 +52,12 @@
 		} catch (err) {
 			console.error(err);
 			error.set('An error occurred. Please try again later.');
+
+			// Reset form values to the current user data
+			e.target.username.value = currentUserData?.username || '';
+			e.target.first_name.value = currentUserData?.firstName || '';
+			e.target.last_name.value = currentUserData?.lastName || '';
+			e.target.email.value = currentUserData?.email || '';
 		} finally {
 			isEditing = false;
 		}
@@ -122,7 +128,7 @@
 		{:else}
 			<Button
 				type="button"
-				level="secondary"
+				level="primary"
 				onclick={() => {
 					isEditing = !isEditing;
 					error.set('');
