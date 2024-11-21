@@ -1,5 +1,6 @@
 # app/models/iamatcha.py
 
+
 import google.generativeai as genai
 from datetime import datetime
 from bson import ObjectId
@@ -7,284 +8,319 @@ from ..config.database import mongo
 from .chat import ChatModel
 from .like import LikeModel
 from .notification import NotificationModel
-from .context import context1, initial_message
+from .context import initial_message
+from .bot_profiles import BOT_PROFILES
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
 
+load_dotenv()
 KEY = os.getenv('GOOGLE_KEY')
-model_selection = 'gemini-1.5-flash-8b'
+model1 = 'gemini-1.5-flash'
+model2 = 'gemini-1.5-flash-8b'
+model3 = 'gemini-1.5-pro'
+model_selection = model2
+
+
 
 class BotModel:
-    BOT_ID = ObjectId("673cfa0e31047e88946f398f")
-    
-    @classmethod
-    def initialize_gemini(cls):
-        """Initialize the Gemini model"""
-        genai.configure(api_key=KEY)
-        
-        generation_config = {
-            'temperature': 0.9,
-            'top_p': 0.9,
-            'top_k': 40,
-            'max_output_tokens': 300,
-            'candidate_count': 1
-        }
-        
-        safety_settings = [
-            {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
-            {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
-            {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
-            {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
-        ]
-        
-        return genai.GenerativeModel(
-            model_name=model_selection,
-            generation_config=generation_config,
-            safety_settings=safety_settings
-        )
+   @classmethod
+   def initialize_gemini(cls):
+       genai.configure(api_key=KEY)
+       
+       generation_config = {
+           'temperature': 0.9,
+           'top_p': 0.9,
+           'top_k': 40,
+           'max_output_tokens': 300,
+           'candidate_count': 1
+       }
+       
+       safety_settings = [
+           {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
+           {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
+           {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
+           {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
+       ]
+       
+       return genai.GenerativeModel(
+           model_name=model_selection,
+           generation_config=generation_config,
+           safety_settings=safety_settings
+       )
 
-    @classmethod
-    def get_user_context(cls, user_id: str) -> str:
-        """Get user context information"""
-        try:
-            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
-            if not user:
-                return ""
-            
-            gender_map = {"male": "hombre", "female": "mujer"}
-            preferences_map = {
-                "male": "los hombres",
-                "female": "las mujeres",
-                "bisexual": "hombres y mujeres",
-                "other": "otros géneros"
-            }
+   @classmethod
+   def select_bot_for_user(cls, user_id: str):
+       """Selecciona bot basado en perfil del usuario"""
+       user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+       if not user:
+           return None
 
-            gender = gender_map.get(user.get('gender', ''), user.get('gender', ''))
-            sexual = preferences_map.get(user.get('sexual_preferences', ''), 'otros géneros')
+       user_age = user.get('age', 25)
+       user_interests = set(user.get('interests', []))
+       user_gender = user.get('gender')
+       user_preferences = user.get('sexual_preferences')
 
-            user_context = f"""
-            Información adicional del usuario con el que hablas:
-            - Nombre: {user.get('first_name', '')}
-            - Edad: {user.get('age', '')} años
-            - Género: {gender}
-            - Le atraen sexualmente {sexual}
-            - Intereses: {', '.join(user.get('interests', []))}
-            - Localización: {user.get('location', {}).get('coordinates', []) if user.get('location') else 'No disponible'}
-            - Biografía: {user.get('biography', '')}
-            """
+       scores = {}
+       for bot_id, bot in BOT_PROFILES.items():
+           score = 0
+           bot_age = bot['age']
+           min_age = max(18, bot_age - 5)
+           max_age = bot_age + 5
             
-            return user_context
-            
-        except Exception as e:
-            print(f"Error getting user context: {e}")
-            return ""
+           if min_age <= user_age <= max_age:
+               score += 10
+           
+           # Intereses comunes
+           matching_interests = len(user_interests & set(bot['interests']))
+           score += matching_interests * 2
+           
+           # Compatibilidad género/preferencias
+           if bot['sexual_preferences'] in [user_gender, "bisexual"]:
+               score += 3
+           if user_preferences in [bot['gender'], "bisexual"]:
+               score += 3
 
-    @classmethod
-    def get_conversation_history(cls, user_id: str) -> dict:
-        """Get or create conversation history"""
-        conversation = mongo.db.conversations.find_one({
-            "$or": [
-                {"from_user_id": ObjectId(user_id), "to_user_id": cls.BOT_ID},
-                {"from_user_id": cls.BOT_ID, "to_user_id": ObjectId(user_id)}
-            ]
-        })
-        
-        if not conversation:
-            conversation = {
-                "from_user_id": ObjectId(user_id),
-                "to_user_id": cls.BOT_ID,
-                "context": context1,
-                "messages": [],
-                "created_at": datetime.now(),
-                "updated_at": datetime.now(),
-                "status": "active"
-            }
-            
-        return conversation
+           scores[bot_id] = score
+           print(f"Bot {bot['username']}: score {score}")   
+       
 
-    @classmethod
-    def save_conversation(cls, conversation: dict):
-        """Save or update conversation"""
-        conversation["updated_at"] = datetime.now()
-        
-        mongo.db.conversations.update_one(
-            {
-                "$or": [
-                    {"from_user_id": conversation["from_user_id"], "to_user_id": conversation["to_user_id"]},
-                    {"from_user_id": conversation["to_user_id"], "to_user_id": conversation["from_user_id"]}
-                ]
-            },
-            {"$set": conversation},
-            upsert=True
-        )
+       selected_bot = max(scores.items(), key=lambda x: x[1])[0]
+       print(f"Selected: {BOT_PROFILES[selected_bot]['username']}")
+       return BOT_PROFILES[selected_bot]
 
-    @classmethod
-    def prepare_chat_history(cls, conversation: dict) -> list:
-        """Prepare chat history for Gemini"""
-        chat_history = [{"role": "user", "parts": [conversation["context"]]}]
-        
-        for msg in conversation["messages"]:
-            role = "user" if msg["from_id"] != cls.BOT_ID else "model"
-            chat_history.append({
-                "role": role,
-                "parts": [msg["content"]]
-            })
-        
-        return chat_history
+   @classmethod
+   def check_and_create_bot(cls):
+       """Create bot profiles if they don't exist"""
+       for bot_data in BOT_PROFILES.values():
+           if not mongo.db.users.find_one({"_id": bot_data["_id"]}):
+               bot_profile = {
+                   **bot_data,
+                   "email": f"{bot_data['username'].lower()}@bot.com",
+                   "password": "hash_seguro",
+                   "verified": True,
+                   "created_at": datetime.now(),
+                   "online": True,
+                   "profile_completed": True,
+                   "photos": [
+                       {
+                           "url": f"url_de_foto_{bot_data['username'].lower()}",
+                           "is_profile": True,
+                           "uploaded_at": datetime.now()
+                       }
+                   ],
+                   "fame_rating": 100
+               }
+               mongo.db.users.insert_one(bot_profile)
 
-    @classmethod
-    def check_and_create_bot(cls):
-        """Create bot user if not exists"""
-        if not mongo.db.users.find_one({"_id": cls.BOT_ID}):
-            bot_data = {
-                "_id": cls.BOT_ID,
-                "username": "Maria",
-                "email": "maria@bot.com",
-                "password": "hash_seguro",
-                "first_name": "Maria",
-                "last_name": "Bot",
-                "age": 22,
-                "gender": "female",
-                "sexual_preferences": "bisexual",
-                "biography": "¡Hola! Soy María de Urduliz",
-                "verified": True,
-                "created_at": datetime.now(),
-                "online": True,
-                "profile_completed": True,
-                "interests": ["fiesta", "baile", "música"],
-                "photos": [
-                    {
-                        "url": "url_de_foto",
-                        "is_profile": True,
-                        "uploaded_at": datetime.now()
-                    }
-                ],
-                "location": {
-                    "type": "Point",
-                    "coordinates": [-2.9716, 43.3666]  # Urduliz
-                },
-                "fame_rating": 100
-            }
-            mongo.db.users.insert_one(bot_data)
+   @classmethod
+   def get_user_context(cls, user_id: str) -> str:
+       try:
+           user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+           if not user:
+               return ""
+           
+           gender_map = {"male": "hombre", "female": "mujer"}
+           preferences_map = {
+               "male": "los hombres",
+               "female": "las mujeres",
+               "bisexual": "hombres y mujeres",
+               "other": "otros géneros"
+           }
 
-    @classmethod
-    def handle_profile_completion(cls, user_id: str):
-        """Like and start conversation with user"""
-        try:
-            # like user
-            LikeModel.add_like(str(cls.BOT_ID), user_id, "like")
-            
-            # Create notification
-            NotificationModel.create(
-                user_id=user_id,
-                type="like",
-                from_user_id=str(cls.BOT_ID)
-            )
-            
-            return True
-        except Exception as e:
-            print(f"Bot like error: {e}")
-            return False
+           gender = gender_map.get(user.get('gender', ''), user.get('gender', ''))
+           sexual = preferences_map.get(user.get('sexual_preferences', ''), 'otros géneros')
 
-    @classmethod
-    def handle_user_like(cls, user_id: str):
-        """Handle user like and start conversation"""
-        try:
-            # Initialize chat
-            model = cls.initialize_gemini()
-            
-            # Get user context and conversation
-            user_context = cls.get_user_context(user_id)
-            conversation = cls.get_conversation_history(user_id)
-            
-            # Add context to conversation if new
-            if not conversation["messages"]:
-                conversation["context"] = f"{context1}\n\n{user_context}"
-                
-                # Create initial message
-                chat = model.start_chat(history=[{"role": "user", "parts": [conversation["context"]]}])
-                response = chat.send_message(initial_message)
-                
-                # Save bot's initial message
-                conversation["messages"].append({
-                    "from_id": cls.BOT_ID,
-                    "to_id": ObjectId(user_id),
-                    "content": response.text.strip(),
-                    "timestamp": datetime.now(),
-                    "read": False
-                })
-                
-                # Save conversation
-                cls.save_conversation(conversation)
-                
-                # Send message through chat system
-                ChatModel.send_message(
-                    from_user_id=str(cls.BOT_ID),
-                    to_user_id=user_id,
-                    content=response.text.strip(),
-                    msg_type='text'
-                )
-            
-            return True
-        except Exception as e:
-            print(f"Bot message error: {e}")
-            return False
+           user_context = f"""
+           Información adicional del usuario con el que hablas:
+           - Nombre: {user.get('first_name', '')}
+           - Edad: {user.get('age', '')} años
+           - Género: {gender}
+           - Le atraen sexualmente {sexual}
+           - Intereses: {', '.join(user.get('interests', []))}
+           - Localización: {user.get('location', {}).get('coordinates', []) if user.get('location') else 'No disponible'}
+           - Biografía: {user.get('biography', '')}
+           """
+           
+           return user_context
+           
+       except Exception as e:
+           print(f"Error getting user context: {e}")
+           return ""
 
-    @classmethod
-    def handle_user_message(cls, user_id: str, message: str):
-        """Process user message and send response"""
-        try:
-            # Get conversation history
-            conversation = cls.get_conversation_history(user_id)
-            
-            # Add user message
-            conversation["messages"].append({
-                "from_id": ObjectId(user_id),
-                "to_id": cls.BOT_ID,
-                "content": message,
-                "timestamp": datetime.now(),
-                "read": False
-            })
-            
-            # Get user context
-            user_context = cls.get_user_context(user_id)
-            conversation["context"] = f"{context1}\n\n{user_context}"
-            
-            # Initialize model
-            model = cls.initialize_gemini()
-            
-            # Prepare and start chat
-            chat_history = cls.prepare_chat_history(conversation)
-            chat = model.start_chat(history=chat_history)
-            
-            # Get response
-            response = chat.send_message(message)
-            response_text = response.text.strip()
-            
-            # Add bot response to conversation
-            conversation["messages"].append({
-                "from_id": cls.BOT_ID,
-                "to_id": ObjectId(user_id),
-                "content": response_text,
-                "timestamp": datetime.now(),
-                "read": False
-            })
-            
-            # Save conversation
-            cls.save_conversation(conversation)
-            
-            # Send through chat system
-            ChatModel.send_message(
-                from_user_id=str(cls.BOT_ID),
-                to_user_id=user_id,
-                content=response_text,
-                msg_type='text'
-            )
-            
-            return True
-            
-        except Exception as e:
-            print(f"Bot response error: {e}")
-            return False
+   @classmethod
+   def get_conversation_history(cls, user_id: str, bot_id: str) -> dict:    
+       bot = next((bot for bot in BOT_PROFILES.values() if str(bot["_id"]) == bot_id), None)
+       if bot:
+           bot_context = bot["context"]
+       else:
+           # Manejar el caso en el que el bot_id no se encuentre en BOT_PROFILES
+           bot_context = ""
+       conversation = mongo.db.conversations.find_one({
+           "$or": [
+               {"from_user_id": ObjectId(user_id), "to_user_id": ObjectId(bot_id)},
+               {"from_user_id": ObjectId(bot_id), "to_user_id": ObjectId(user_id)}
+           ]
+       })
+       
+       if not conversation:
+           conversation = {
+               "from_user_id": ObjectId(user_id),
+               "to_user_id": ObjectId(bot_id),
+               "context": bot_context,
+               "messages": [],
+               "created_at": datetime.now(),
+               "updated_at": datetime.now(),
+               "status": "active"
+           }
+           
+       return conversation
+
+   @classmethod
+   def save_conversation(cls, conversation: dict):
+       conversation["updated_at"] = datetime.now()
+       
+       mongo.db.conversations.update_one(
+           {
+               "$or": [
+                   {"from_user_id": conversation["from_user_id"], "to_user_id": conversation["to_user_id"]},
+                   {"from_user_id": conversation["to_user_id"], "to_user_id": conversation["from_user_id"]}
+               ]
+           },
+           {"$set": conversation},
+           upsert=True
+       )
+
+   @classmethod
+   def prepare_chat_history(cls, conversation: dict, bot_id: str) -> list:
+       chat_history = [{"role": "user", "parts": [conversation["context"]]}]
+       
+       for msg in conversation["messages"]:
+           role = "user" if msg["from_id"] != ObjectId(bot_id) else "model"
+           chat_history.append({
+               "role": role,
+               "parts": [msg["content"]]
+           })
+       
+       return chat_history
+
+   @classmethod
+   def handle_profile_completion(cls, user_id: str):
+       try:
+           selected_bot = cls.select_bot_for_user(user_id)
+           if not selected_bot:
+               return False
+               
+           bot_id = str(selected_bot["_id"])
+           
+           LikeModel.add_like(bot_id, user_id, "like")
+           NotificationModel.create(
+               user_id=user_id,
+               type="like",
+               from_user_id=bot_id
+           )
+           return True
+       except Exception as e:
+           print(f"Bot like error: {e}")
+           return False
+
+   @classmethod
+   def handle_user_like(cls, user_id: str, bot_id: str):
+       try:
+           print(f"---Procesando like de usuario {user_id} para bot {bot_id}")
+           model = cls.initialize_gemini()
+           user_context = cls.get_user_context(user_id)
+           conversation = cls.get_conversation_history(user_id, bot_id)
+
+           if not model:
+              print("Model not found")
+           if not user_context:
+              print("User context not found")
+           if not conversation:
+              print("Conversation not found")
+
+           print(f"Procesando like de usuario {user_id} para bot {bot_id}")
+           print(f"Contexto del usuario: {user_context}")
+           print(f"Historial de conversación: {conversation}")
+           
+           if not conversation["messages"]:
+               bot = next((bot for bot in BOT_PROFILES.values() if str(bot["_id"]) == bot_id), None)
+               if not bot:
+                   print(f"No se encontró el bot con ID {bot_id}")
+                   return False
+                   
+               conversation["context"] = f"{bot['context']}\n\n{user_context}"
+               chat = model.start_chat(history=[{"role": "user", "parts": [conversation["context"]]}])
+               response = chat.send_message(initial_message)
+               
+               conversation["messages"].append({
+                   "from_id": ObjectId(bot_id),
+                   "to_id": ObjectId(user_id),
+                   "content": response.text.strip(),
+                   "timestamp": datetime.now(),
+                   "read": False
+               })
+               
+               cls.save_conversation(conversation)
+               
+               ChatModel.send_message(
+                   from_user_id=str(bot_id),
+                   to_user_id=user_id,
+                   content=response.text.strip(),
+                   msg_type='text'
+               )
+           
+           return True
+       except Exception as e:
+           print(f"Bot message error: {e}")
+           return False
+
+   @classmethod
+   def handle_user_message(cls, user_id: str, message: str, bot_id: str):
+       try:
+           bot = next((bot for bot in BOT_PROFILES.values() if str(bot["_id"]) == bot_id), None)
+           if not bot:
+               return False
+               
+           conversation = cls.get_conversation_history(user_id, bot_id)
+           
+           conversation["messages"].append({
+               "from_id": ObjectId(user_id),
+               "to_id": ObjectId(bot_id),
+               "content": message,
+               "timestamp": datetime.now(),
+               "read": False
+           })
+           
+           user_context = cls.get_user_context(user_id)
+           conversation["context"] = f"{bot['context']}\n\n{user_context}"
+           
+           model = cls.initialize_gemini()
+           chat_history = cls.prepare_chat_history(conversation, bot_id)
+           chat = model.start_chat(history=chat_history)
+           
+           response = chat.send_message(message)
+           response_text = response.text.strip()
+           
+           conversation["messages"].append({
+               "from_id": ObjectId(bot_id),
+               "to_id": ObjectId(user_id),
+               "content": response_text,
+               "timestamp": datetime.now(),
+               "read": False
+           })
+           
+           cls.save_conversation(conversation)
+           
+           ChatModel.send_message(
+               from_user_id=str(bot_id),
+               to_user_id=user_id,
+               content=response_text,
+               msg_type='text'
+           )
+           
+           return True
+           
+       except Exception as e:
+           print(f"Bot response error: {e}")
+           return False

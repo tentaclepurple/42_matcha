@@ -7,6 +7,7 @@ from ..models.user import UserModel
 from ..models.like import LikeModel
 from ..models.notification import NotificationModel
 from ..models.iamatcha import BotModel
+from ..models.bot_profiles import BOT_PROFILES
 from bson import ObjectId
 from datetime import datetime
 
@@ -63,6 +64,7 @@ def get_conversations():
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 @chat_bp.route('/messages/<user_identifier>', methods=['GET'])
 @jwt_required()
@@ -138,6 +140,7 @@ def get_messages(user_identifier):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
 @chat_bp.route('/send/<user_identifier>', methods=['POST'])
 @jwt_required()
 def send_message(user_identifier):
@@ -145,6 +148,10 @@ def send_message(user_identifier):
     try:
         current_user_id = get_jwt_identity()
         
+        user = UserModel.find_by_id(current_user_id)
+        if not user:
+            return jsonify({'error': 'Current user not found'}), 404
+
         # Validate request
         data = request.get_json()
         if not data or 'content' not in data:
@@ -171,28 +178,34 @@ def send_message(user_identifier):
             
         if not recipient:
             return jsonify({'error': 'Recipient not found'}), 404
+
+           # Verify match exists
+        recipient_id = str(recipient['_id'])
+        is_match = LikeModel.check_is_match(current_user_id, recipient_id)
+
+        if not is_match:
+            return jsonify({'error': 'Cannot send message - no match exists'}), 403
+
+        # Check if recipient is a bot
+        bot = next((bot for bot in BOT_PROFILES.values() 
+                    if bot["username"] == recipient["username"] or 
+                    str(bot["_id"]) == str(recipient["_id"])), None)
         
-		# Si el mensaje es para Maria
-        if str(recipient['_id']) == str(BotModel.BOT_ID):
+        if bot:
             ChatModel.send_message(
                 from_user_id=current_user_id,
-                to_user_id=str(BotModel.BOT_ID),
+                to_user_id=str(bot["_id"]),
                 content=content,
                 msg_type='text'
             )
             
-            # Procesar respuesta del bot
-            if BotModel.handle_user_message(current_user_id, content):
+            # Process bot response
+            if BotModel.handle_user_message(current_user_id, content, str(bot["_id"])):
                 return jsonify({'message': 'Message sent and processed'}), 200
             else:
                 return jsonify({'error': 'Failed to process message'}), 500
             
-        recipient_id = str(recipient['_id'])
         
-        # Verify match exists
-        is_match = LikeModel.check_is_match(current_user_id, recipient_id)
-        if not is_match:
-            return jsonify({'error': 'Cannot send message - no match exists'}), 403
             
         # Send message
         success = ChatModel.send_message(
@@ -209,6 +222,7 @@ def send_message(user_identifier):
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 @chat_bp.route('/read/<user_identifier>', methods=['PUT'])
 @jwt_required()

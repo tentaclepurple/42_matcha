@@ -63,16 +63,21 @@ class UserModel:
         """
         user = UserModel.find_by_id(user_id)
         
-        # if profile was not completed before, mark it as completed
-        if not user['profile_completed']:
-            BotModel.handle_profile_completion(user_id)
-            profile_data['profile_completed'] = True      
+        try:
+            if not user['profile_completed']:
+                # Select bot for user if not already selected
+                selected_bot = BotModel.select_bot_for_user(user_id)
+                if selected_bot:
+                    BotModel.handle_profile_completion(user_id)
+        except Exception as e:
+            print(e)
+            pass
+        profile_data['profile_completed'] = True    
 
         result = mongo.db.users.update_one(
             {"_id": ObjectId(user_id)},
             {"$set": profile_data}
         )
-
         return result.modified_count > 0
 
     @staticmethod
