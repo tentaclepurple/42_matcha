@@ -79,13 +79,20 @@
 							id="email"
 							name="email"
 							value="chiamatemi.nico@gmail.com"
+							autocomplete="email"
 							required
 						/>
 					</label>
 
 					<label>
 						Password
-						<PasswordInput id="password" name="password" value="Ciaociao1!" required />
+						<PasswordInput
+							id="password"
+							name="password"
+							value="Ciaociao1!"
+							required
+							autocomplete="current-password"
+						/>
 					</label>
 				</fieldset>
 

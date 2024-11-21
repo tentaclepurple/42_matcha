@@ -56,11 +56,23 @@
 		<fieldset class="mb-4">
 			<label class="flex flex-col items-start justify-center">
 				Password
-				<PasswordInput id="password" name="password" value="Ciaociao1!" required />
+				<PasswordInput
+					id="password"
+					name="password"
+					value="Ciaociao1!"
+					required
+					autocomplete="new-password"
+				/>
 			</label>
 			<label class="flex flex-col items-start justify-center">
 				Confirm password
-				<PasswordInput id="confirm" name="confirm" value="Ciaociao1!" required />
+				<PasswordInput
+					id="confirm"
+					name="confirm"
+					value="Ciaociao1!"
+					required
+					autocomplete="new-password"
+				/>
 			</label>
 		</fieldset>
 		{#if error}
