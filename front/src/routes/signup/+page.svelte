@@ -9,8 +9,15 @@
 	import { MIN_BIRTH_DATA } from '$lib/constants/user';
 	import calcEighteenthBirthday from '$lib/utils/calc-eighteenth-birthday';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
+	import { writable } from 'svelte/store';
 
-	let error: string = '';
+	let error = writable('');
+	error.subscribe(() => {
+		setTimeout(() => {
+			error.set('');
+		}, 5000);
+	});
+
 	let isLoading: boolean = false;
 
 	const handleSubmit = async (e) => {
@@ -18,7 +25,7 @@
 		e.preventDefault();
 
 		isLoading = true;
-		error = '';
+		error.set('');
 
 		const form = e.target;
 		const formData = new FormData(form);
@@ -26,14 +33,14 @@
 		const password = formData.get('password') as string;
 		const confirmPassword = formData.get('confirm') as string;
 		if (password !== confirmPassword) {
-			error = 'Passwords do not match';
+			error.set('Passwords do not match');
 			isLoading = false;
 			return;
 		}
 
 		const { isValid: isPasswordValid, message: passwordError } = validatePassword(password);
 		if (!isPasswordValid) {
-			error = passwordError;
+			error.set(passwordError);
 			isLoading = false;
 			return;
 		}
@@ -55,10 +62,10 @@
 			if (!response.ok) {
 				switch (response.status) {
 					case 409:
-						error = 'User and/or email already exists';
+						error.set('Username or email already in use');
 						break;
 					default:
-						error = 'An error occurred. Please try again later.';
+						error.set('An error occurred. Please try again later.');
 						break;
 				}
 				return;
@@ -66,14 +73,10 @@
 
 			goto('/signup/verify');
 		} catch (err) {
-			error = 'An error occurred. Please try again later.';
+			error.set('An error occurred. Please try again later.');
 		} finally {
 			isLoading = false;
 		}
-	};
-
-	const handleCancel = () => {
-		goto('/');
 	};
 </script>
 
@@ -93,6 +96,7 @@
 							required
 							minlength="5"
 							maxlength="12"
+							autocomplete="username"
 						/>
 					</label>
 					<label>
@@ -103,6 +107,7 @@
 							name="email"
 							value="chiamatemi.nico@gmail.com"
 							required
+							autocomplete="email"
 						/>
 					</label>
 				</div>
@@ -118,6 +123,7 @@
 								value="Nicolas"
 								required
 								maxlength="30"
+								autocomplete="given-name"
 							/>
 						</label>
 						<label>
@@ -129,6 +135,7 @@
 								value="Gasco"
 								required
 								maxlength="30"
+								autocomplete="family-name"
 							/>
 						</label>
 					</div>
@@ -143,6 +150,7 @@
 							min={MIN_BIRTH_DATA}
 							max={calcEighteenthBirthday()}
 							required
+							autocomplete="bday"
 						/>
 					</label>
 				</div>
@@ -150,21 +158,41 @@
 				<div class="mb-4">
 					<label class="flex flex-col items-start justify-center">
 						Password
-						<PasswordInput id="password" name="password" value="Ciaociao1!" required />
+						<PasswordInput
+							id="password"
+							name="password"
+							value="Ciaociao1!"
+							required
+							autocomplete="current-password"
+						/>
 					</label>
 					<label class="flex flex-col items-start justify-center">
 						Confirm password
-						<PasswordInput id="confirm" name="confirm" value="Ciaociao1!" required />
+						<PasswordInput
+							id="confirm"
+							name="confirm"
+							value="Ciaociao1!"
+							required
+							autocomplete="current-password"
+						/>
 					</label>
 				</div>
 			</fieldset>
 
-			{#if error}
-				<p class="text-red-500">{error}</p>
+			{#if $error}
+				<p class="text-red-500">{$error}</p>
 			{/if}
 
 			<div class="flex items-baseline justify-center gap-2">
-				<Button type="button" level="secondary" onclick={handleCancel}>Cancel</Button>
+				<Button
+					type="button"
+					level="secondary"
+					onclick={() => {
+						goto('/login');
+					}}
+				>
+					Cancel
+				</Button>
 				<Button type="submit" level="primary" {isLoading}>Sign up</Button>
 			</div>
 		</Form>

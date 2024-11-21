@@ -3,17 +3,16 @@
 	import Button from '$lib/components/Button.svelte';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
+	import { writable } from 'svelte/store';
 
-	let error = '';
-	let message = '';
+	let error = writable('');
 	let isLoading = false;
 
 	const handleReset = async (e) => {
 		e.preventDefault();
 
 		isLoading = true;
-		error = '';
-		message = '';
+		error.set('');
 
 		const formData = new FormData(e.target);
 		const email = formData.get('email');
@@ -27,7 +26,7 @@
 		});
 
 		if (!res) {
-			error = 'An error occurred. Please try again later.';
+			error.set('An error occurred. Please try again later.');
 			isLoading = false;
 			return;
 		}
@@ -43,16 +42,21 @@
 		<fieldset class="mb-4 flex flex-col items-start">
 			<label class="mb-4">
 				E-mail
-				<input type="email" id="email" name="email" value="chiamatemi.Nico@gmail.com" required />
+				<input
+					type="email"
+					id="email"
+					name="email"
+					value="chiamatemi.Nico@gmail.com"
+					required
+					autocomplete="email"
+				/>
 			</label>
 
 			<Button level="primary" type="submit" {isLoading}>Reset password</Button>
 		</fieldset>
 	</form>
 
-	{#if message}
-		<p>{message}</p>
-	{:else if error}
-		<p style="text-red-500">{error}</p>
+	{#if $error}
+		<p style="text-red-500">{$error}</p>
 	{/if}
 </PageWrapper>
