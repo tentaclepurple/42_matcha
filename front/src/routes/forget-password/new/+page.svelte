@@ -4,15 +4,16 @@
 	import Button from '$lib/components/Button.svelte';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
 	import { goto } from '$app/navigation';
+	import { writable } from 'svelte/store';
 
-	let error = '';
+	let error = writable('');
 	let loading = false;
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
 		loading = true;
-		error = '';
+		error.set('');
 
 		const params = new URLSearchParams(window.location.search);
 		const token = params.get('token');
@@ -22,7 +23,7 @@
 		const confirm = formData.get('confirm') as string;
 
 		if (password !== confirm) {
-			error = 'Passwords do not match';
+			error.set('Passwords do not match');
 			loading = false;
 			return;
 		}
@@ -38,7 +39,7 @@
 		});
 
 		if (!res) {
-			error = 'An error occurred. Please try again later.';
+			error.set('An error occurred. Please try again later.');
 			loading = false;
 			return;
 		}
@@ -75,8 +76,8 @@
 				/>
 			</label>
 		</fieldset>
-		{#if error}
-			<p class="mb-4 text-red-500">{error}</p>
+		{#if $error}
+			<p class="mb-4 text-red-500">{$error}</p>
 		{/if}
 
 		<Button type="submit">Set new password</Button>
