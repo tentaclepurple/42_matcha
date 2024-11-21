@@ -13,3 +13,5 @@ venv/
 ENV/
 
 .vscode/
+
+matcha_backend/app/static/uploads/

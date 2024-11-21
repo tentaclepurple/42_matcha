@@ -7,5 +7,11 @@ import { SERVER_BASE_URL } from '$lib/constants/api';
  * @returns The full URL to the asset on the server.
  */
 export default function getServerAsset(assetName: string): string {
+	// Some asset come prefixed by 'app'
+	if (assetName.startsWith('app') || assetName.startsWith('/app')) {
+		const relativeAssetName = assetName.split('/').slice(1).join('/');
+		return `${SERVER_BASE_URL}/${relativeAssetName}`;
+	}
+
 	return `${SERVER_BASE_URL}/${assetName}`;
 }
