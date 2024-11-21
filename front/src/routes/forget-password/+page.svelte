@@ -43,7 +43,14 @@
 		<fieldset class="mb-4 flex flex-col items-start">
 			<label class="mb-4">
 				E-mail
-				<input type="email" id="email" name="email" value="chiamatemi.Nico@gmail.com" required />
+				<input
+					type="email"
+					id="email"
+					name="email"
+					value="chiamatemi.Nico@gmail.com"
+					required
+					autocomplete="email"
+				/>
 			</label>
 
 			<Button level="primary" type="submit" {isLoading}>Reset password</Button>

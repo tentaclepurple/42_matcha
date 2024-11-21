@@ -93,6 +93,7 @@
 							required
 							minlength="5"
 							maxlength="12"
+							autocomplete="username"
 						/>
 					</label>
 					<label>
@@ -103,6 +104,7 @@
 							name="email"
 							value="chiamatemi.nico@gmail.com"
 							required
+							autocomplete="email"
 						/>
 					</label>
 				</div>
@@ -118,6 +120,7 @@
 								value="Nicolas"
 								required
 								maxlength="30"
+								autocomplete="given-name"
 							/>
 						</label>
 						<label>
@@ -129,6 +132,7 @@
 								value="Gasco"
 								required
 								maxlength="30"
+								autocomplete="family-name"
 							/>
 						</label>
 					</div>
@@ -143,6 +147,7 @@
 							min={MIN_BIRTH_DATA}
 							max={calcEighteenthBirthday()}
 							required
+							autocomplete="bday"
 						/>
 					</label>
 				</div>
@@ -150,11 +155,23 @@
 				<div class="mb-4">
 					<label class="flex flex-col items-start justify-center">
 						Password
-						<PasswordInput id="password" name="password" value="Ciaociao1!" required />
+						<PasswordInput
+							id="password"
+							name="password"
+							value="Ciaociao1!"
+							required
+							autocomplete="current-password"
+						/>
 					</label>
 					<label class="flex flex-col items-start justify-center">
 						Confirm password
-						<PasswordInput id="confirm" name="confirm" value="Ciaociao1!" required />
+						<PasswordInput
+							id="confirm"
+							name="confirm"
+							value="Ciaociao1!"
+							required
+							autocomplete="current-password"
+						/>
 					</label>
 				</div>
 			</fieldset>
