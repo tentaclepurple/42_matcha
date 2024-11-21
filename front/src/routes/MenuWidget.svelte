@@ -1,17 +1,16 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import RoundAvatar from '$lib/components/RoundAvatar.svelte';
-	import type UserData from '$lib/interfaces/user-data.interface';
 	import getServerAsset from '$lib/utils/get-server-asset';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
 	import { logout } from '$lib/stores/auth';
 	import { onDestroy, onMount } from 'svelte';
+	import { userData } from '$lib/stores/user-data';
 
-	export let currentUserData: UserData | null;
 	let showMenu = false;
 
-	$: avatarUrl = currentUserData?.profilePhoto
-		? getServerAsset(currentUserData.profilePhoto)
+	$: avatarUrl = $userData?.profilePhoto
+		? getServerAsset($userData.profilePhoto)
 		: '/icons/avatar.svg';
 
 	const handleLogOut = () => {
