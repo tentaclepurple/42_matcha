@@ -20,9 +20,7 @@ class UserModel:
         })
         
         if existing_user:
-            #DO NOT FORGET
-            #raise ValueError(f"User with username {user_data['username']} or email {user_data['email']} already exists")
-            pass
+            raise ValueError(f"User with username {user_data['username']} or email {user_data['email']} already exists")
     
         result = mongo.db.users.insert_one(user_data)
         return str(result.inserted_id)
@@ -54,7 +52,6 @@ class UserModel:
                 }
             }
         )
-        return result.modified_count > 0
 
     @staticmethod
     def update_profile(user_id: str, profile_data: Dict[str, Any]) -> bool:
@@ -62,10 +59,12 @@ class UserModel:
         Update user profile data
         Returns: True if successful
         """
+        profile_data["profile_completed"] = True
         result = mongo.db.users.update_one(
             {"_id": ObjectId(user_id)},
             {"$set": profile_data}
         )
+        
         return result.modified_count > 0
 
     @staticmethod

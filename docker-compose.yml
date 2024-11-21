@@ -5,11 +5,11 @@ services:
     container_name: backend
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./docker/back/Dockerfile
     ports:
       - "5000:5000"
     volumes:
-      - .:/app
+      - ./matcha_backend:/app
     env_file:
       - .env
     environment:
