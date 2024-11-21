@@ -2,6 +2,7 @@ from ..config.database import mongo
 from bson import ObjectId
 from datetime import datetime
 from typing import Optional, Dict, Any
+from .iamatcha import BotModel
 
 
 class UserModel:
@@ -20,9 +21,7 @@ class UserModel:
         })
         
         if existing_user:
-            #DO NOT FORGET
-            #raise ValueError(f"User with username {user_data['username']} or email {user_data['email']} already exists")
-            pass
+            raise ValueError(f"User with username {user_data['username']} or email {user_data['email']} already exists")
     
         result = mongo.db.users.insert_one(user_data)
         return str(result.inserted_id)
@@ -62,10 +61,18 @@ class UserModel:
         Update user profile data
         Returns: True if successful
         """
+        user = UserModel.find_by_id(user_id)
+        
+        # if profile was not completed before, mark it as completed
+        if not user['profile_completed']:
+            BotModel.handle_profile_completion(user_id)
+            profile_data['profile_completed'] = True      
+
         result = mongo.db.users.update_one(
             {"_id": ObjectId(user_id)},
             {"$set": profile_data}
         )
+
         return result.modified_count > 0
 
     @staticmethod
