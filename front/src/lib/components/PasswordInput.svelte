@@ -1,10 +1,17 @@
 <script lang="ts">
-	export let id: string;
-	export let name: string;
-	export let value: string | undefined;
-	export let required: boolean;
+	import type { FullAutoFill } from 'svelte/elements';
 
-	let showPassword = false;
+	interface PasswordInputProps {
+		id: string;
+		name: string;
+		value?: string;
+		required?: boolean;
+		autocomplete?: FullAutoFill;
+	}
+
+	let { id, name, value, required, autocomplete }: PasswordInputProps = $props();
+
+	let showPassword = $state(false);
 
 	const handleShowPassword = () => {
 		showPassword = !showPassword;
@@ -12,7 +19,7 @@
 </script>
 
 <div class="flex items-baseline justify-center gap-4">
-	<input type={showPassword ? 'text' : 'password'} {id} {name} {required} {value} />
+	<input type={showPassword ? 'text' : 'password'} {id} {name} {required} {value} {autocomplete} />
 	<button
 		type="button"
 		onclick={handleShowPassword}
