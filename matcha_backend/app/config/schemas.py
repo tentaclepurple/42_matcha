@@ -133,6 +133,10 @@ USER_SCHEMA = {
             "reported": {
                 "bsonType": "bool",
                 "description": "whether the user has been reported as fake"
+            },
+            "context": {
+                "bsonType": ["string", "null"],
+                "description": "ia context"
             }
         },
         "additionalProperties": False

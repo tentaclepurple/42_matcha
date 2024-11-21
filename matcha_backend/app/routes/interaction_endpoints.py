@@ -8,6 +8,7 @@ from ..models.user import UserModel
 from ..models.like import LikeModel
 from ..models.notification import NotificationModel
 from ..models.iamatcha import BotModel
+from ..models.bot_profiles import BOT_PROFILES
 
 
 interaction_bp = Blueprint('interaction', __name__)
@@ -117,67 +118,71 @@ def unblock_user(user_identifier):
 @interaction_bp.route('/like/<user_identifier>', methods=['POST'])
 @jwt_required()
 def toggle_like(user_identifier):
-   try:
-       current_user_id = get_jwt_identity()
-       user = get_user_by_identifier(user_identifier)
-       if not user:
-           return jsonify({'error': 'User not found'}), 404
-       
-       if current_user_id in [str(blocked_id) for blocked_id in user.get('blocked_users', [])]:
-           return jsonify({'error': 'This user had blocked you'}), 400
-           
-       to_user_id = str(user['_id'])
-
-       # Check if trying to like self
-       if to_user_id == current_user_id:
-           return jsonify({'error': 'Cannot like yourself'}), 400
-
-       # Check existing interactions
-       existing_like = mongo.db.likes.find_one({
-           "from_user_id": ObjectId(current_user_id),
-           "to_user_id": ObjectId(to_user_id),
-           "type": "like"
-       })
-
-       if to_user_id == str(BotModel.BOT_ID) and not existing_like:
-            # Inicia conversación
-            BotModel.handle_user_like(current_user_id)
-       
-       existing_unlike = mongo.db.likes.find_one({
-           "from_user_id": ObjectId(current_user_id),
-           "to_user_id": ObjectId(to_user_id),
-           "type": "unlike"
-       })
-       
-       if existing_like:
-           # If like exists, remove it
-           mongo.db.likes.delete_one({"_id": existing_like["_id"]})
-           return jsonify({'message': 'Like removed'}), 200
-           
-       # Remove unlike if exists and add like
-       if existing_unlike:
-           mongo.db.likes.delete_one({"_id": existing_unlike["_id"]})
-           
-       # Add new like
-       LikeModel.add_like(current_user_id, to_user_id, "like")
-        # Create like notification
-       
-       NotificationModel.create(
-           user_id=to_user_id,
-           type="like",
-           from_user_id=current_user_id
-        )
-       
-       # Check if match occurs (if the other user had already liked us)
+    try:
+        current_user_id = get_jwt_identity()
+        user = get_user_by_identifier(user_identifier)
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
         
-       other_user_like = mongo.db.likes.find_one({
+        if current_user_id in [str(blocked_id) for blocked_id in user.get('blocked_users', [])]:
+            return jsonify({'error': 'This user had blocked you'}), 400
+            
+        to_user_id = str(user['_id'])
+        # Check if trying to like self
+        if to_user_id == current_user_id:
+            return jsonify({'error': 'Cannot like yourself'}), 400
+
+        # Check if user is a bot
+        bot = next((bot for bot in BOT_PROFILES.values() 
+                    if bot["username"] == user["username"] or 
+                    str(bot["_id"]) == to_user_id), None)
+
+        # Check existing interactions
+        existing_like = mongo.db.likes.find_one({
+            "from_user_id": ObjectId(current_user_id),
+            "to_user_id": ObjectId(to_user_id),
+            "type": "like"
+        })
+        print("**AQUI")
+
+        if bot and not existing_like:
+            # Inicia conversación con el bot específico
+            BotModel.handle_user_like(current_user_id, to_user_id)
+        
+        existing_unlike = mongo.db.likes.find_one({
+            "from_user_id": ObjectId(current_user_id),
+            "to_user_id": ObjectId(to_user_id),
+            "type": "unlike"
+        })
+        
+        if existing_like:
+            # If like exists, remove it
+            mongo.db.likes.delete_one({"_id": existing_like["_id"]})
+            return jsonify({'message': 'Like removed'}), 200
+            
+        # Remove unlike if exists and add like
+        if existing_unlike:
+            mongo.db.likes.delete_one({"_id": existing_unlike["_id"]})
+            
+        # Add new like
+        LikeModel.add_like(current_user_id, to_user_id, "like")
+        
+        # Create like notification
+        NotificationModel.create(
+            user_id=to_user_id,
+            type="like",
+            from_user_id=current_user_id
+        )
+        
+        # Check if match occurs (if the other user had already liked us)
+        other_user_like = mongo.db.likes.find_one({
             "from_user_id": ObjectId(to_user_id),
             "to_user_id": ObjectId(current_user_id),
             "type": "like"
         })
         
-       is_match = bool(other_user_like)
-       if is_match:
+        is_match = bool(other_user_like)
+        if is_match:
             # Create match notifications for both users
             NotificationModel.create(
                 user_id=to_user_id,
@@ -189,67 +194,67 @@ def toggle_like(user_identifier):
                 type="match",
                 from_user_id=to_user_id
             )
-       
-       return jsonify({
-           'message': 'Like added',
+        
+        return jsonify({
+            'message': 'Like added',
             'is_match': is_match
-       }), 200
+        }), 200
 
-   except Exception as e:
-       return jsonify({'error': str(e)}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 @interaction_bp.route('/unlike/<user_identifier>', methods=['POST'])
 @jwt_required()
 def toggle_unlike(user_identifier):
-   try:
-       current_user_id = get_jwt_identity()
-       user = get_user_by_identifier(user_identifier)
-       if not user:
-           return jsonify({'error': 'User not found'}), 404
-           
-       if current_user_id in [str(blocked_id) for blocked_id in user.get('blocked_users', [])]:
-           return jsonify({'error': 'This user had blocked you'}), 400
+    try:
+        current_user_id = get_jwt_identity()
+        user = get_user_by_identifier(user_identifier)
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
+            
+        if current_user_id in [str(blocked_id) for blocked_id in user.get('blocked_users', [])]:
+            return jsonify({'error': 'This user had blocked you'}), 400
 
-       to_user_id = str(user['_id'])
+        to_user_id = str(user['_id'])
 
-       # check if trying to unlike self
-       if to_user_id == current_user_id:
-           return jsonify({'error': 'Cannot unlike yourself'}), 400
-       
-       # Check existing interactions
-       existing_unlike = mongo.db.likes.find_one({
-           "from_user_id": ObjectId(current_user_id),
-           "to_user_id": ObjectId(to_user_id),
-           "type": "unlike"
-       })
-       
-       existing_like = mongo.db.likes.find_one({
-           "from_user_id": ObjectId(current_user_id),
-           "to_user_id": ObjectId(to_user_id),
-           "type": "like"
-       })
-       
-       if existing_unlike:
-           # If unlike exists, remove it
-           mongo.db.likes.delete_one({"_id": existing_unlike["_id"]})
-           return jsonify({'message': 'Unlike removed'}), 200
-           
-       # Remove like if exists and add unlike
-       if existing_like:
-           mongo.db.likes.delete_one({"_id": existing_like["_id"]})
-           
-       # Add new unlike
-       LikeModel.add_like(current_user_id, to_user_id, "unlike")
+        # check if trying to unlike self
+        if to_user_id == current_user_id:
+            return jsonify({'error': 'Cannot unlike yourself'}), 400
+        
+        # Check existing interactions
+        existing_unlike = mongo.db.likes.find_one({
+            "from_user_id": ObjectId(current_user_id),
+            "to_user_id": ObjectId(to_user_id),
+            "type": "unlike"
+        })
+        
+        existing_like = mongo.db.likes.find_one({
+            "from_user_id": ObjectId(current_user_id),
+            "to_user_id": ObjectId(to_user_id),
+            "type": "like"
+        })
+        
+        if existing_unlike:
+            # If unlike exists, remove it
+            mongo.db.likes.delete_one({"_id": existing_unlike["_id"]})
+            return jsonify({'message': 'Unlike removed'}), 200
+            
+        # Remove like if exists and add unlike
+        if existing_like:
+            mongo.db.likes.delete_one({"_id": existing_like["_id"]})
+            
+        # Add new unlike
+        LikeModel.add_like(current_user_id, to_user_id, "unlike")
 
-       # Create unlike notification
-       NotificationModel.create(
+        # Create unlike notification
+        NotificationModel.create(
             user_id=to_user_id,
             type="unlike",
             from_user_id=current_user_id
         )
-       
-       return jsonify({'message': 'Unlike added'}), 200
-       
-   except Exception as e:
-       return jsonify({'error': str(e)}), 500
+        
+        return jsonify({'message': 'Unlike added'}), 200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
