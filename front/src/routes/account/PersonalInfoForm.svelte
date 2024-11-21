@@ -1,18 +1,31 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
-	import type UserData from '$lib/interfaces/user-data.interface';
+	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
+	import { userData } from '$lib/stores/user-data';
+	import { writable } from 'svelte/store';
 
-	export let currentUserData: UserData;
+	$: currentUserData = $userData;
 
 	let isEditing = false;
-	let error = '';
-	let success = '';
+	let error = writable('');
+	error.subscribe(() => {
+		setTimeout(() => {
+			error.set('');
+		}, DEFAULT_TIMEOUT);
+	});
+
+	let success = writable('');
+	success.subscribe(() => {
+		setTimeout(() => {
+			success.set('');
+		}, DEFAULT_TIMEOUT);
+	});
 
 	const handleSave = async (e) => {
 		e.preventDefault();
-		error = '';
-		success = '';
+		error.set('');
+		success.set('');
 
 		const formData = new FormData(e.target);
 
@@ -35,10 +48,10 @@
 				throw new Error('Something went wrong');
 			}
 
-			success = 'Profile updated successfully';
+			success.set('Profile updated successfully');
 		} catch (err) {
 			console.error(err);
-			error = 'An error occurred. Please try again later.';
+			error.set('An error occurred. Please try again later.');
 		} finally {
 			isEditing = false;
 		}
@@ -53,11 +66,12 @@
 				type="text"
 				id="username"
 				name="username"
-				value={currentUserData.username}
+				value={currentUserData ? currentUserData.username : ''}
 				required
 				readonly={!isEditing}
 				minlength="5"
 				maxlength="12"
+				autocomplete="username"
 			/>
 		</label>
 
@@ -68,10 +82,11 @@
 					type="text"
 					id="first_name"
 					name="first_name"
-					value={currentUserData.firstName}
+					value={currentUserData ? currentUserData.firstName : ''}
 					readonly={!isEditing}
 					maxlength="30"
 					required
+					autocomplete="given-name"
 				/>
 			</label>
 			<label>
@@ -80,10 +95,11 @@
 					type="text"
 					id="last_name"
 					name="last_name"
-					value={currentUserData.lastName}
+					value={currentUserData ? currentUserData.lastName : ''}
 					readonly={!isEditing}
 					maxlength="30"
 					required
+					autocomplete="family-name"
 				/>
 			</label>
 		</div>
@@ -95,8 +111,9 @@
 				id="email"
 				name="email"
 				required
-				value={currentUserData.email}
+				value={currentUserData ? currentUserData.email : ''}
 				readonly={!isEditing}
+				autocomplete="email"
 			/>
 		</label>
 
@@ -108,17 +125,17 @@
 				level="secondary"
 				onclick={() => {
 					isEditing = !isEditing;
-					error = '';
-					success = '';
+					error.set('');
+					success.set('');
 				}}
 			>
 				Update info
 			</Button>
 		{/if}
 	</fieldset>
-	{#if success}
-		<p class="mt-4 text-green-500">{success}</p>
-	{:else if error}
-		<p class="mt-4 text-red-500">{error}</p>
+	{#if $success}
+		<p class="mt-4 text-green-500">{$success}</p>
+	{:else if $error}
+		<p class="mt-4 text-red-500">{$error}</p>
 	{/if}
 </form>
