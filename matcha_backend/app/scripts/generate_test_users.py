@@ -17,6 +17,8 @@ load_dotenv()
 
 # Create Flask app and configure MongoDB
 app = Flask(__name__)
+
+print("env vars:", os.getenv('MONGO_ROOT_USERNAME'), os.getenv('MONGO_ROOT_PASSWORD'), os.getenv('MONGO_DATABASE'))
 app.config["MONGO_URI"] = (
     f"mongodb://{os.getenv('MONGO_ROOT_USERNAME')}:"
     f"{os.getenv('MONGO_ROOT_PASSWORD')}@localhost:27017/"
