@@ -5,15 +5,8 @@
 	import { onMount } from 'svelte';
 
 	import '../app.css';
-	import { fetchUserData, userData } from '$lib/stores/user-data';
-	import type UserData from '$lib/interfaces/user-data.interface';
+	import { fetchUserData } from '$lib/stores/user-data';
 	import MenuWidget from './MenuWidget.svelte';
-
-	let currentUserData: UserData | null = null;
-
-	userData.subscribe((value) => {
-		currentUserData = value;
-	});
 
 	onMount(async () => {
 		const accessToken = localStorage.getItem('access_token');
@@ -37,9 +30,12 @@
 
 			<div class="flex items-center justify-center gap-4">
 				{#if $isAuthenticated}
-					<MenuWidget {currentUserData} />
+					<MenuWidget />
 				{:else}
-					<a href="/login">Sign in</a>
+					<a href="/login" class="flex items-center justify-center gap-1 no-underline">
+						Sign in
+						<img src="icons/login.svg" alt="" class="w-5" />
+					</a>
 				{/if}
 			</div>
 		</header>
