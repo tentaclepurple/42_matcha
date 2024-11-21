@@ -110,8 +110,8 @@ class LikeModel:
         
         return {
             "liked_by_me": outgoing["has_like"],
-            "likes_me": outgoing["has_unlike"],
-            "unliked_by_me": incoming["has_like"],
+            "likes_me": incoming["has_like"],
+            "unliked_by_me": outgoing["has_unlike"],
             "unlikes_me": incoming["has_unlike"],
             "is_match": outgoing["has_like"] and incoming["has_like"]
         }
