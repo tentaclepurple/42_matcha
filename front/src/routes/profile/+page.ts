@@ -22,11 +22,13 @@ export const load: PageLoad = async ({ fetch }) => {
 	}
 
 	const profileData = await response.json();
+	console.log(profileData);
 
 	return {
 		profileData: {
-			username: profileData.username,
-			photos: profileData.photos
+			age: profileData.age,
+			photos: profileData.photos,
+			username: profileData.username
 		}
 	};
 };
