@@ -1,6 +1,6 @@
 .PHONY: up all down exec env clean
 
-all: env up exec
+all: env up
 
 up:
 	docker compose up -d
@@ -23,6 +23,9 @@ env:
 		curl -L "https://www.$$key.com/scl/fi/xq4kwbk1z5rpwy1etgr8l/env?rlkey=fl913obdcaddlo9m06ced0ng9&dl=1" -o .env; \
 		echo ".env file has been downloaded."; \
 	fi
+
+logs:
+	docker logs backend
 
 test:
 	cd matcha_backend/app/scripts/ && python3 generate_test_users.py
