@@ -145,7 +145,7 @@ def delete_photo(index):
         
         # create default photo data
         default_photo_data = {
-            'url': 'default_photo.jpg',  # Ajusta esto al nombre de tu foto default
+            'url': 'static/default/default.svg',
             'is_profile': user['photos'][index]['is_profile'],
             'uploaded_at': datetime.utcnow()
         }
