@@ -143,7 +143,6 @@ def toggle_like(user_identifier):
             "to_user_id": ObjectId(to_user_id),
             "type": "like"
         })
-        print("**AQUI")
 
         if bot and not existing_like:
             # Inicia conversación con el bot específico

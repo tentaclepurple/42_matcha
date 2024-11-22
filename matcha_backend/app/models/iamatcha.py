@@ -11,6 +11,7 @@ from .notification import NotificationModel
 from .context import initial_message
 from .bot_profiles import BOT_PROFILES
 from dotenv import load_dotenv
+import random
 import os
 
 
@@ -173,7 +174,7 @@ class BotModel:
                "updated_at": datetime.now(),
                "status": "active"
            }
-           
+       introtext = cls
        return conversation
 
    @classmethod
@@ -192,17 +193,50 @@ class BotModel:
        )
 
    @classmethod
-   def prepare_chat_history(cls, conversation: dict, bot_id: str) -> list:
-       chat_history = [{"role": "user", "parts": [conversation["context"]]}]
-       
-       for msg in conversation["messages"]:
-           role = "user" if msg["from_id"] != ObjectId(bot_id) else "model"
-           chat_history.append({
-               "role": role,
-               "parts": [msg["content"]]
-           })
-       
-       return chat_history
+   def prepare_chat_history(cls, conversation: dict, bot_id: str, bot: dict) -> list:
+        # Extraer información crítica
+        critical_context = {
+            "user_name": conversation.get("context", "").split("- Nombre: ")[1].split("\n")[0].strip(),
+            "bot_name": bot["first_name"]
+        }
+        
+        # Crear variaciones de recordatorios más naturales
+        def create_natural_reminder():
+            reminders = [
+                f"[Contexto: Conversación entre {critical_context['bot_name']} y {critical_context['user_name']}]",
+                f"[Mantener personalidad de {critical_context['bot_name']} y contexto con {critical_context['user_name']}]",
+                f"[Continuar conversación natural con {critical_context['user_name']}]",
+                f"[Mantener el tono y estilo establecido en la conversación]"
+            ]
+            return {
+                "role": "user",
+                "parts": [random.choice(reminders)]
+            }
+        
+        chat_history = [{"role": "user", "parts": [conversation["context"]]}]
+        
+        # Obtener mensajes recientes
+        recent_messages = conversation["messages"][-15:]
+        
+        # Insertar recordatorios sutiles cada ciertos mensajes
+        for i, msg in enumerate(recent_messages):
+            # Insertar recordatorio solo cada 7 mensajes para hacerlo menos frecuente
+            if i % 7 == 0 and i > 0:  # Evitar el primero para no ser repetitivo
+                chat_history.append(create_natural_reminder())
+                
+            role = "user" if msg["from_id"] != ObjectId(bot_id) else "model"
+            chat_history.append({
+                "role": role,
+                "parts": [msg["content"]]
+            })
+        
+        # Añadir un recordatorio final sutil
+        chat_history.append({
+            "role": "user",
+            "parts": [f"[Mantener conversación natural como {critical_context['bot_name']}]"]
+        })
+        
+        return chat_history
 
    @classmethod
    def handle_profile_completion(cls, user_id: str):
@@ -223,11 +257,35 @@ class BotModel:
        except Exception as e:
            print(f"Bot like error: {e}")
            return False
+   
+   @classmethod
+   def get_context_with_intro(cls, bot):
+       gender_map = {"male": "hombre", "female": "mujer"}
+       preferences_map = {
+               "male": "los hombres",
+               "female": "las mujeres",
+               "bisexual": "hombres y mujeres",
+               "other": "otros géneros"
+           }
+
+       gender = gender_map.get(bot['gender'], bot['gender'])
+       sexual = preferences_map.get(bot['sexual_preferences'])
+
+       context_intro = f"""
+           Información sobre ti:
+           - Tu nombre es {bot['first_name']}
+           - Tienes {bot['age']} años
+           - Eres {gender}
+           - Te atraen sexualmente {sexual}
+           - Tus intereses son: {', '.join(bot['interests'])}
+           - Una breve biografía adicional sobre ti: {bot['biography']}
+            Y este es tu contexto de conversación ampliado:
+           """
+       return f"{context_intro}\n\n{bot['context']}"
 
    @classmethod
    def handle_user_like(cls, user_id: str, bot_id: str):
        try:
-           print(f"---Procesando like de usuario {user_id} para bot {bot_id}")
            model = cls.initialize_gemini()
            user_context = cls.get_user_context(user_id)
            conversation = cls.get_conversation_history(user_id, bot_id)
@@ -238,18 +296,16 @@ class BotModel:
               print("User context not found")
            if not conversation:
               print("Conversation not found")
-
-           print(f"Procesando like de usuario {user_id} para bot {bot_id}")
-           print(f"Contexto del usuario: {user_context}")
-           print(f"Historial de conversación: {conversation}")
            
            if not conversation["messages"]:
                bot = next((bot for bot in BOT_PROFILES.values() if str(bot["_id"]) == bot_id), None)
                if not bot:
                    print(f"No se encontró el bot con ID {bot_id}")
                    return False
-                   
-               conversation["context"] = f"{bot['context']}\n\n{user_context}"
+
+               context = cls.get_context_with_intro(bot)
+
+               conversation["context"] = f"{context}\n\n{user_context}"
                chat = model.start_chat(history=[{"role": "user", "parts": [conversation["context"]]}])
                response = chat.send_message(initial_message)
                
@@ -275,6 +331,7 @@ class BotModel:
            print(f"Bot message error: {e}")
            return False
 
+
    @classmethod
    def handle_user_message(cls, user_id: str, message: str, bot_id: str):
        try:
@@ -292,11 +349,12 @@ class BotModel:
                "read": False
            })
            
+           context = cls.get_context_with_intro(bot)
            user_context = cls.get_user_context(user_id)
-           conversation["context"] = f"{bot['context']}\n\n{user_context}"
+           conversation["context"] = f"{context}\n\n{user_context}"
            
            model = cls.initialize_gemini()
-           chat_history = cls.prepare_chat_history(conversation, bot_id)
+           chat_history = cls.prepare_chat_history(conversation, bot_id, bot)
            chat = model.start_chat(history=chat_history)
            
            response = chat.send_message(message)

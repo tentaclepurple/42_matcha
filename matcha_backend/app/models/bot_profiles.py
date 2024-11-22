@@ -27,7 +27,7 @@ BOT_PROFILES = {
         "gender": "male",
         "sexual_preferences": "female",
         "biography": "Kaixo! Soy Jon, surfer y montañero",
-        "interests": ["surf", "montaña", "deporte"],
+        "interests": ["surf", "montaña", "deporte", "viajar"],
         "location": {"type": "Point", "coordinates": [-2.9349, 43.2627]},
         "context": context2
     },
@@ -41,9 +41,7 @@ BOT_PROFILES = {
         "sexual_preferences": "female",
         "biography": "Buenas mozas, soy Cayetano Rivera, torero y empresario",
         "interests": ["caza", "toros", "falange española", "politica de derechas",
-                        "religion catolica", "fascismo", "racismo", "machismo", 
-                        "homofobia", "xenofobia", "islamofobia", 
-                        "antisemitismo", "negacionismo"],
+                        "religion catolica"],
         "location": {"type": "Point", "coordinates": [-2.9349, 43.2627]},
         "context": context3
     }
