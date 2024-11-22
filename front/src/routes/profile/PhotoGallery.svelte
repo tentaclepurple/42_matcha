@@ -14,6 +14,8 @@
 		}, DEFAULT_TIMEOUT);
 	});
 
+	let showDeleteButton: number | null = null;
+
 	export let photos: UserProfileData['photos'];
 
 	const handlePhotoUpload = async (e) => {
@@ -65,11 +67,32 @@
 					</div>
 				</label>
 			{:else}
-				<img
-					src={getServerAsset(photo.url)}
-					alt=""
-					class={`${index === 0 ? 'h-56 w-40' : 'h-32 w-32'} border-2 border-gray-500 object-cover shadow-md`}
-				/>
+				<div
+					onmouseenter={(e) => {
+						const targetIndex = Number(e.target?.dataset?.id);
+						if (targetIndex === index) showDeleteButton = index;
+					}}
+					onmouseleave={() => {
+						showDeleteButton = null;
+					}}
+					data-id={index}
+					class={`relative ${showDeleteButton === index ? 'shadow-lg' : ''}`}
+				>
+					{#if showDeleteButton === index}
+						<button
+							type="button"
+							aria-label="Delete"
+							class="absolute inset-0 m-auto h-10 w-10 rounded-full bg-red-500 p-2"
+						>
+							<img src="/icons/delete.svg" alt="" />
+						</button>
+					{/if}
+					<img
+						src={getServerAsset(photo.url)}
+						alt=""
+						class={`${index === 0 ? 'h-56 w-40' : 'h-32 w-32'} border-2 border-gray-500 object-cover shadow-md`}
+					/>
+				</div>
 			{/if}
 		{/each}
 	</div>
