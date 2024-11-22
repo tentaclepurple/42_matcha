@@ -58,7 +58,7 @@ BOT_PROFILES = {
         "context": context3
     },
 	"LONDON_TECH_BOT" : {
-		"_id": ObjectId("673cfa0e31047e03946f398g"),
+		"_id": ObjectId("673cfa0e31045e88946f398f"),
 		"username": "james",
 		"first_name": "James",
 		"last_name": "Smith",
@@ -71,7 +71,7 @@ BOT_PROFILES = {
 		"context": context4
 	},
 	"CULT_FUNCIONARY_BOT" : {
-		"_id": ObjectId("673cfa0e31047e03946f398h"),
+		"_id": ObjectId("673cea1e31097e88946f398f"),
 		"username": "isabel",
 		"first_name": "Isabel",
 		"last_name": "Garcia",
@@ -84,7 +84,7 @@ BOT_PROFILES = {
 		"context": context5
 	},
 	"SURGEON_SERIOUS_BOT" : {
-		"_id": ObjectId("673cfa0e31047e03946f398i"),
+		"_id": ObjectId("673cfa0e31047a77946f398f"),
 		"username": "ane",
 		"first_name": "Ane",
 		"last_name": "Lopez",
@@ -97,7 +97,7 @@ BOT_PROFILES = {
 		"context": context6
 	},
 	"PARTY_LOVER_BOT" : {
-		"_id": ObjectId("673cfa0e31047e03946f398j"),
+		"_id": ObjectId("673cfa0e09147e88946f398f"),
 		"username": "elputoamo",
 		"first_name": "Arkaitz",
 		"last_name": "Ruiz",
@@ -110,7 +110,7 @@ BOT_PROFILES = {
 		"context": context7
 	},
 	"FITNESS_GURU_BOT" : {
-		"_id": ObjectId("673cfa0e31047e03946f398l"),
+		"_id": ObjectId("673cfa0e31047012f46f398f"),
 		"username": "laura",
 		"first_name": "Laura",
 		"last_name": "Sanchez",
@@ -123,7 +123,7 @@ BOT_PROFILES = {
 		"context": context9
 	},
 	"PARTY_QUEEN_BOT": {
-		"_id": ObjectId("673cfa0e31047e03946f398o"),
+		"_id": ObjectId("923cfe0e31047e88946f398f"),
 		"username": "carla",
 		"first_name": "Carla",
 		"last_name": "Intxaurraga",
@@ -136,7 +136,7 @@ BOT_PROFILES = {
 		"context": context10
 	},
 	"DOMINATRIX_BOT": {
-		"_id": ObjectId("673cfa0e31047e03946f398p"),
+		"_id": ObjectId("673cfa0e31047e88946f240e"),
 		"username": "amaidurre",
 		"first_name": "Idurre",
 		"last_name": "Basterra",
@@ -149,7 +149,7 @@ BOT_PROFILES = {
 		"context": context11
 	},
 	"EL_FARY_BOT": {
-		"_id": ObjectId("673cfa0e31047e03946f398q"),
+		"_id": ObjectId("673cfe3c31047d88946f108f"),
 		"username": "elfary",
 		"first_name": "Jose Luis",
 		"last_name": "Cantero",
