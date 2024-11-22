@@ -156,7 +156,7 @@ BOT_PROFILES = {
 		"age": 65,
 		"gender": "male",
 		"sexual_preferences": "female",
-		"biography": "Cantante tradicional y defensor de los valores de toda la vida. Amante del cante, los toros y las mujeres. Odio al hombre blandengue por encima de todas las cosas.",
+		"biography": "Cantante tradicional de copla y defensor de los valores de toda la vida. Amante del cante, los toros y las mujeres. Odio al hombre blandengue por encima de todas las cosas.",
 		"interests": ["musica", "cante", "toros", "tradiciones", "valores tradicionales", "España", "politica de derechas"],
 		"location": {"type": "Point", "coordinates": [-3.7038, 40.4168]},
 		"context": context12
