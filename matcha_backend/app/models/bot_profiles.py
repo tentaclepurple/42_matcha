@@ -19,9 +19,9 @@ from .context import (
 BOT_PROFILES = {
     "PARTY_BOT": {
         "_id": ObjectId("673cfa0e31047e88946f398f"),
-        "username": "Maria",
+        "username": "maria",
         "first_name": "Maria",
-        "last_name": "Gonzalez",
+        "last_name": "Ibarretxe",
         "age": 22,
         "gender": "female",
         "sexual_preferences": "bisexual",
@@ -32,7 +32,7 @@ BOT_PROFILES = {
     },
     "SPORTS_BOT": {
         "_id": ObjectId("673cfa0e31047e03946f398f"),
-        "username": "Jon",
+        "username": "jon",
         "first_name": "Jon",
         "last_name": "Urkiza",
         "age": 25,
@@ -59,7 +59,7 @@ BOT_PROFILES = {
     },
 	"LONDON_TECH_BOT" : {
 		"_id": ObjectId("673cfa0e31047e03946f398g"),
-		"username": "James",
+		"username": "james",
 		"first_name": "James",
 		"last_name": "Smith",
 		"age": 35,
@@ -72,7 +72,7 @@ BOT_PROFILES = {
 	},
 	"CULT_FUNCIONARY_BOT" : {
 		"_id": ObjectId("673cfa0e31047e03946f398h"),
-		"username": "Isabel",
+		"username": "isabel",
 		"first_name": "Isabel",
 		"last_name": "Garcia",
 		"age": 50,
@@ -85,7 +85,7 @@ BOT_PROFILES = {
 	},
 	"SURGEON_SERIOUS_BOT" : {
 		"_id": ObjectId("673cfa0e31047e03946f398i"),
-		"username": "Ane",
+		"username": "ane",
 		"first_name": "Ane",
 		"last_name": "Lopez",
 		"age": 28,
@@ -98,8 +98,8 @@ BOT_PROFILES = {
 	},
 	"PARTY_LOVER_BOT" : {
 		"_id": ObjectId("673cfa0e31047e03946f398j"),
-		"username": "Dani",
-		"first_name": "Daniel",
+		"username": "elputoamo",
+		"first_name": "Arkaitz",
 		"last_name": "Ruiz",
 		"age": 24,
 		"gender": "male",
@@ -111,9 +111,9 @@ BOT_PROFILES = {
 	},
 	"FITNESS_GURU_BOT" : {
 		"_id": ObjectId("673cfa0e31047e03946f398l"),
-		"username": "Laura",
+		"username": "laura",
 		"first_name": "Laura",
-		"last_name": "Sánchez",
+		"last_name": "Sanchez",
 		"age": 26,
 		"gender": "female",
 		"sexual_preferences": "bisexual",
@@ -124,7 +124,7 @@ BOT_PROFILES = {
 	},
 	"PARTY_QUEEN_BOT": {
 		"_id": ObjectId("673cfa0e31047e03946f398o"),
-		"username": "Carla",
+		"username": "carla",
 		"first_name": "Carla",
 		"last_name": "Intxaurraga",
 		"age": 23,
@@ -137,7 +137,7 @@ BOT_PROFILES = {
 	},
 	"DOMINATRIX_BOT": {
 		"_id": ObjectId("673cfa0e31047e03946f398p"),
-		"username": "AmaIdurre",
+		"username": "amaidurre",
 		"first_name": "Idurre",
 		"last_name": "Basterra",
 		"age": 29,
