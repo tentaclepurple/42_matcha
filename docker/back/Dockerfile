@@ -10,7 +10,7 @@ RUN pip install -r requirements.txt
 
 RUN echo 'alias py="python3"' >> /root/.bashrc
 
-CMD ["top", "-b"]
+#CMD ["top", "-b"]
 
 #CMD ["flask", "run", "--host=0.0.0.0", "--reload"]
 
