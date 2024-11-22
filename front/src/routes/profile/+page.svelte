@@ -4,11 +4,6 @@
 	import PhotoGallery from './PhotoGallery.svelte';
 
 	const currentProfileData = $userProfileData;
-
-	const avatarUrl = $derived(
-		$userProfileData?.photos.filter((photo) => photo.is_profile)[0]?.url ?? ''
-	);
-	const photos = $derived($userProfileData?.photos.filter((photo) => !photo.is_profile) ?? []);
 </script>
 
 <PageWrapper>
@@ -18,7 +13,7 @@
 	</div>
 
 	<div class="mb-4 flex w-fit flex-col items-start">
-		<PhotoGallery {avatarUrl} {photos} />
+		<PhotoGallery photos={currentProfileData ? currentProfileData.photos : []} />
 		<div class="flex w-56 items-baseline justify-between">
 			<p class="text-3xl">{currentProfileData?.username}</p>
 			<p class="text-2xl">{currentProfileData?.age}</p>

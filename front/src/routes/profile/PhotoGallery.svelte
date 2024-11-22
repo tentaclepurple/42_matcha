@@ -14,7 +14,6 @@
 		}, DEFAULT_TIMEOUT);
 	});
 
-	export let avatarUrl: string;
 	export let photos: UserProfileData['photos'];
 
 	const handlePhotoUpload = async (e) => {
@@ -53,24 +52,23 @@
 </script>
 
 <div class="mb-2 flex items-end gap-4">
-	<img
-		src={getServerAsset(avatarUrl)}
-		alt=""
-		class="max-h-80 w-56 border-2 border-gray-500 object-cover"
-	/>
 	<div class="flex items-end gap-2">
 		{#each photos as photo, index}
 			{#if photo.url.endsWith(DEFAULT_AVATAR_NAME)}
 				<label class="cursor-pointer hover:shadow-lg">
 					<span class="sr-only">Upload new picture</span>
 					<input type="file" class="hidden" onchange={handlePhotoUpload} data-id={index} />
-					<div class="flex h-32 w-32 items-center justify-center bg-gray-300 shadow-md">+</div>
+					<div
+						class={`flex ${index === 0 ? 'h-56 w-40' : 'h-32 w-32'} items-center justify-center bg-gray-300 shadow-md`}
+					>
+						+
+					</div>
 				</label>
 			{:else}
 				<img
 					src={getServerAsset(photo.url)}
 					alt=""
-					class="w-32 border-2 border-gray-500 object-cover shadow-md"
+					class={`${index === 0 ? 'h-56 w-40' : 'h-32 w-32'} border-2 border-gray-500 object-cover shadow-md`}
 				/>
 			{/if}
 		{/each}
