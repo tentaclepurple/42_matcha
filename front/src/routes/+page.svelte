@@ -1,5 +1,15 @@
 <script>
+	import { goto } from '$app/navigation';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
+	import { isAuthenticated } from '$lib/stores/auth';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		console.log('onMount', $isAuthenticated);
+		if ($isAuthenticated) {
+			goto('/dashboard', { replaceState: true });
+		}
+	});
 </script>
 
 <div class="wrapper flex flex-1 flex-col items-center justify-center">

@@ -22,7 +22,7 @@
 <button
 	{type}
 	{...restProps}
-	class={`${styles} ${restProps.class} flex items-center justify-center gap-2`}
+	class={`${styles} flex items-center justify-center gap-2 ${restProps.class}`}
 >
 	{@render children()}
 	{#if isLoading === true}

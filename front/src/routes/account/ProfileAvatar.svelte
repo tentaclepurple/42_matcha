@@ -1,66 +1,138 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import RoundedAvatar from '$lib/components/RoundedAvatar.svelte';
+	import RoundAvatar from '$lib/components/RoundAvatar.svelte';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
+	import { DEFAULT_AVATAR_NAME } from '$lib/constants/avatar';
 	import { AVATAR_MAX_SIZE } from '$lib/constants/files';
-	import type UserData from '$lib/interfaces/user-data.interface';
+	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
+	import { fetchUserData, userData } from '$lib/stores/user-data';
 	import getServerAsset from '$lib/utils/get-server-asset';
+	import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
 
-	export let currentUserData: UserData;
-	let error = '';
+	$: currentUserData = $userData;
+
+	let error = writable('');
+	error.subscribe(() => {
+		setTimeout(() => {
+			error.set('');
+		}, DEFAULT_TIMEOUT);
+	});
+
+	let success = writable('');
+	success.subscribe(() => {
+		setTimeout(() => {
+			success.set('');
+		}, DEFAULT_TIMEOUT);
+	});
+
+	let isLoading = false;
+
+	$: avatarUrl = getServerAsset(currentUserData?.profilePhoto ?? '');
+
+	const token = localStorage.getItem('access_token');
+
+	onMount(async () => {
+		if (!token) {
+			goto('/login', { replaceState: true });
+		}
+
+		await fetchUserData();
+	});
 
 	const handleEditAvatar = async (e) => {
-		error = '';
+		error.set('');
+		success.set('');
+		isLoading = true;
 
 		const { files } = e.target;
 		const file = files[0];
 
 		if (!file) {
-			error = 'Something went wrong. Please try again.';
+			error.set('Something went wrong. Please try again.');
 			return;
 		}
 
 		if (file.size > AVATAR_MAX_SIZE) {
-			error = 'File is too large. Try again with a smaller file.';
+			error.set('File is too large. Please choose a smaller one.');
 			return;
 		}
 
 		const formData = new FormData();
-		formData.append('photo', file);
-
-		const token = localStorage.getItem('access_token');
-		if (!token) {
-			goto('/login', { replaceState: true });
-		}
-
+		formData.append('photo', file, file.name);
 		try {
-			const res = await fetch(`${SERVER_BASE_URL}/api/profile/update_photo/1`, {
+			const res = await fetch(`${SERVER_BASE_URL}/api/profile/update_photo/0`, {
 				method: 'PUT',
 				headers: {
-					Authorization: `Bearer ${localStorage.getItem('token')}`,
-					'Content-Type': 'multipart/form-data'
+					Authorization: `Bearer ${token}`
 				},
 				body: formData
 			});
 
-			console.log('ciao', res);
+			if (!res.ok) {
+				throw new Error();
+			}
 
-			const data = await res.json();
-			console.log(data);
+			await fetchUserData();
+
+			success.set('Avatar updated successfully!');
 		} catch (err) {
 			console.error(err);
-			error = 'An error occurred. Please try again later.';
+			error.set('Something went wrong. Please try again.');
+		} finally {
+			isLoading = false;
+			e.target.value = '';
+		}
+	};
+
+	const handleDeleteAvatar = async () => {
+		error.set('');
+		success.set('');
+		isLoading = true;
+
+		try {
+			const res = await fetch(`${SERVER_BASE_URL}/api/profile/delete_photo/0`, {
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			});
+
+			if (!res.ok) {
+				throw new Error();
+			}
+
+			await fetchUserData();
+
+			success.set('Avatar deleted successfully!');
+		} catch (err) {
+			console.error(err);
+			error.set('Something went wrong. Please try again.');
+		} finally {
+			isLoading = false;
 		}
 	};
 </script>
 
 <h2>Avatar</h2>
 <div class="gap-42 flex max-w-sm items-center gap-4">
-	<RoundedAvatar src={getServerAsset(currentUserData.profilePhoto)} alt="" size="l" />
-	<div>
+	<div class="relative">
+		<RoundAvatar src={avatarUrl} alt="" size="l" />
+		{#if !currentUserData?.profilePhoto.endsWith(DEFAULT_AVATAR_NAME) && !isLoading}
+			<button
+				type="button"
+				class="absolute bottom-0 left-0 rounded-full bg-red-500 p-2 shadow-md hover:bg-red-600"
+				aria-label="Delete"
+				onclick={handleDeleteAvatar}
+			>
+				<img src="/icons/delete.svg" alt="" class="w-6" />
+			</button>
+		{/if}
+	</div>
+	<form>
 		<fieldset class="flex flex-col items-start gap-4">
 			<label
-				class="cursor-pointer rounded border border-teal-500 bg-transparent px-4 py-2 font-semibold text-teal-700 hover:border-transparent hover:bg-teal-500 hover:text-white"
+				class="cursor-pointer rounded bg-teal-500 px-4 py-2 font-bold text-white hover:bg-teal-700"
 			>
 				Change avatar
 				<input
@@ -70,14 +142,20 @@
 					accept="image/png, image/jpeg"
 					class="sr-only"
 					onchange={handleEditAvatar}
+					onclick={() => {
+						error.set('');
+						success.set('');
+					}}
 				/>
 			</label>
 			<p class="text-sm">
 				Double-check that the image is in PNG or JPG format and that it does not exceed 5 MB.
 			</p>
 		</fieldset>
-	</div>
+	</form>
 </div>
-{#if error}
-	<p class="mt-4 text-red-500">{error}</p>
+{#if $success}
+	<p class="mt-4 text-green-500">{$success}</p>
+{:else if $error}
+	<p class="mt-4 text-red-500">{$error}</p>
 {/if}
