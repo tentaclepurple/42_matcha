@@ -66,9 +66,8 @@ class UserModel:
         try:
             if not user['profile_completed']:
                 # Select bot for user if not already selected
-                selected_bot = BotModel.select_bot_for_user(user_id)
-                if selected_bot:
-                    BotModel.handle_profile_completion(user_id)
+                if BotModel.handle_profile_completion(user_id):
+                    pass
         except Exception as e:
             print(e)
             pass

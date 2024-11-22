@@ -52,7 +52,7 @@ class BotModel:
 
    @classmethod
    def select_bot_for_user(cls, user_id: str):
-       """Selecciona bot basado en perfil del usuario"""
+       """Select a bot for the user based on their profile"""
        user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
        if not user:
            return None
@@ -66,28 +66,33 @@ class BotModel:
        for bot_id, bot in BOT_PROFILES.items():
            score = 0
            bot_age = bot['age']
-           min_age = max(18, bot_age - 5)
-           max_age = bot_age + 5
-            
-           if min_age <= user_age <= max_age:
-               score += 10
+           print(f"\n**Bot {bot['username']}, User {user['username']}")
+
+           difference = abs(user_age - bot_age)
+           age_score = max(0.5, 12 - (difference / 2.5))
+           print(f" user age: {user_age}, bot age: {bot_age}, age_score: {age_score}")
+           score += age_score
            
-           # Intereses comunes
+           # common interests
            matching_interests = len(user_interests & set(bot['interests']))
+           print(f" Matching interests: {matching_interests}")
            score += matching_interests * 2
            
-           # Compatibilidad género/preferencias
-           if bot['sexual_preferences'] in [user_gender, "bisexual"]:
-               score += 3
-           if user_preferences in [bot['gender'], "bisexual"]:
-               score += 3
+           # gender and sexual preferences
+           sex_score = 0
+           if bot['sexual_preferences'] in [user_gender, "bisexual"] and user_preferences in [bot['gender'], "bisexual"]:
+               sex_score = 15
+               score += sex_score
+           else:
+               sex_score = -5
+           print(f" bot sexual preferences: {bot['sexual_preferences']}, User sexual preferences: {user_preferences}, Sex_score = {sex_score}")
 
            scores[bot_id] = score
-           print(f"Bot {bot['username']}: score {score}")   
+           print(f"-> Bot {bot['username']}: score {score}")   
        
 
        selected_bot = max(scores.items(), key=lambda x: x[1])[0]
-       print(f"Selected: {BOT_PROFILES[selected_bot]['username']}")
+       print(f"\nSelected: {BOT_PROFILES[selected_bot]['username']}")
        return BOT_PROFILES[selected_bot]
 
    @classmethod
