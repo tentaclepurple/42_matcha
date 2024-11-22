@@ -53,7 +53,6 @@ class UserModel:
                 }
             }
         )
-        return result.modified_count > 0
 
     @staticmethod
     def update_profile(user_id: str, profile_data: Dict[str, Any]) -> bool:
@@ -77,6 +76,7 @@ class UserModel:
             {"_id": ObjectId(user_id)},
             {"$set": profile_data}
         )
+        
         return result.modified_count > 0
 
     @staticmethod
