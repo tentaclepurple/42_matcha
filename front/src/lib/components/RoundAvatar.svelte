@@ -29,5 +29,5 @@
 <div
 	class={`flex items-center justify-center rounded-full border-2 border-teal-500 bg-gray-200 ${wrapperStyles} shrink-0 overflow-hidden`}
 >
-	<img {src} {alt} class={`${pictureStyles} aspect-square`} />
+	<img {src} {alt} class={`${pictureStyles} aspect-square object-cover`} />
 </div>

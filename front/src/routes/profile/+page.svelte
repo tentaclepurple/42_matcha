@@ -34,7 +34,7 @@
 			<img
 				src={getServerAsset(avatarUrl)}
 				alt=""
-				class="w-56 border-2 border-gray-500 object-cover"
+				class="max-h-80 w-56 border-2 border-gray-500 object-cover"
 			/>
 			<div class="flex items-center gap-2">
 				{#each photos as photo}
