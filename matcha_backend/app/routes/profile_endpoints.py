@@ -192,6 +192,7 @@ def my_profile_info():
            # Profile
            'username': user.get('username'),
            'gender': user.get('gender'),
+           'age': user.get('age'),
            'sexual_preferences': user.get('sexual_preferences'),
            'biography': user.get('biography'),
            'interests': user.get('interests', []),
