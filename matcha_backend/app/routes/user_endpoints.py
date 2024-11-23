@@ -160,33 +160,51 @@ def login():
             
         # Find user and check credentials
         user = UserModel.find_by_email(data['email'].lower())
-        if not user or not check_password_hash(user['password'], data['password']):
+        if not user:
             return jsonify({'error': 'Invalid credentials'}), 401
+            
+        # Check account lock
+        lock_expires = UserModel.check_account_lock(user['_id'])
+        if lock_expires:
+            remaining_time = lock_expires - datetime.utcnow()
+            hours = remaining_time.total_seconds() / 3600
+            return jsonify({
+                'error': 'Account temporarily locked',
+                'message': f'Too many failed attempts. Try again in {hours:.1f} hours'
+            }), 429
+            
+        # Verify password
+        if not check_password_hash(user['password'], data['password']):
+            updated_user = UserModel.increment_login_attempts(user['_id'])
+            attempts = updated_user.get('login_attempts', 0)
+            
+            if attempts >= 5:
+                return jsonify({
+                    'error': 'Account locked',
+                    'message': 'Too many failed attempts. Try again in 24 hours'
+                }), 429
+                
+            remaining_attempts = 5 - attempts
+            return jsonify({
+                'error': 'Invalid credentials',
+                'message': f'Invalid password. {remaining_attempts} attempts remaining'
+            }), 401
             
         # Check verification
         if not user['verified']:
             return jsonify({'error': 'Email not verified'}), 401
 
-        # Generate access token
+        # Successful login - reset attempts and generate token
+        UserModel.reset_login_attempts(user['_id'])
         access_token = create_access_token(identity=str(user['_id']))
-
-        # Update online status
-        UserModel.update_online_status(str(user['_id']), True)
-        
-        # Generate response
-        user_data = {
-            'user_id': str(user['_id']),
-            'profile_completed': user['profile_completed']
-        }
-        
-        # WE CAN ADD MORE USER DATA TO THE RESPONSE IF NEEDED
-        # CAUTION WITH NON SERIALIZABLE DATA TYPES LIKE DATETIME, GEOJSON, ETC.
-        # response['user_data'] = user
         
         return jsonify({
             'access_token': access_token,
-            'user': user_data
-            }),200
+            'user': {
+                'user_id': str(user['_id']),
+                'profile_completed': user['profile_completed']
+            }
+        }), 200
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
