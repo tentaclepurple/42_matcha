@@ -15,6 +15,10 @@ export async function fetchUserData(): Promise<void> {
 			}
 		});
 
+		if (!res.ok) {
+			throw new Error('Failed to fetch user data');
+		}
+
 		const { email, first_name, last_name, profile_photo, username } = await res.json();
 
 		userData.set({
@@ -26,5 +30,6 @@ export async function fetchUserData(): Promise<void> {
 		});
 	} catch (error: unknown) {
 		console.error(error);
+		throw new Error('Failed to fetch user data');
 	}
 }
