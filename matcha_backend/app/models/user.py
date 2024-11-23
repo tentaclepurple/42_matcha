@@ -1,6 +1,6 @@
 from ..config.database import mongo
 from bson import ObjectId
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
 from .iamatcha import BotModel
 
@@ -217,3 +217,71 @@ class UserModel:
             {"$pull": {"blocked_users": ObjectId(blocked_user_id)}}
         )
         return result.modified_count > 0
+
+    @staticmethod
+    def increment_login_attempts(user_id: str) -> Dict[str, Any]:
+        """
+        Increment login attempts and lock account if necessary
+        Returns: Updated user data
+        """
+        update_data = {
+            "login_attempts": 1,
+            "last_failed_login": datetime.utcnow()
+        }
+        
+        # Get current attempts
+        user = mongo.db.users.find_one(
+            {"_id": ObjectId(user_id)},
+            {"login_attempts": 1}
+        )
+        
+        current_attempts = user.get('login_attempts', 0) + 1
+        update_data['login_attempts'] = current_attempts
+        
+        # Lock account if max attempts reached
+        if current_attempts >= 5:
+            update_data['locked_until'] = datetime.utcnow() + timedelta(hours=24)
+        
+        result = mongo.db.users.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$set": update_data}
+        )
+        
+        return mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+    @staticmethod
+    def reset_login_attempts(user_id: str) -> bool:
+        """Reset login attempts after successful login"""
+        result = mongo.db.users.update_one(
+            {"_id": ObjectId(user_id)},
+            {
+                "$set": {
+                    "login_attempts": 0,
+                    "locked_until": None,
+                    "last_failed_login": None,
+                    "online": True,
+                    "last_connection": datetime.utcnow()
+                }
+            }
+        )
+        return result.modified_count > 0
+
+    @staticmethod
+    def check_account_lock(user_id: str) -> Optional[datetime]:
+        """
+        Check if account is locked
+        Returns: None if not locked, or datetime when lock expires
+        """
+        user = mongo.db.users.find_one(
+            {"_id": ObjectId(user_id)},
+            {"locked_until": 1}
+        )
+        
+        if user and user.get('locked_until'):
+            if datetime.utcnow() < user['locked_until']:
+                return user['locked_until']
+            else:
+                # Reset if lock has expired
+                UserModel.reset_login_attempts(user_id)
+                return None
+        return None
