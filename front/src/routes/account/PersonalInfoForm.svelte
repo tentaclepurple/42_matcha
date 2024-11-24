@@ -65,8 +65,8 @@
 </script>
 
 <form onsubmit={handleSave}>
-	<fieldset class="flex flex-col items-start gap-5">
-		<label>
+	<fieldset class="grid grid-cols-2 grid-rows-3 gap-x-3 gap-y-5">
+		<label class="col-span-2">
 			Username:
 			<input
 				type="text"
@@ -81,36 +81,35 @@
 			/>
 		</label>
 
-		<div class="flex items-center gap-3">
-			<label>
-				First name:
-				<input
-					type="text"
-					id="first_name"
-					name="first_name"
-					value={currentUserData ? currentUserData.firstName : ''}
-					readonly={!isEditing}
-					maxlength="30"
-					required
-					autocomplete="given-name"
-				/>
-			</label>
-			<label>
-				Last name:
-				<input
-					type="text"
-					id="last_name"
-					name="last_name"
-					value={currentUserData ? currentUserData.lastName : ''}
-					readonly={!isEditing}
-					maxlength="30"
-					required
-					autocomplete="family-name"
-				/>
-			</label>
-		</div>
+		<label>
+			First name:
+			<input
+				type="text"
+				id="first_name"
+				name="first_name"
+				value={currentUserData ? currentUserData.firstName : ''}
+				readonly={!isEditing}
+				maxlength="30"
+				required
+				autocomplete="given-name"
+			/>
+		</label>
 
 		<label>
+			Last name:
+			<input
+				type="text"
+				id="last_name"
+				name="last_name"
+				value={currentUserData ? currentUserData.lastName : ''}
+				readonly={!isEditing}
+				maxlength="30"
+				required
+				autocomplete="family-name"
+			/>
+		</label>
+
+		<label class="col-span-2">
 			Email:
 			<input
 				type="email"
@@ -120,9 +119,12 @@
 				value={currentUserData ? currentUserData.email : ''}
 				readonly={!isEditing}
 				autocomplete="email"
+				class="w-full"
 			/>
 		</label>
+	</fieldset>
 
+	<div class="mt-6">
 		{#if isEditing}
 			<Button type="submit" level="primary">Save</Button>
 		{:else}
@@ -138,7 +140,8 @@
 				Update info
 			</Button>
 		{/if}
-	</fieldset>
+	</div>
+
 	{#if $success}
 		<p class="mt-4 text-green-500">{$success}</p>
 	{:else if $error}
