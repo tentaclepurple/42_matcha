@@ -109,8 +109,8 @@
 					Male <GenderSymbol gender={GENDER_OPTIONS.MALE} />
 				</option>
 				<option value={GENDER_OPTIONS.FEMALE}>
-					Female <GenderSymbol gender={GENDER_OPTIONS.FEMALE} /></option
-				>
+					Female <GenderSymbol gender={GENDER_OPTIONS.FEMALE} />
+				</option>
 				<option value={GENDER_OPTIONS.OTHER}>
 					Other <GenderSymbol gender={GENDER_OPTIONS.OTHER} />
 				</option>
@@ -140,8 +140,9 @@
 					id="biography"
 					name="biography"
 					placeholder="Tell us more about yourself"
-					class="mb-1 w-full"
+					class="mb-1 w-full text-sm"
 					required
+					rows="4"
 					minlength="1"
 					maxlength="500"
 					oninput={handleTextareaUpdate}
