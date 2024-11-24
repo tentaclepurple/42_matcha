@@ -92,18 +92,14 @@
 	};
 </script>
 
-<div class="mb-2 flex items-end gap-4">
-	<div class="flex items-end gap-2">
-		{#each photos as photo, index}
+<div class="mb-2 grid  grid-cols-[200px_170px_170px] grid-rows-2 gap-2">
+	{#each photos as photo, index}
+		<div class={`${index === 0 ? 'row-span-2' : ''} h-full min-h-40`}>
 			{#if photo.url.endsWith(DEFAULT_AVATAR_NAME)}
-				<label class="cursor-pointer hover:shadow-lg">
+				<label class="h-full cursor-pointer hover:shadow-lg">
 					<span class="sr-only">Upload new picture</span>
 					<input type="file" class="hidden" onchange={handlePhotoUpload} data-id={index} />
-					<div
-						class={`flex ${index === 0 ? 'h-56 w-40' : 'h-32 w-32'} items-center justify-center bg-gray-300 shadow-md`}
-					>
-						+
-					</div>
+					<div class="flex h-full items-center justify-center bg-gray-300 shadow-md">+</div>
 				</label>
 			{:else}
 				<div
@@ -111,7 +107,7 @@
 					onmouseleave={handlePhotoMouseLeave}
 					onclick={() => handlePhotoDelete(index)}
 					data-id={index}
-					class={`relative ${showDeleteButton === index ? 'shadow-lg' : ''}`}
+					class={`relative ${showDeleteButton === index ? 'shadow-lg' : ''} h-full`}
 					role={showDeleteButton === index ? 'button' : ''}
 				>
 					{#if showDeleteButton === index}
@@ -124,12 +120,12 @@
 					<img
 						src={getServerAsset(photo.url)}
 						alt=""
-						class={`${index === 0 ? 'h-56 w-40' : 'h-32 w-32'} border-2 border-gray-500 object-cover shadow-md`}
+						class={`h-full border-2 border-gray-500 object-cover shadow-md`}
 					/>
 				</div>
 			{/if}
-		{/each}
-	</div>
+		</div>
+	{/each}
 </div>
 {#if $error}
 	<p class="text-sm text-red-500">{$error}</p>
