@@ -62,6 +62,34 @@
 	const handlePhotoMouseLeave = () => {
 		showDeleteButton = null;
 	};
+
+	const handlePhotoDelete = async (index: number) => {
+		const isRelevantButton = index === showDeleteButton;
+
+		if (!isRelevantButton) return;
+
+		const token = localStorage.getItem('access_token');
+
+		try {
+			const res = await fetch(`${SERVER_BASE_URL}/api/profile/delete_photo/${index}`, {
+				method: 'DELETE',
+				headers: {
+					authorization: `Bearer ${token}`
+				}
+			});
+
+			if (!res.ok) {
+				throw new Error('Failed to delete photo');
+			}
+
+			await res.json();
+
+			await fetchUserProfileData();
+		} catch (e) {
+			console.error(e);
+			error.set('There was an error deleting the photo. Please try again.');
+		}
+	};
 </script>
 
 <div class="mb-2 flex items-end gap-4">
@@ -81,6 +109,7 @@
 				<div
 					onmouseenter={(event) => handlePhotoMouseEnter(event, index)}
 					onmouseleave={handlePhotoMouseLeave}
+					onclick={() => handlePhotoDelete(index)}
 					data-id={index}
 					class={`relative ${showDeleteButton === index ? 'shadow-lg' : ''}`}
 					role={showDeleteButton === index ? 'button' : ''}
