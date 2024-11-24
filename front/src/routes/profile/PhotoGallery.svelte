@@ -51,6 +51,17 @@
 			e.target.value = '';
 		}
 	};
+
+	const handlePhotoMouseEnter = (e: MouseEvent, index: number) => {
+		const target = e.target as HTMLElement;
+		const targetIndex = Number(target?.dataset?.id);
+
+		if (targetIndex === index) showDeleteButton = index;
+	};
+
+	const handlePhotoMouseLeave = () => {
+		showDeleteButton = null;
+	};
 </script>
 
 <div class="mb-2 flex items-end gap-4">
@@ -68,24 +79,18 @@
 				</label>
 			{:else}
 				<div
-					onmouseenter={(e) => {
-						const targetIndex = Number(e.target?.dataset?.id);
-						if (targetIndex === index) showDeleteButton = index;
-					}}
-					onmouseleave={() => {
-						showDeleteButton = null;
-					}}
+					onmouseenter={(event) => handlePhotoMouseEnter(event, index)}
+					onmouseleave={handlePhotoMouseLeave}
 					data-id={index}
 					class={`relative ${showDeleteButton === index ? 'shadow-lg' : ''}`}
+					role={showDeleteButton === index ? 'button' : ''}
 				>
 					{#if showDeleteButton === index}
-						<button
-							type="button"
-							aria-label="Delete"
+						<img
+							src="/icons/delete.svg"
+							alt=""
 							class="absolute inset-0 m-auto h-10 w-10 rounded-full bg-red-500 p-2"
-						>
-							<img src="/icons/delete.svg" alt="" />
-						</button>
+						/>
 					{/if}
 					<img
 						src={getServerAsset(photo.url)}
