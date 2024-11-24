@@ -25,6 +25,12 @@
 		}
 	});
 
+	$: textAreaLength = 0;
+	const handleTextareaUpdate = (event: Event) => {
+		const textArea = event.target as HTMLTextAreaElement;
+		textAreaLength = textArea.value.length;
+	};
+
 	const handleFormSubmit = async (event: Event) => {
 		event.preventDefault();
 		error.set('');
@@ -84,7 +90,7 @@
 	<h2 class="mb-6">Complete your profile to find your soulmate</h2>
 	<form onsubmit={handleFormSubmit}>
 		<fieldset class="mb-8 flex flex-col gap-5">
-			<label class="flex items-baseline gap-2">
+			<label class="flex justify-between gap-2">
 				<span class="font-bold">Gender:</span>
 				<select name="gender" id="gender">
 					<option value={null} disabled selected>Choose an option</option>
@@ -94,7 +100,7 @@
 				</select>
 			</label>
 
-			<label class="flex items-baseline gap-2">
+			<label class="flex justify-between gap-2">
 				<span class="font-bold">Interested in:</span>
 				<select name="sexual_preferences" id="sexual_preferences">
 					<option value={null} disabled selected>Choose an option</option>
@@ -104,14 +110,26 @@
 				</select>
 			</label>
 
-			<label class="flex items-baseline gap-2">
+			<label class="flex justify-between gap-2">
 				<span class="font-bold">Bio:</span>
-				<textarea
-					id="biography"
-					name="biography"
-					placeholder="Tell us more about yourself"
-					class="w-full"
-				></textarea>
+				<div class="flex w-2/3 flex-col items-end">
+					<textarea
+						id="biography"
+						name="biography"
+						placeholder="Tell us more about yourself"
+						class="mb-1 w-full"
+						required
+						minlength="1"
+						maxlength="500"
+						oninput={handleTextareaUpdate}
+					></textarea>
+					<p class="flex w-full items-baseline justify-between gap-6 text-xs text-gray-500">
+						Describe yourself in less than 500 characters
+						<span>
+							{textAreaLength}/500
+						</span>
+					</p>
+				</div>
 			</label>
 		</fieldset>
 
