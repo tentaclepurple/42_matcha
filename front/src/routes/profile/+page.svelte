@@ -6,6 +6,8 @@
 	import MissingDataForm from './MissingDataForm.svelte';
 	import { writable } from 'svelte/store';
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
+	import { GENDER_OPTIONS, PREFERENCES_OPTIONS } from '$lib/constants/user-profile-data';
+	import type UserProfileData from '$lib/interfaces/user-profile-data.interface';
 
 	if (!$userProfileData) {
 		goto('/login');
@@ -25,6 +27,30 @@
 			}, DEFAULT_TIMEOUT);
 		}
 	});
+
+	const getGenderIcon = (userProfileData: UserProfileData): string => {
+		switch (userProfileData.gender) {
+			case GENDER_OPTIONS.MALE:
+				return 'icons/gender/male.svg';
+			case GENDER_OPTIONS.FEMALE:
+				return 'icons/gender/female.svg';
+			case GENDER_OPTIONS.OTHER:
+			default:
+				return 'icons/gender/male-female.svg';
+		}
+	};
+
+	const getPreferencesIcon = (userProfileData: UserProfileData): string => {
+		switch (userProfileData.sexualPreference) {
+			case PREFERENCES_OPTIONS.MALE:
+				return 'icons/gender/male.svg';
+			case PREFERENCES_OPTIONS.FEMALE:
+				return 'icons/gender/female.svg';
+			case PREFERENCES_OPTIONS.BISEXUAL:
+			default:
+				return 'icons/gender/male-female.svg';
+		}
+	};
 </script>
 
 <PageWrapper>
@@ -43,17 +69,23 @@
 					<dl class="flex flex-col gap-3">
 						<div>
 							<dt class="font-bold">About me</dt>
-							<dd>{$userProfileData.biography}</dd>
+							<dd class="max-w-xl">{$userProfileData.biography}</dd>
 						</div>
 
 						<div class="flex items-baseline gap-2">
 							<dt class="font-bold">Gender:</dt>
-							<dd>{$userProfileData.gender}</dd>
+							<dd class="flex items-center gap-1">
+								{$userProfileData.gender}
+								<img src={getGenderIcon($userProfileData)} alt="" class="w-5" />
+							</dd>
 						</div>
 
 						<div class="flex items-baseline gap-2">
 							<dt class="font-bold">Interested in:</dt>
-							<dd>{$userProfileData.sexualPreference}</dd>
+							<dd class="flex items-center gap-1">
+								{$userProfileData.sexualPreference}
+								<img src={getPreferencesIcon($userProfileData)} alt="" class="w-5" />
+							</dd>
 						</div>
 					</dl>
 				</div>
