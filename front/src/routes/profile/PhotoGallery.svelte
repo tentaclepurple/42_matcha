@@ -29,7 +29,7 @@
 			formData.append('photo', photo);
 
 			const input = e.target;
-			const index = +input.dataset.id + 1;
+			const index = input.dataset.id;
 
 			const res = await fetch(`${SERVER_BASE_URL}/api/profile/update_photo/${index}`, {
 				method: 'PUT',
