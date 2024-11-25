@@ -3,16 +3,27 @@
 	import Button from '$lib/components/Button.svelte';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
-	import { writable } from 'svelte/store';
 
-	let error = writable('');
+	let error: string = $state('');
+	$effect(() => {
+		if (error) {
+			const timeout = setTimeout(() => {
+				error = '';
+			}, 5000);
+
+			return () => {
+				clearTimeout(timeout);
+			};
+		}
+	});
+
 	let isLoading = false;
 
 	const handleReset = async (e) => {
 		e.preventDefault();
 
 		isLoading = true;
-		error.set('');
+		error = '';
 
 		const formData = new FormData(e.target);
 		const email = formData.get('email');
@@ -26,7 +37,7 @@
 		});
 
 		if (!res) {
-			error.set('An error occurred. Please try again later.');
+			error = 'An error occurred. Please try again later.';
 			isLoading = false;
 			return;
 		}
@@ -56,7 +67,7 @@
 		</fieldset>
 	</form>
 
-	{#if $error}
-		<p style="text-red-500">{$error}</p>
+	{#if error}
+		<p style="text-red-500">{error}</p>
 	{/if}
 </PageWrapper>

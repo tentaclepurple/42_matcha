@@ -8,20 +8,31 @@
 	import { fetchUserData, userData } from '$lib/stores/user-data';
 	import getServerAsset from '$lib/utils/get-server-asset';
 	import { onMount } from 'svelte';
-	import { writable } from 'svelte/store';
 
-	let error = writable('');
-	error.subscribe(() => {
-		setTimeout(() => {
-			error.set('');
-		}, DEFAULT_TIMEOUT);
+	let error: string = $state('');
+	$effect(() => {
+		if (error) {
+			const timeout = setTimeout(() => {
+				error = '';
+			}, DEFAULT_TIMEOUT);
+
+			return () => {
+				clearTimeout(timeout);
+			};
+		}
 	});
 
-	let success = writable('');
-	success.subscribe(() => {
-		setTimeout(() => {
-			success.set('');
-		}, DEFAULT_TIMEOUT);
+	let success: string = $state('');
+	$effect(() => {
+		if (success) {
+			const timeout = setTimeout(() => {
+				success = '';
+			}, DEFAULT_TIMEOUT);
+
+			return () => {
+				clearTimeout(timeout);
+			};
+		}
 	});
 
 	let isLoading: boolean = $state(false);
@@ -39,20 +50,20 @@
 	});
 
 	const handleEditAvatar = async (e) => {
-		error.set('');
-		success.set('');
+		error = '';
+		success = '';
 		isLoading = true;
 
 		const { files } = e.target;
 		const file = files[0];
 
 		if (!file) {
-			error.set('Something went wrong. Please try again.');
+			error = 'Something went wrong. Please try again.';
 			return;
 		}
 
 		if (file.size > AVATAR_MAX_SIZE) {
-			error.set('File is too large. Please choose a smaller one.');
+			error = 'File is too large. Please choose a smaller one.';
 			return;
 		}
 
@@ -73,10 +84,10 @@
 
 			await fetchUserData();
 
-			success.set('Avatar updated successfully!');
+			success = 'Avatar updated successfully!';
 		} catch (err) {
 			console.error(err);
-			error.set('Something went wrong. Please try again.');
+			error = 'Something went wrong. Please try again.';
 		} finally {
 			isLoading = false;
 			e.target.value = '';
@@ -84,8 +95,8 @@
 	};
 
 	const handleDeleteAvatar = async () => {
-		error.set('');
-		success.set('');
+		error = '';
+		success = '';
 		isLoading = true;
 
 		try {
@@ -102,10 +113,10 @@
 
 			await fetchUserData();
 
-			success.set('Avatar deleted successfully!');
+			success = 'Avatar deleted successfully!';
 		} catch (err) {
 			console.error(err);
-			error.set('Something went wrong. Please try again.');
+			error = 'Something went wrong. Please try again.';
 		} finally {
 			isLoading = false;
 		}
@@ -141,8 +152,8 @@
 					class="sr-only"
 					onchange={handleEditAvatar}
 					onclick={() => {
-						error.set('');
-						success.set('');
+						error = '';
+						success = '';
 					}}
 				/>
 			</label>
@@ -152,8 +163,8 @@
 		</fieldset>
 	</form>
 </div>
-{#if $success}
-	<p class="mt-4 text-green-500">{$success}</p>
-{:else if $error}
-	<p class="mt-4 text-red-500">{$error}</p>
+{#if success}
+	<p class="mt-4 text-green-500">{success}</p>
+{:else if error}
+	<p class="mt-4 text-red-500">{error}</p>
 {/if}
