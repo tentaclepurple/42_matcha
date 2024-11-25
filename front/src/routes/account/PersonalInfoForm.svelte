@@ -5,8 +5,6 @@
 	import { userData } from '$lib/stores/user-data';
 	import { writable } from 'svelte/store';
 
-	$: currentUserData = $userData;
-
 	let isEditing = false;
 	let error = writable('');
 	error.subscribe(() => {
@@ -54,10 +52,10 @@
 			error.set('An error occurred. Please try again later.');
 
 			// Reset form values to the current user data
-			e.target.username.value = currentUserData?.username || '';
-			e.target.first_name.value = currentUserData?.firstName || '';
-			e.target.last_name.value = currentUserData?.lastName || '';
-			e.target.email.value = currentUserData?.email || '';
+			e.target.username.value = $userData?.username || '';
+			e.target.first_name.value = $userData?.firstName || '';
+			e.target.last_name.value = $userData?.lastName || '';
+			e.target.email.value = $userData?.email || '';
 		} finally {
 			isEditing = false;
 		}
@@ -72,7 +70,7 @@
 				type="text"
 				id="username"
 				name="username"
-				value={currentUserData ? currentUserData.username : ''}
+				value={$userData ? $userData.username : ''}
 				required
 				readonly={!isEditing}
 				minlength="5"
@@ -87,7 +85,7 @@
 				type="text"
 				id="first_name"
 				name="first_name"
-				value={currentUserData ? currentUserData.firstName : ''}
+				value={$userData ? $userData.firstName : ''}
 				readonly={!isEditing}
 				maxlength="30"
 				required
@@ -101,7 +99,7 @@
 				type="text"
 				id="last_name"
 				name="last_name"
-				value={currentUserData ? currentUserData.lastName : ''}
+				value={$userData ? $userData.lastName : ''}
 				readonly={!isEditing}
 				maxlength="30"
 				required
@@ -116,7 +114,7 @@
 				id="email"
 				name="email"
 				required
-				value={currentUserData ? currentUserData.email : ''}
+				value={$userData ? $userData.email : ''}
 				readonly={!isEditing}
 				autocomplete="email"
 				class="w-full"

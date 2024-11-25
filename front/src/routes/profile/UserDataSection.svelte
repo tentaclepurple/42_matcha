@@ -4,7 +4,7 @@
 	import PreferenceSymbol from './PreferenceSymbol.svelte';
 	import UserDataForm from './UserDataForm.svelte';
 
-	$: isEditing = false;
+	let isEditing: boolean = $state(false);
 </script>
 
 {#if $userProfileData}

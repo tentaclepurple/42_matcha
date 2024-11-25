@@ -10,8 +10,6 @@
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 
-	$: currentUserData = $userData;
-
 	let error = writable('');
 	error.subscribe(() => {
 		setTimeout(() => {
@@ -26,9 +24,9 @@
 		}, DEFAULT_TIMEOUT);
 	});
 
-	let isLoading = false;
+	let isLoading: boolean = $state(false);
 
-	$: avatarUrl = getServerAsset(currentUserData?.profilePhoto ?? '');
+	let avatarUrl: string = $derived(getServerAsset($userData?.profilePhoto ?? '/icons/avatar.svg'));
 
 	const token = localStorage.getItem('access_token');
 
@@ -118,7 +116,7 @@
 <div class="gap-42 flex max-w-sm items-center gap-4">
 	<div class="relative">
 		<RoundAvatar src={avatarUrl} alt="" size="l" />
-		{#if !currentUserData?.profilePhoto.endsWith(DEFAULT_AVATAR_NAME) && !isLoading}
+		{#if !$userData?.profilePhoto.endsWith(DEFAULT_AVATAR_NAME) && !isLoading}
 			<button
 				type="button"
 				class="absolute bottom-0 left-0 rounded-full bg-red-500 p-2 shadow-md hover:bg-red-600"
