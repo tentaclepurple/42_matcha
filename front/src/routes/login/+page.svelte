@@ -9,6 +9,7 @@
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
 	import { fetchUserData } from '$lib/stores/user-data';
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
+	import { getUserLocation } from '$lib/stores/geolocation';
 
 	let error: string = $state('');
 	$effect(() => {
@@ -61,6 +62,7 @@
 
 			localStorage.setItem('access_token', access_token);
 			login();
+			await getUserLocation();
 			await fetchUserData();
 
 			const { profile_completed: profileCompleted } = user;
