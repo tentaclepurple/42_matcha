@@ -3,13 +3,13 @@
 	import Form from '$lib/components/Form.svelte';
 	import PasswordInput from '$lib/components/PasswordInput.svelte';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
-	import { login } from '$lib/stores/auth';
 
 	import { goto } from '$app/navigation';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
 	import { fetchUserData } from '$lib/stores/user-data';
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
 	import { userLocation } from '$lib/state/geolocation.svelte';
+	import { userAuth } from '$lib/state/auth.svelte';
 
 	let error: string = $state('');
 	$effect(() => {
@@ -61,7 +61,7 @@
 			const { access_token, user } = await res.json();
 
 			localStorage.setItem('access_token', access_token);
-			login();
+			userAuth.login();
 			await userLocation.getUserLocation();
 			await fetchUserData();
 
