@@ -3,27 +3,39 @@
 	import { SERVER_BASE_URL } from '$lib/constants/api';
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
 	import { userData } from '$lib/stores/user-data';
-	import { writable } from 'svelte/store';
 
-	let isEditing = false;
-	let error = writable('');
-	error.subscribe(() => {
-		setTimeout(() => {
-			error.set('');
-		}, DEFAULT_TIMEOUT);
+	let isEditing: boolean = $state(false);
+
+	let error: string = $state('');
+	$effect(() => {
+		if (error) {
+			const timeout = setTimeout(() => {
+				error = '';
+			}, DEFAULT_TIMEOUT);
+
+			return () => {
+				clearTimeout(timeout);
+			};
+		}
 	});
 
-	let success = writable('');
-	success.subscribe(() => {
-		setTimeout(() => {
-			success.set('');
-		}, DEFAULT_TIMEOUT);
+	let success: string = $state('');
+	$effect(() => {
+		if (success) {
+			const timeout = setTimeout(() => {
+				success = '';
+			}, DEFAULT_TIMEOUT);
+
+			return () => {
+				clearTimeout(timeout);
+			};
+		}
 	});
 
 	const handleSave = async (e) => {
 		e.preventDefault();
-		error.set('');
-		success.set('');
+		error = '';
+		success = '';
 
 		const formData = new FormData(e.target);
 
@@ -46,10 +58,10 @@
 				throw new Error('Something went wrong');
 			}
 
-			success.set('Profile updated successfully');
+			success = 'Profile updated successfully';
 		} catch (err) {
 			console.error(err);
-			error.set('An error occurred. Please try again later.');
+			error = 'An error occurred. Please try again later.';
 
 			// Reset form values to the current user data
 			e.target.username.value = $userData?.username || '';
@@ -131,8 +143,8 @@
 				level="primary"
 				onclick={() => {
 					isEditing = !isEditing;
-					error.set('');
-					success.set('');
+					error = '';
+					success = '';
 				}}
 			>
 				Update info
@@ -140,9 +152,9 @@
 		{/if}
 	</div>
 
-	{#if $success}
-		<p class="mt-4 text-green-500">{$success}</p>
-	{:else if $error}
-		<p class="mt-4 text-red-500">{$error}</p>
+	{#if success}
+		<p class="mt-4 text-green-500">{success}</p>
+	{:else if error}
+		<p class="mt-4 text-red-500">{error}</p>
 	{/if}
 </form>

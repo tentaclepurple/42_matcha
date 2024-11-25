@@ -4,23 +4,28 @@
 	import type UserProfileData from '$lib/interfaces/user-profile-data.interface';
 	import getServerAsset from '$lib/utils/get-server-asset';
 	import { fetchUserProfileData } from '$lib/stores/user-profile-data';
-	import { writable } from 'svelte/store';
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
 
 	const { photos }: { photos: UserProfileData['photos'] } = $props();
 
-	let error = writable('');
-	error.subscribe(() => {
-		setTimeout(() => {
-			error.set('');
-		}, DEFAULT_TIMEOUT);
+	let error: string = $state('');
+	$effect(() => {
+		if (error) {
+			const timeout = setTimeout(() => {
+				error = '';
+			}, DEFAULT_TIMEOUT);
+
+			return () => {
+				clearTimeout(timeout);
+			};
+		}
 	});
 
-	let showDeleteButton: null | boolean = $state(null);
+	let showDeleteButton: null | number = $state(null);
 
 	const handlePhotoUpload = async (e) => {
 		try {
-			error.set('');
+			error = '';
 			const token = localStorage.getItem('access_token');
 
 			const photo = e.target.files[0];
@@ -46,7 +51,7 @@
 			await fetchUserProfileData();
 		} catch (e) {
 			console.error(error);
-			error.set('There was an error uploading the photo. Please try again.');
+			error = 'There was an error uploading the photo. Please try again.';
 		} finally {
 			e.target.value = '';
 		}
@@ -87,7 +92,7 @@
 			await fetchUserProfileData();
 		} catch (e) {
 			console.error(e);
-			error.set('There was an error deleting the photo. Please try again.');
+			error = 'There was an error deleting the photo. Please try again.';
 		}
 	};
 </script>
@@ -127,6 +132,6 @@
 		</div>
 	{/each}
 </div>
-{#if $error}
-	<p class="text-sm text-red-500">{$error}</p>
+{#if error}
+	<p class="text-sm text-red-500">{error}</p>
 {/if}

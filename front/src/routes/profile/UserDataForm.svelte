@@ -3,7 +3,6 @@
 	import { GENDER_OPTIONS, PREFERENCES_OPTIONS } from '$lib/constants/user-profile-data';
 	import { fetchUserProfileData } from '$lib/stores/user-profile-data';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
-	import { writable } from 'svelte/store';
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
 	import GenderSymbol from './GenderSymbol.svelte';
 	import PreferenceSymbol from './PreferenceSymbol.svelte';
@@ -16,30 +15,34 @@
 		onCancel?: () => void;
 	} = $props();
 
-	const success = writable('');
-	success.subscribe((value) => {
-		if (value) {
-			setTimeout(() => {
-				success.set('');
+	let success: string = $state('');
+	$effect(() => {
+		if (success) {
+			const timeout = setTimeout(() => {
+				success = '';
 			}, DEFAULT_TIMEOUT);
+
+			return () => {
+				clearTimeout(timeout);
+			};
 		}
 	});
 
-	const error = writable('');
-
+	let error: string = $state('');
 	let errorTimeoutId: null | number = $state(null);
-	error.subscribe((value) => {
-		if (errorTimeoutId) {
-			clearTimeout(errorTimeoutId);
+	$effect(() => {
+		if (error) {
+			const timeout = setTimeout(() => {
+				error = '';
+			}, DEFAULT_TIMEOUT);
+			errorTimeoutId = timeout;
 		}
 
-		if (value) {
-			const timeoutId = setTimeout(() => {
-				error.set('');
-				errorTimeoutId = null;
-			}, DEFAULT_TIMEOUT);
-			errorTimeoutId = timeoutId;
-		}
+		return () => {
+			if (errorTimeoutId) {
+				clearTimeout(errorTimeoutId);
+			}
+		};
 	});
 
 	let textAreaLength = $state(0);
@@ -50,8 +53,8 @@
 
 	const handleFormSubmit = async (event: Event) => {
 		event.preventDefault();
-		error.set('');
-		success.set('');
+		error = '';
+		success = '';
 
 		try {
 			const token = localStorage.getItem('access_token');
@@ -61,19 +64,19 @@
 			const gender = formData.get('gender') as string;
 
 			if (!gender) {
-				error.set('Please provide your gender');
+				error = 'Please provide your gender';
 				return;
 			}
 
 			const sexualPreferences = formData.get('sexual_preferences') as string;
 			if (!sexualPreferences) {
-				error.set('Please provide your dating preferences');
+				error = 'Please provide your sexual preferences';
 				return;
 			}
 
 			const bio = formData.get('biography') as string;
 			if (!bio.length) {
-				error.set('Please provide a bio');
+				error = 'Please provide a bio';
 				return;
 			}
 
@@ -89,17 +92,17 @@
 			});
 
 			if (!res.ok) {
-				error.set('There was an error updating your profile.');
+				error = 'An error occurred. Please try again later.';
 				return;
 			}
 
-			success.set('Profile updated successfully');
+			success = 'Profile updated successfully';
 
 			await fetchUserProfileData();
 			onSuccess?.();
 		} catch (e) {
 			console.error(e);
-			error.set('There was an error updating your profile.');
+			error = 'An error occurred. Please try again later.';
 		}
 	};
 </script>
@@ -169,8 +172,8 @@
 		<Button type="submit" level="primary">Save</Button>
 	</div>
 </form>
-{#if $success}
-	<p class="text-green-500">{$success}</p>
-{:else if $error}
-	<p class="mt-4 text-red-500">{$error}</p>
+{#if success}
+	<p class="text-green-500">{success}</p>
+{:else if error}
+	<p class="mt-4 text-red-500">{error}</p>
 {/if}
