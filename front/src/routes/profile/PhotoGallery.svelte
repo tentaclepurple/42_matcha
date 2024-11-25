@@ -104,7 +104,9 @@
 				<label class="h-full cursor-pointer hover:shadow-lg">
 					<span class="sr-only">Upload new picture</span>
 					<input type="file" class="hidden" onchange={handlePhotoUpload} data-id={index} />
-					<div class="flex h-full items-center justify-center bg-gray-300 shadow-md">+</div>
+					<div class="flex h-full items-center justify-center bg-gray-300 shadow-md">
+						<img src="/icons/plus.svg" alt="" class="h-8 w-8" />
+					</div>
 				</label>
 			{:else}
 				<div
