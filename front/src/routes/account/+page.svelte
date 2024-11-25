@@ -13,14 +13,17 @@
 </script>
 
 <PageWrapper>
-	<h1>Account</h1>
-	<p class="mb-6">This is where you can complete your profile</p>
+	<header class="mb-6">
+		<h1>Account</h1>
+		<p>This is where you can handle your account information.</p>
+		<p>Looking for your profile info? Go to the <a href="/profile">Profile page</a>.</p>
+	</header>
 
 	<div>
 		<div class="flex flex-col items-start gap-4">
 			<ProfileAvatar />
 			<div>
-				<h2 class="mb-4">Account information</h2>
+				<h2 class="mb-4">Information</h2>
 				<PersonalInfoForm />
 			</div>
 		</div>
