@@ -8,8 +8,13 @@
 	import GenderSymbol from './GenderSymbol.svelte';
 	import PreferenceSymbol from './PreferenceSymbol.svelte';
 
-	export let onSuccess: (() => void) | undefined = undefined;
-	export let onCancel: (() => void) | undefined = undefined;
+	const {
+		onSuccess = undefined,
+		onCancel = undefined
+	}: {
+		onSuccess?: () => void;
+		onCancel?: () => void;
+	} = $props();
 
 	const success = writable('');
 	success.subscribe((value) => {
@@ -22,7 +27,7 @@
 
 	const error = writable('');
 
-	$: errorTimeoutId = null as number | null;
+	let errorTimeoutId: null | number = $state(null);
 	error.subscribe((value) => {
 		if (errorTimeoutId) {
 			clearTimeout(errorTimeoutId);
@@ -37,7 +42,7 @@
 		}
 	});
 
-	$: textAreaLength = 0;
+	let textAreaLength = $state(0);
 	const handleTextareaUpdate = (event: Event) => {
 		const textArea = event.target as HTMLTextAreaElement;
 		textAreaLength = textArea.value.length;

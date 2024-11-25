@@ -3,7 +3,7 @@
 
 	type Preferences = (typeof PREFERENCES_OPTIONS)[keyof typeof PREFERENCES_OPTIONS];
 
-	export let preference;
+	const { preference }: { preference: Preferences } = $props();
 
 	const getPreferencesSymbol = (preference: Preferences): string => {
 		switch (preference) {
