@@ -3,7 +3,7 @@
 
 	type Gender = (typeof GENDER_OPTIONS)[keyof typeof GENDER_OPTIONS];
 
-	export let gender: Gender;
+	const { gender }: { gender: Gender } = $props();
 
 	const getGenderSymbol = (gender: Gender): string => {
 		switch (gender) {

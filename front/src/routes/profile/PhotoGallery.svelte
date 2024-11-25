@@ -7,6 +7,8 @@
 	import { writable } from 'svelte/store';
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
 
+	const { photos }: { photos: UserProfileData['photos'] } = $props();
+
 	let error = writable('');
 	error.subscribe(() => {
 		setTimeout(() => {
@@ -14,9 +16,7 @@
 		}, DEFAULT_TIMEOUT);
 	});
 
-	let showDeleteButton: number | null = null;
-
-	export let photos: UserProfileData['photos'];
+	let showDeleteButton: null | boolean = $state(null);
 
 	const handlePhotoUpload = async (e) => {
 		try {
@@ -92,7 +92,7 @@
 	};
 </script>
 
-<div class="mb-2 grid  grid-cols-[200px_170px_170px] grid-rows-2 gap-2">
+<div class="mb-2 grid grid-cols-[200px_170px_170px] grid-rows-2 gap-2">
 	{#each photos as photo, index}
 		<div class={`${index === 0 ? 'row-span-2' : ''} h-full min-h-40`}>
 			{#if photo.url.endsWith(DEFAULT_AVATAR_NAME)}
