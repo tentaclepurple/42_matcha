@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let children;
+	const { children } = $props();
 
 	import { isAuthenticated, login } from '$lib/stores/auth';
 	import { onMount } from 'svelte';

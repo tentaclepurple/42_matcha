@@ -2,9 +2,15 @@
 	import { onMount } from 'svelte';
 	import lottie from 'lottie-web';
 
-	export let animationData: object;
-	export let loop: boolean = true;
-	export let autoplay: boolean = true;
+	const {
+		autoplay = true,
+		animationData,
+		loop = true
+	}: {
+		autoplay: boolean;
+		animationData: object;
+		loop: boolean;
+	} = $props();
 
 	let container: HTMLDivElement;
 

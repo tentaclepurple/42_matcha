@@ -3,29 +3,39 @@
 	import { SERVER_BASE_URL } from '$lib/constants/api';
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
 	import { userData } from '$lib/stores/user-data';
-	import { writable } from 'svelte/store';
 
-	$: currentUserData = $userData;
+	let isEditing: boolean = $state(false);
 
-	let isEditing = false;
-	let error = writable('');
-	error.subscribe(() => {
-		setTimeout(() => {
-			error.set('');
-		}, DEFAULT_TIMEOUT);
+	let error: string = $state('');
+	$effect(() => {
+		if (error) {
+			const timeout = setTimeout(() => {
+				error = '';
+			}, DEFAULT_TIMEOUT);
+
+			return () => {
+				clearTimeout(timeout);
+			};
+		}
 	});
 
-	let success = writable('');
-	success.subscribe(() => {
-		setTimeout(() => {
-			success.set('');
-		}, DEFAULT_TIMEOUT);
+	let success: string = $state('');
+	$effect(() => {
+		if (success) {
+			const timeout = setTimeout(() => {
+				success = '';
+			}, DEFAULT_TIMEOUT);
+
+			return () => {
+				clearTimeout(timeout);
+			};
+		}
 	});
 
 	const handleSave = async (e) => {
 		e.preventDefault();
-		error.set('');
-		success.set('');
+		error = '';
+		success = '';
 
 		const formData = new FormData(e.target);
 
@@ -48,16 +58,16 @@
 				throw new Error('Something went wrong');
 			}
 
-			success.set('Profile updated successfully');
+			success = 'Profile updated successfully';
 		} catch (err) {
 			console.error(err);
-			error.set('An error occurred. Please try again later.');
+			error = 'An error occurred. Please try again later.';
 
 			// Reset form values to the current user data
-			e.target.username.value = currentUserData?.username || '';
-			e.target.first_name.value = currentUserData?.firstName || '';
-			e.target.last_name.value = currentUserData?.lastName || '';
-			e.target.email.value = currentUserData?.email || '';
+			e.target.username.value = $userData?.username || '';
+			e.target.first_name.value = $userData?.firstName || '';
+			e.target.last_name.value = $userData?.lastName || '';
+			e.target.email.value = $userData?.email || '';
 		} finally {
 			isEditing = false;
 		}
@@ -65,14 +75,14 @@
 </script>
 
 <form onsubmit={handleSave}>
-	<fieldset class="flex flex-col items-start gap-5">
-		<label>
+	<fieldset class="grid grid-cols-2 grid-rows-3 gap-x-3 gap-y-5">
+		<label class="col-span-2">
 			Username:
 			<input
 				type="text"
 				id="username"
 				name="username"
-				value={currentUserData ? currentUserData.username : ''}
+				value={$userData ? $userData.username : ''}
 				required
 				readonly={!isEditing}
 				minlength="5"
@@ -81,48 +91,50 @@
 			/>
 		</label>
 
-		<div class="flex items-center gap-3">
-			<label>
-				First name:
-				<input
-					type="text"
-					id="first_name"
-					name="first_name"
-					value={currentUserData ? currentUserData.firstName : ''}
-					readonly={!isEditing}
-					maxlength="30"
-					required
-					autocomplete="given-name"
-				/>
-			</label>
-			<label>
-				Last name:
-				<input
-					type="text"
-					id="last_name"
-					name="last_name"
-					value={currentUserData ? currentUserData.lastName : ''}
-					readonly={!isEditing}
-					maxlength="30"
-					required
-					autocomplete="family-name"
-				/>
-			</label>
-		</div>
+		<label>
+			First name:
+			<input
+				type="text"
+				id="first_name"
+				name="first_name"
+				value={$userData ? $userData.firstName : ''}
+				readonly={!isEditing}
+				maxlength="30"
+				required
+				autocomplete="given-name"
+			/>
+		</label>
 
 		<label>
+			Last name:
+			<input
+				type="text"
+				id="last_name"
+				name="last_name"
+				value={$userData ? $userData.lastName : ''}
+				readonly={!isEditing}
+				maxlength="30"
+				required
+				autocomplete="family-name"
+			/>
+		</label>
+
+		<label class="col-span-2">
 			Email:
 			<input
 				type="email"
 				id="email"
 				name="email"
 				required
-				value={currentUserData ? currentUserData.email : ''}
+				value={$userData ? $userData.email : ''}
 				readonly={!isEditing}
 				autocomplete="email"
+				class="w-full"
 			/>
 		</label>
+	</fieldset>
 
+	<div class="mt-6">
 		{#if isEditing}
 			<Button type="submit" level="primary">Save</Button>
 		{:else}
@@ -131,17 +143,18 @@
 				level="primary"
 				onclick={() => {
 					isEditing = !isEditing;
-					error.set('');
-					success.set('');
+					error = '';
+					success = '';
 				}}
 			>
 				Update info
 			</Button>
 		{/if}
-	</fieldset>
-	{#if $success}
-		<p class="mt-4 text-green-500">{$success}</p>
-	{:else if $error}
-		<p class="mt-4 text-red-500">{$error}</p>
+	</div>
+
+	{#if success}
+		<p class="mt-4 text-green-500">{success}</p>
+	{:else if error}
+		<p class="mt-4 text-red-500">{error}</p>
 	{/if}
 </form>

@@ -9,23 +9,28 @@
 	import { MIN_BIRTH_DATA } from '$lib/constants/user';
 	import calcEighteenthBirthday from '$lib/utils/calc-eighteenth-birthday';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
-	import { writable } from 'svelte/store';
 
-	let error = writable('');
-	error.subscribe(() => {
-		setTimeout(() => {
-			error.set('');
-		}, 5000);
+	let error: string = $state('');
+	$effect(() => {
+		if (error) {
+			const timeout = setTimeout(() => {
+				error = '';
+			}, 5000);
+
+			return () => {
+				clearTimeout(timeout);
+			};
+		}
 	});
 
-	let isLoading: boolean = false;
+	let isLoading: boolean = $state(false);
 
 	const handleSubmit = async (e) => {
 		if (isLoading) return;
 		e.preventDefault();
 
 		isLoading = true;
-		error.set('');
+		error = '';
 
 		const form = e.target;
 		const formData = new FormData(form);
@@ -33,14 +38,14 @@
 		const password = formData.get('password') as string;
 		const confirmPassword = formData.get('confirm') as string;
 		if (password !== confirmPassword) {
-			error.set('Passwords do not match');
+			error = 'Passwords do not match';
 			isLoading = false;
 			return;
 		}
 
 		const { isValid: isPasswordValid, message: passwordError } = validatePassword(password);
 		if (!isPasswordValid) {
-			error.set(passwordError);
+			error = passwordError;
 			isLoading = false;
 			return;
 		}
@@ -62,18 +67,17 @@
 			if (!response.ok) {
 				switch (response.status) {
 					case 409:
-						error.set('Username or email already in use');
+						error = 'Username or email already in use';
 						break;
 					default:
-						error.set('An error occurred. Please try again later.');
-						break;
+						throw new Error('An error occurred. Please try again later.');
 				}
 				return;
 			}
 
 			goto('/signup/verify');
 		} catch (err) {
-			error.set('An error occurred. Please try again later.');
+			error = 'An error occurred. Please try again later.';
 		} finally {
 			isLoading = false;
 		}
@@ -179,8 +183,8 @@
 				</div>
 			</fieldset>
 
-			{#if $error}
-				<p class="text-red-500">{$error}</p>
+			{#if error}
+				<p class="text-red-500">{error}</p>
 			{/if}
 
 			<div class="flex items-baseline justify-center gap-2">

@@ -7,11 +7,11 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { userData } from '$lib/stores/user-data';
 
-	let showMenu = false;
+	let showMenu: boolean = $state(false);
 
-	$: avatarUrl = $userData?.profilePhoto
-		? getServerAsset($userData.profilePhoto)
-		: '/icons/avatar.svg';
+	const avatarUrl: string = $derived(
+		$userData?.profilePhoto ? getServerAsset($userData.profilePhoto) : '/icons/avatar.svg'
+	);
 
 	const handleLogOut = () => {
 		const accessToken = localStorage.getItem('access_token');
