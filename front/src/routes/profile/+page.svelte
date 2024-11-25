@@ -5,7 +5,7 @@
 	import PhotoGallery from './PhotoGallery.svelte';
 	import UserDataSection from './UserDataSection.svelte';
 	import UserDataForm from './UserDataForm.svelte';
-	import { DefaultMarker, MapLibre, Marker, Popup } from 'svelte-maplibre';
+	import { DefaultMarker, MapLibre } from 'svelte-maplibre';
 
 	if (!$userProfileData) {
 		goto('/login');
