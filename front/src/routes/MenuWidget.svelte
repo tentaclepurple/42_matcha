@@ -3,9 +3,9 @@
 	import RoundAvatar from '$lib/components/RoundAvatar.svelte';
 	import getServerAsset from '$lib/utils/get-server-asset';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
-	import { logout } from '$lib/stores/auth';
 	import { onDestroy, onMount } from 'svelte';
 	import { userData } from '$lib/stores/user-data';
+	import { userAuth } from '$lib/state/auth.svelte';
 
 	let showMenu: boolean = $state(false);
 
@@ -28,7 +28,7 @@
 			localStorage.removeItem('access_token');
 		}
 
-		logout();
+		userAuth.logout();
 		goto('/');
 	};
 

@@ -1,12 +1,11 @@
 <script>
 	import { goto } from '$app/navigation';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
-	import { isAuthenticated } from '$lib/stores/auth';
+	import { userAuth } from '$lib/state/auth.svelte';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-		console.log('onMount', $isAuthenticated);
-		if ($isAuthenticated) {
+		if (userAuth.isAuthenticated) {
 			goto('/dashboard', { replaceState: true });
 		}
 	});
