@@ -134,7 +134,6 @@ USER_SCHEMA = {
                 "minimum": 0,
                 "description": "user popularity rating"
             },
-            
             # Other
             "blocked_users": {
                 "bsonType": ["array", "null"],
