@@ -18,6 +18,8 @@
 			await fetchUserData();
 			await fetchUserProfileData();
 			await userLocation.getUserLocation();
+		} else {
+			userAuth.logout();
 		}
 	});
 </script>
