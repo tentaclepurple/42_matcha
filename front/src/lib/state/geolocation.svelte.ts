@@ -1,20 +1,20 @@
 class UserLocation {
-	private _location = $state<null | [number, number]>(null);
+	#location = $state<null | [number, number]>(null);
 
 	get value(): null | [number, number] {
-		return this._location;
+		return this.#location;
 	}
 
 	set value(newValue: null | [number, number]) {
-		this._location = newValue;
+		this.#location = newValue;
 	}
 
 	getUserLocation = async () => {
 		if (navigator.geolocation) {
 			console.log('Locating user…');
 			navigator.geolocation.getCurrentPosition((position) => {
-				this._location = [position.coords.latitude, position.coords.longitude];
-				console.log('User located', this._location);
+				this.#location = [position.coords.latitude, position.coords.longitude];
+				console.log('User located', this.#location);
 			});
 		}
 	};
