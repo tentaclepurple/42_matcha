@@ -6,11 +6,11 @@
 
 	import { goto } from '$app/navigation';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
-	import { fetchUserData } from '$lib/stores/user-data';
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
 	import { userLocation } from '$lib/state/geolocation.svelte';
 	import { userAuth } from '$lib/state/auth.svelte';
 	import { fetchUserProfileData } from '$lib/stores/user-profile-data';
+	import { userData } from '$lib/state/user-data.svelte';
 
 	let error: string = $state('');
 	$effect(() => {
@@ -64,7 +64,7 @@
 			localStorage.setItem('access_token', access_token);
 			userAuth.login();
 			await userLocation.getUserLocation();
-			await fetchUserData();
+			await userData.fetch();
 			await fetchUserProfileData();
 
 			const { profile_completed: profileCompleted } = user;
