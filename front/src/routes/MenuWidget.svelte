@@ -4,13 +4,13 @@
 	import getServerAsset from '$lib/utils/get-server-asset';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
 	import { onDestroy, onMount } from 'svelte';
-	import { userData } from '$lib/stores/user-data';
 	import { userAuth } from '$lib/state/auth.svelte';
+	import { userData } from '$lib/state/user-data.svelte';
 
 	let showMenu: boolean = $state(false);
 
 	const avatarUrl: string = $derived(
-		$userData?.profilePhoto ? getServerAsset($userData.profilePhoto) : '/icons/avatar.svg'
+		userData.value?.profilePhoto ? getServerAsset(userData.value.profilePhoto) : '/icons/avatar.svg'
 	);
 
 	const handleLogOut = () => {

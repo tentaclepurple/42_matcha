@@ -5,7 +5,7 @@
 	import { DEFAULT_AVATAR_NAME } from '$lib/constants/avatar';
 	import { AVATAR_MAX_SIZE } from '$lib/constants/files';
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
-	import { fetchUserData, userData } from '$lib/stores/user-data';
+	import { userData } from '$lib/state/user-data.svelte';
 	import getServerAsset from '$lib/utils/get-server-asset';
 	import { onMount } from 'svelte';
 
@@ -37,7 +37,9 @@
 
 	let isLoading: boolean = $state(false);
 
-	let avatarUrl: string = $derived(getServerAsset($userData?.profilePhoto ?? '/icons/avatar.svg'));
+	let avatarUrl: string = $derived(
+		getServerAsset(userData?.value?.profilePhoto ?? '/icons/avatar.svg')
+	);
 
 	const token = localStorage.getItem('access_token');
 
@@ -46,7 +48,7 @@
 			goto('/login', { replaceState: true });
 		}
 
-		await fetchUserData();
+		await userData.fetch();
 	});
 
 	const handleEditAvatar = async (e) => {
@@ -82,7 +84,7 @@
 				throw new Error();
 			}
 
-			await fetchUserData();
+			await userData.fetch();
 
 			success = 'Avatar updated successfully!';
 		} catch (err) {
@@ -111,7 +113,7 @@
 				throw new Error();
 			}
 
-			await fetchUserData();
+			await userData.fetch();
 
 			success = 'Avatar deleted successfully!';
 		} catch (err) {
@@ -127,7 +129,7 @@
 <div class="gap-42 flex max-w-sm items-center gap-4">
 	<div class="relative">
 		<RoundAvatar src={avatarUrl} alt="" size="l" />
-		{#if !$userData?.profilePhoto.endsWith(DEFAULT_AVATAR_NAME) && !isLoading}
+		{#if !userData?.value?.profilePhoto.endsWith(DEFAULT_AVATAR_NAME) && !isLoading}
 			<button
 				type="button"
 				class="absolute bottom-0 left-0 rounded-full bg-red-500 p-2 shadow-md hover:bg-red-600"
