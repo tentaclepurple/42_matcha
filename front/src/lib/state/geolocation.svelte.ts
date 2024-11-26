@@ -13,7 +13,7 @@ class UserLocation {
 		if (navigator.geolocation) {
 			console.log('Locating user…');
 			navigator.geolocation.getCurrentPosition((position) => {
-				this.#location = [position.coords.latitude, position.coords.longitude];
+				this.#location = [position.coords.longitude, position.coords.latitude];
 				console.log('User located', this.#location);
 			});
 		}
