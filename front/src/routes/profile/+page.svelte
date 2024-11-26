@@ -6,6 +6,7 @@
 	import UserDataSection from './UserDataSection.svelte';
 	import UserDataForm from './UserDataForm.svelte';
 	import { DefaultMarker, MapLibre } from 'svelte-maplibre';
+	import { userLocation } from '$lib/state/geolocation.svelte';
 
 	if (!$userProfileData) {
 		goto('/login');
@@ -16,6 +17,8 @@
 			$userProfileData?.gender && $userProfileData?.sexualPreference && $userProfileData?.biography
 		)
 	);
+
+	console.log(userLocation.value);
 </script>
 
 <PageWrapper>
@@ -45,17 +48,18 @@
 			{/if}
 
 			<div class="mt-6 w-full rounded-lg shadow-md">
+				<h2>Your location</h2>
 				<MapLibre
-					center={$userProfileData.location.coordinates}
+					center={userLocation?.value ?? $userProfileData.location.coordinates}
 					class="h-[250px] w-full rounded-md"
 					interactive={false}
-					maxZoom={15}
-					minZoom={5}
+					maxZoom={18}
+					minZoom={10}
 					standardControls
 					style="https://tiles.basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
-					zoom={8}
+					zoom={11}
 				>
-					<DefaultMarker lngLat={$userProfileData.location.coordinates} />
+					<DefaultMarker lngLat={userLocation?.value ?? $userProfileData.location.coordinates} />
 				</MapLibre>
 			</div>
 		</div>
