@@ -10,6 +10,7 @@
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
 	import { userLocation } from '$lib/state/geolocation.svelte';
 	import { userAuth } from '$lib/state/auth.svelte';
+	import { fetchUserProfileData } from '$lib/stores/user-profile-data';
 
 	let error: string = $state('');
 	$effect(() => {
@@ -64,6 +65,7 @@
 			userAuth.login();
 			await userLocation.getUserLocation();
 			await fetchUserData();
+			await fetchUserProfileData();
 
 			const { profile_completed: profileCompleted } = user;
 			return profileCompleted ? goto('/dashboard') : goto('/profile');

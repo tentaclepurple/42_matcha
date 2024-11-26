@@ -1,4 +1,5 @@
 <script>
+	import { DEFAULT_LOCATION } from '$lib/constants/geolocation';
 	import { userLocation } from '$lib/state/geolocation.svelte';
 	import { userProfileData } from '$lib/stores/user-profile-data';
 	import { MapLibre, Marker, Popup } from 'svelte-maplibre';
@@ -23,11 +24,11 @@
 {/snippet}
 
 <MapLibre
-	center={userLocation.value ? userLocation.value : [-2.9913001, 43.3010342]}
+	center={userLocation.value ?? DEFAULT_LOCATION}
 	class="h-[750px] w-full rounded-md"
 	interactive={true}
 	maxZoom={18}
-	minZoom={11}
+	minZoom={0}
 	standardControls
 	style="https://tiles.basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
 	zoom={14}
@@ -35,7 +36,7 @@
 	{#if $userProfileData}
 		{@render marker({
 			user: $userProfileData,
-			coordinates: [-2.9913001, 43.3010342],
+			coordinates: userLocation.value ?? DEFAULT_LOCATION,
 			isCurrentUser: true
 		})}
 	{/if}
