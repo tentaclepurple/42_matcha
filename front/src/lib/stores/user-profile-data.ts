@@ -19,11 +19,17 @@ export async function fetchUserProfileData(): Promise<void> {
 			throw new Error('Failed to fetch user profile data');
 		}
 
-		const { age, photos, username } = await response.json();
+		const { age, biography, fame_rating, gender, location, photos, sexual_preferences, username } =
+			await response.json();
 
 		userProfileData.set({
 			age,
+			biography,
+			fameRating: fame_rating,
+			gender,
+			location,
 			photos,
+			sexualPreference: sexual_preferences,
 			username
 		});
 	} catch (error: unknown) {

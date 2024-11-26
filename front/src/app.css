@@ -31,3 +31,17 @@ form input {
 		background: #f4f4f4;
 	}
 }
+
+form select {
+	background: transparent;
+	outline: 2px teal solid;
+	padding: 4px 12px;
+	border-radius: 4px;
+}
+
+form textarea {
+	background: transparent;
+	outline: 2px teal solid;
+	padding: 4px 12px;
+	border-radius: 4px;
+}
