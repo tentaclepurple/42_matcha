@@ -3,28 +3,34 @@
 	import Form from '$lib/components/Form.svelte';
 	import PasswordInput from '$lib/components/PasswordInput.svelte';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
-	import { login } from '$lib/stores/auth';
 
 	import { goto } from '$app/navigation';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
 	import { fetchUserData } from '$lib/stores/user-data';
-	import { writable } from 'svelte/store';
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
+	import { userLocation } from '$lib/state/geolocation.svelte';
+	import { userAuth } from '$lib/state/auth.svelte';
 
-	let error = writable('');
-	error.subscribe(() => {
-		setTimeout(() => {
-			error.set('');
-		}, DEFAULT_TIMEOUT);
+	let error: string = $state('');
+	$effect(() => {
+		if (error) {
+			const timeout = setTimeout(() => {
+				error = '';
+			}, DEFAULT_TIMEOUT);
+
+			return () => {
+				clearTimeout(timeout);
+			};
+		}
 	});
 
-	let isLoading: boolean = false;
+	let isLoading: boolean = $state(false);
 
 	const handleSubmit = async (e) => {
 		if (isLoading) return;
 
 		isLoading = true;
-		error.set('');
+		error = '';
 
 		e.preventDefault();
 
@@ -42,10 +48,10 @@
 			if (!res.ok) {
 				switch (res.status) {
 					case 401:
-						error.set('Invalid e-mail or password');
+						error = 'Invalid e-mail or password';
 						break;
 					default:
-						error.set('An error occurred. Please try again later.');
+						error = 'An error occurred. Please try again later.';
 						break;
 				}
 
@@ -55,13 +61,14 @@
 			const { access_token, user } = await res.json();
 
 			localStorage.setItem('access_token', access_token);
-			login();
+			userAuth.login();
+			await userLocation.getUserLocation();
 			await fetchUserData();
 
 			const { profile_completed: profileCompleted } = user;
-			return profileCompleted ? goto('/dashboard') : goto('/account');
+			return profileCompleted ? goto('/dashboard') : goto('/profile');
 		} catch (err) {
-			error.set('An error occurred. Please try again later.');
+			error = 'An error occurred. Please try again later.';
 			return;
 		} finally {
 			isLoading = false;
@@ -111,8 +118,8 @@
 					<Button type="submit" {isLoading}>Log in</Button>
 				</div>
 
-				{#if $error}
-					<p class="mt-2 text-red-500">{$error}</p>
+				{#if error}
+					<p class="mt-2 text-red-500">{error}</p>
 				{/if}
 			</Form>
 		</div>
