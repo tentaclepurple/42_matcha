@@ -68,6 +68,6 @@
 	</form>
 
 	{#if error}
-		<p style="text-red-500">{error}</p>
+		<p class="text-red-500">{error}</p>
 	{/if}
 </PageWrapper>
