@@ -7,15 +7,18 @@
 	import { fetchUserData } from '$lib/stores/user-data';
 	import MenuWidget from './MenuWidget.svelte';
 	import { userAuth } from '$lib/state/auth.svelte';
+	import { fetchUserProfileData } from '$lib/stores/user-profile-data';
+	import { userLocation } from '$lib/state/geolocation.svelte';
 
 	onMount(async () => {
 		const accessToken = localStorage.getItem('access_token');
 
 		if (accessToken) {
 			userAuth.login();
+			await fetchUserData();
+			await fetchUserProfileData();
+			await userLocation.getUserLocation();
 		}
-
-		await fetchUserData();
 	});
 </script>
 
