@@ -1,18 +1,18 @@
 <script lang="ts">
 	const { children } = $props();
 
-	import { isAuthenticated, login } from '$lib/stores/auth';
 	import { onMount } from 'svelte';
 
 	import '../app.css';
 	import { fetchUserData } from '$lib/stores/user-data';
 	import MenuWidget from './MenuWidget.svelte';
+	import { userAuth } from '$lib/state/auth.svelte';
 
 	onMount(async () => {
 		const accessToken = localStorage.getItem('access_token');
 
 		if (accessToken) {
-			login();
+			userAuth.login();
 		}
 
 		await fetchUserData();
@@ -29,7 +29,7 @@
 			</nav>
 
 			<div class="flex items-center justify-center gap-4">
-				{#if $isAuthenticated}
+				{#if userAuth.isAuthenticated}
 					<MenuWidget />
 				{:else}
 					<a href="/login" class="flex items-center justify-center gap-1 no-underline">
