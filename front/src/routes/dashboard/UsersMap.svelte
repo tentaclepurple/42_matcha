@@ -1,7 +1,7 @@
 <script>
 	import { DEFAULT_LOCATION } from '$lib/constants/geolocation';
 	import { userLocation } from '$lib/state/geolocation.svelte';
-	import { userProfileData } from '$lib/stores/user-profile-data';
+	import { userProfileData } from '$lib/state/user-profile-data.svelte';
 	import { MapLibre, Marker, Popup } from 'svelte-maplibre';
 
 	const { results } = $props();
@@ -33,9 +33,9 @@
 	style="https://tiles.basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
 	zoom={14}
 >
-	{#if $userProfileData}
+	{#if userProfileData?.value}
 		{@render marker({
-			user: $userProfileData,
+			user: userProfileData.value,
 			coordinates: userLocation.value ?? DEFAULT_LOCATION,
 			isCurrentUser: true
 		})}
