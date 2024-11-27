@@ -7,6 +7,7 @@
 	import { DefaultMarker, MapLibre } from 'svelte-maplibre';
 	import { userLocation } from '$lib/state/geolocation.svelte';
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
+	import FameRating from '$lib/components/FameRating.svelte';
 
 	if (!userProfileData.value) {
 		goto('/login');
@@ -35,9 +36,7 @@
 
 			<div class="mb-6 flex w-full items-baseline justify-between">
 				<h2>{userProfileData.value.username}, {userProfileData.value.age}</h2>
-				<div class="rounded-xl bg-teal-400 p-3">
-					<span class="text-4xl font-bold">{userProfileData.value.fameRating}</span>% fame
-				</div>
+				<FameRating fameRating={userProfileData.value.fameRating} />
 			</div>
 
 			{#if isProfileComplete}
