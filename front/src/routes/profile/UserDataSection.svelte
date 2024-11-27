@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
-	import GenderSymbol from './GenderSymbol.svelte';
-	import PreferenceSymbol from './PreferenceSymbol.svelte';
+	import GenderSymbol from '$lib/components/GenderSymbol.svelte';
+	import PreferenceSymbol from '$lib/components/PreferenceSymbol.svelte';
 	import UserDataForm from './UserDataForm.svelte';
 
 	let isEditing: boolean = $state(false);

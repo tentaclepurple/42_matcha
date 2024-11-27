@@ -3,8 +3,8 @@
 	import { GENDER_OPTIONS, PREFERENCES_OPTIONS } from '$lib/constants/user-profile-data';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
-	import GenderSymbol from './GenderSymbol.svelte';
-	import PreferenceSymbol from './PreferenceSymbol.svelte';
+	import GenderSymbol from '$lib/components/GenderSymbol.svelte';
+	import PreferenceSymbol from '$lib/components/PreferenceSymbol.svelte';
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
 
 	const {
