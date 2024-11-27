@@ -6,9 +6,9 @@
 	import '../app.css';
 	import MenuWidget from './MenuWidget.svelte';
 	import { userAuth } from '$lib/state/auth.svelte';
-	import { fetchUserProfileData } from '$lib/stores/user-profile-data';
 	import { userLocation } from '$lib/state/geolocation.svelte';
 	import { userData } from '$lib/state/user-data.svelte';
+	import { userProfileData } from '$lib/state/user-profile-data.svelte';
 
 	onMount(async () => {
 		const accessToken = localStorage.getItem('access_token');
@@ -16,7 +16,7 @@
 		if (accessToken) {
 			userAuth.login();
 			await userData.fetch();
-			await fetchUserProfileData();
+			await userProfileData.fetch();
 			await userLocation.getUserLocation();
 		} else {
 			userAuth.logout();

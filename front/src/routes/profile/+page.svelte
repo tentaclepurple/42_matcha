@@ -1,20 +1,22 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
-	import { userProfileData } from '$lib/stores/user-profile-data';
 	import PhotoGallery from './PhotoGallery.svelte';
 	import UserDataSection from './UserDataSection.svelte';
 	import UserDataForm from './UserDataForm.svelte';
 	import { DefaultMarker, MapLibre } from 'svelte-maplibre';
 	import { userLocation } from '$lib/state/geolocation.svelte';
+	import { userProfileData } from '$lib/state/user-profile-data.svelte';
 
-	if (!$userProfileData) {
+	if (!userProfileData.value) {
 		goto('/login');
 	}
 
 	let isProfileComplete = $derived(
 		Boolean(
-			$userProfileData?.gender && $userProfileData?.sexualPreference && $userProfileData?.biography
+			userProfileData?.value?.gender &&
+				userProfileData?.value?.sexualPreference &&
+				userProfileData?.value?.biography
 		)
 	);
 
@@ -22,19 +24,19 @@
 </script>
 
 <PageWrapper>
-	{#if $userProfileData}
+	{#if userProfileData?.value}
 		<div class="mb-12">
 			<h1>Profile</h1>
 			<p>This is the profile page.</p>
 		</div>
 
 		<div class="mb-4 flex w-fit flex-col items-start">
-			<PhotoGallery photos={$userProfileData.photos} />
+			<PhotoGallery photos={userProfileData.value.photos} />
 
 			<div class="mb-6 flex w-full items-baseline justify-between">
-				<h2>{$userProfileData.username}, {$userProfileData.age}</h2>
+				<h2>{userProfileData.value.username}, {userProfileData.value.age}</h2>
 				<div class="rounded-xl bg-teal-400 p-3">
-					<span class="text-4xl font-bold">{$userProfileData.fameRating}</span>% fame
+					<span class="text-4xl font-bold">{userProfileData.value.fameRating}</span>% fame
 				</div>
 			</div>
 
@@ -50,7 +52,7 @@
 			<div class="mt-6 w-full rounded-lg shadow-md">
 				<h2>Your location</h2>
 				<MapLibre
-					center={userLocation?.value ?? $userProfileData.location.coordinates}
+					center={userLocation?.value ?? userProfileData.value.location.coordinates}
 					class="h-[250px] w-full rounded-md"
 					interactive={false}
 					maxZoom={18}
@@ -59,7 +61,9 @@
 					style="https://tiles.basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
 					zoom={11}
 				>
-					<DefaultMarker lngLat={userLocation?.value ?? $userProfileData.location.coordinates} />
+					<DefaultMarker
+						lngLat={userLocation?.value ?? userProfileData.value.location.coordinates}
+					/>
 				</MapLibre>
 			</div>
 		</div>

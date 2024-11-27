@@ -1,17 +1,14 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
-import { fetchUserProfileData, userProfileData } from '$lib/stores/user-profile-data';
-import { get } from 'svelte/store';
+import { userProfileData } from '$lib/state/user-profile-data.svelte';
 
 export const ssr = false;
 
 export const load: PageLoad = async () => {
 	try {
-		await fetchUserProfileData();
+		await userProfileData.fetch();
 
-		const currentUserProfileData = get(userProfileData);
-
-		if (!currentUserProfileData) {
+		if (!userProfileData?.value) {
 			throw new Error('Failed to fetch user profile data');
 		}
 	} catch (error: unknown) {
