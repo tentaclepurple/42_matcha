@@ -11,8 +11,10 @@
 </script>
 
 {#if selectedUser}
-	<div class="items-between m-8 flex w-3/5 flex-col justify-between rounded-lg bg-teal-200 p-6">
-		<nav class="mb-12">
+	<div
+		class="items-between m-8 flex w-3/5 flex-col items-start justify-between rounded-lg bg-teal-200 p-6"
+	>
+		<nav class="mb-12 flex w-full items-center justify-between">
 			<Button
 				type="button"
 				level="primary"
@@ -22,7 +24,19 @@
 			>
 				← Back
 			</Button>
+
+			<Button
+				type="button"
+				level="primary"
+				onclick={() => {
+					goto(`/chat/${selectedUser.username}`);
+				}}
+				aria-label="Send new message"
+			>
+				<img src="/icons/message.svg" alt="" class="h-7" />
+			</Button>
 		</nav>
+
 		<div>
 			<div class="flex items-center justify-between">
 				<img
