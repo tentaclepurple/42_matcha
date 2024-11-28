@@ -1,6 +1,5 @@
 import { SERVER_BASE_URL } from '$lib/constants/api';
 import type UserData from '$lib/interfaces/user-data.interface';
-import { writable, type Writable } from 'svelte/store';
 
 class UserDataClass {
 	#value = $state<null | UserData>(null);
