@@ -62,9 +62,9 @@
 			class="absolute right-0 top-full mt-2 flex min-h-32 min-w-48 justify-end rounded-md bg-teal-200 p-6 shadow-xl"
 		>
 			<nav class="flex flex-col items-end gap-3">
-				<a href="/dashboard" onclick={handleShowMenu} class="flex items-center gap-1">
+				<a href="/search" onclick={handleShowMenu} class="flex items-center gap-1">
 					<img src="/icons/home.svg" alt="" class="w-4" />
-					Dashboard
+					Search
 				</a>
 				<a href="/account" onclick={handleShowMenu} class="flex items-center gap-1">
 					<img src="/icons/settings.svg" alt="" class="w-5" />

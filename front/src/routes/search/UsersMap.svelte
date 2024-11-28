@@ -1,4 +1,6 @@
 <script>
+	import { goto } from '$app/navigation';
+	import Button from '$lib/components/Button.svelte';
 	import { DEFAULT_LOCATION } from '$lib/constants/geolocation';
 	import { userLocation } from '$lib/state/geolocation.svelte';
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
@@ -19,6 +21,15 @@
 				<img src="icons/avatar.svg" alt="" class="mb-2 h-10 w-10" />
 				<span>{user.username}, {user.age}</span>
 			</span>
+			<Button
+				type="button"
+				level="primary"
+				onclick={() => {
+					goto(`/search/${user.username}?origin=map`);
+				}}
+			>
+				View profile
+			</Button>
 		</Popup>
 	</Marker>
 {/snippet}

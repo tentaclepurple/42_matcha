@@ -68,7 +68,7 @@
 			await userProfileData.fetch();
 
 			const { profile_completed: profileCompleted } = user;
-			return profileCompleted ? goto('/dashboard') : goto('/profile');
+			return profileCompleted ? goto('/search') : goto('/profile');
 		} catch (err) {
 			error = 'An error occurred. Please try again later.';
 			return;
