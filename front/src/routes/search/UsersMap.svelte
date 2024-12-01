@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import Button from '$lib/components/Button.svelte';
+	import GenderSymbol from '$lib/components/GenderSymbol.svelte';
 	import { DEFAULT_LOCATION } from '$lib/constants/geolocation';
 	import { userLocation } from '$lib/state/geolocation.svelte';
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
@@ -17,9 +18,10 @@
 		></div>
 
 		<Popup openOn="click" offset={[0, 0]}>
-			<div class="flex flex-col items-center justify-center gap-1 px-2">
-				<img src={user.profile_photo} alt="" class="mb-2 h-10 w-10" />
-				<span>{user.username}, {user.age}</span>
+			<div class="flex flex-col items-center justify-center gap-2 px-2">
+				<img src={user.profile_photo} alt="" class="w-24 aspect-square" />
+				<span class="font-xs font-bold">{user.username}</span>
+				<span>{user.age}, {user.gender} <GenderSymbol gender={user.gender} /></span>
 				<Button
 					type="button"
 					level="primary"
