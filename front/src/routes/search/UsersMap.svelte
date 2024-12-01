@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation';
 	import Button from '$lib/components/Button.svelte';
 	import { DEFAULT_LOCATION } from '$lib/constants/geolocation';
@@ -17,7 +17,7 @@
 		></div>
 
 		<Popup openOn="click" offset={[0, 0]}>
-			<span class="flex h-20 w-20 flex-col items-center justify-center px-2 py-3">
+			<span class="flex flex-col items-center justify-center px-2 py-3">
 				<img src="icons/avatar.svg" alt="" class="mb-2 h-10 w-10" />
 				<span>{user.username}, {user.age}</span>
 			</span>
@@ -34,25 +34,27 @@
 	</Marker>
 {/snippet}
 
-<MapLibre
-	center={userLocation.value ?? DEFAULT_LOCATION}
-	class="h-[750px] w-full rounded-md"
-	interactive={true}
-	maxZoom={18}
-	minZoom={0}
-	standardControls
-	style="https://tiles.basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
-	zoom={14}
->
-	{#if userProfileData?.value}
-		{@render marker({
-			user: userProfileData.value,
-			coordinates: userLocation.value ?? DEFAULT_LOCATION,
-			isCurrentUser: true
-		})}
-	{/if}
+<div class="flex h-[65vh] w-full items-center justify-center">
+	<MapLibre
+		center={userLocation.value ?? DEFAULT_LOCATION}
+		class="h-full w-full rounded-md"
+		interactive={true}
+		maxZoom={18}
+		minZoom={0}
+		standardControls
+		style="https://tiles.basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
+		zoom={14}
+	>
+		{#if userProfileData?.value}
+			{@render marker({
+				user: userProfileData.value,
+				coordinates: userLocation.value ?? DEFAULT_LOCATION,
+				isCurrentUser: true
+			})}
+		{/if}
 
-	{#each results as user (user.user_id)}
-		{@render marker({ user, coordinates: user.location.coordinates, isCurrentUser: false })}
-	{/each}
-</MapLibre>
+		{#each results as user (user.user_id)}
+			{@render marker({ user, coordinates: user.location.coordinates, isCurrentUser: false })}
+		{/each}
+	</MapLibre>
+</div>
