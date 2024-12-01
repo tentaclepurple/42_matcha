@@ -11,12 +11,12 @@
 </script>
 
 <PageWrapper>
-	<header class="mb-6">
-		<h1>Search</h1>
-		<p>Here is where the magic happens</p>
+	<header class="mb-6 flex flex-col items-center">
+		<h1>Find true love</h1>
+		<p>Use the Map or List below to search for your next soulmate.</p>
 	</header>
 
-	<div class="mx-auto max-w-5xl">
+	<div class="mx-auto w-full max-w-5xl px-12">
 		<Tabs.Root value={viewParam} class="w-full bg-teal-100 shadow-lg">
 			<Tabs.List class="grid w-full grid-cols-2">
 				<Tabs.Trigger value="map">Map</Tabs.Trigger>
