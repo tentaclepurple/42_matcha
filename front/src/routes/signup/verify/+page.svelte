@@ -6,13 +6,13 @@
 </script>
 
 <PageWrapper>
-	<h1 class="mb-2">You're almost there!</h1>
-	<p>We sent you an e-mail. Confirm your e-mail address and you'll be able to log in.</p>
+	<h1 class="mb-4">You're almost there!</h1>
+	<p class="mb-2">We sent you an e-mail. Confirm your e-mail address and you'll be able to log in.</p>
 
 	<Button
 		type="button"
 		level="primary"
-		class="mt-4"
+		class="mt-4 w-fit"
 		onclick={() => {
 			goto('/login');
 		}}
