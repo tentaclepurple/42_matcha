@@ -1,7 +1,8 @@
 <script>
 	import { page } from '$app/stores';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
-	import Conversations from './Conversations.svelte';
+	import ConversationsList from './ConversationsList.svelte';
+	import Conversations from './ConversationsList.svelte';
 
 	const { children } = $props();
 	const { conversations } = $page.data;
@@ -10,9 +11,9 @@
 <PageWrapper>
 	<h1>Messages</h1>
 	<div class="flex items-stretch gap-8">
-		<div class="w-full min-w-[200px] max-w-[300px] rounded-md bg-teal-200 p-3">
+		<div class="w-full min-w-[200px] max-w-[300px] rounded-md bg-teal-100 p-3">
 			<h2 class="sr-only mb-4">List of chats</h2>
-			<Conversations {conversations} />
+			<ConversationsList {conversations} />
 		</div>
 
 		{@render children()}
