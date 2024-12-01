@@ -11,6 +11,8 @@
 </script>
 
 <PageWrapper>
-	<h1>Profile of {username}</h1>
-	<SelectUserProfile {selectedUser} {origin} />
+	<div class="flex flex-col justify-center items-center">
+		<h1>Profile of {username}</h1>
+		<SelectUserProfile {selectedUser} {origin} />
+	</div>
 </PageWrapper>

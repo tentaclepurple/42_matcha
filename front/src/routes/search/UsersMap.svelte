@@ -17,19 +17,19 @@
 		></div>
 
 		<Popup openOn="click" offset={[0, 0]}>
-			<span class="flex flex-col items-center justify-center px-2 py-3">
-				<img src="icons/avatar.svg" alt="" class="mb-2 h-10 w-10" />
+			<div class="flex flex-col items-center justify-center gap-1 px-2">
+				<img src={user.profile_photo} alt="" class="mb-2 h-10 w-10" />
 				<span>{user.username}, {user.age}</span>
-			</span>
-			<Button
-				type="button"
-				level="primary"
-				onclick={() => {
-					goto(`/search/${user.username}?origin=map`);
-				}}
-			>
-				View profile
-			</Button>
+				<Button
+					type="button"
+					level="primary"
+					onclick={() => {
+						goto(`/search/${user.username}?origin=map`);
+					}}
+				>
+					View profile
+				</Button>
+			</div>
 		</Popup>
 	</Marker>
 {/snippet}
@@ -40,7 +40,7 @@
 		class="h-full w-full rounded-md"
 		interactive={true}
 		maxZoom={18}
-		minZoom={0}
+		minZoom={6}
 		standardControls
 		style="https://tiles.basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
 		zoom={14}
@@ -54,6 +54,7 @@
 		{/if}
 
 		{#each results as user (user.user_id)}
+			{$inspect(user)}
 			{@render marker({ user, coordinates: user.location.coordinates, isCurrentUser: false })}
 		{/each}
 	</MapLibre>
