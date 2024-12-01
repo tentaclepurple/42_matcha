@@ -40,7 +40,7 @@
 			type="button"
 			level="primary"
 			onclick={() => {
-				goto(`/chat/?username=${selectedUser.username}`);
+				goto(`/chat/${selectedUser.username}`);
 			}}
 			aria-label="Send new message"
 		>
