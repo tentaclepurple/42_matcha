@@ -2,10 +2,10 @@
 	import NewMessageForm from './NewMessageForm.svelte';
 
 	import { page } from '$app/stores';
-	import PastMessages from './PastMessages.svelte';
 	import { messagesData } from '$lib/state/messages.svelte';
 	import { onDestroy } from 'svelte';
 	import { POLLING_INTERVAL } from '$lib/constants/polling';
+	import MessagesList from './MessagesList.svelte';
 
 	let username = $state($page.params.username);
 	$effect(() => {
@@ -23,6 +23,6 @@
 
 <div class="w-full">
 	<h2 class="mb-4">{username}</h2>
-	<PastMessages />
+	<MessagesList />
 	<NewMessageForm {username} />
 </div>
