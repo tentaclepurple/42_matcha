@@ -1,11 +1,19 @@
 <script>
-	import { page } from '$app/stores';
-	import PageWrapper from '$lib/components/PageWrapper.svelte';
+	import NewMessageForm from './NewMessageForm.svelte';
 
-	const { username } = $page.params;
+	import { page } from '$app/stores';
+	import PastMessages from './PastMessages.svelte';
+
+	let username = $state($page.params.username);
+	$effect(() => {
+		username = $page.params.username;
+	});
+
+	const messages = $page.data.messages;
 </script>
 
-<PageWrapper>
-	<a href="/chat">Back to messages</a>
-	<h1>Conversation with {username}</h1>
-</PageWrapper>
+<div class="w-full">
+	<h2 class="mb-6">{username}</h2>
+	<PastMessages {messages} />
+	<NewMessageForm {username} />
+</div>
