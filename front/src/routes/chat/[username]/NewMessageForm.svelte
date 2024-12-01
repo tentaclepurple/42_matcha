@@ -7,13 +7,13 @@
 
 	let error = $state<null | string>(null);
 
-	const handleNewMessage = async (event) => {
+	const handleFormSubmit = async (event) => {
 		event.preventDefault();
+		error = '';
 		const form = event.target;
+		const message = form.message.value;
 
 		try {
-			const message = form.message.value;
-
 			const token = localStorage.getItem('access_token');
 
 			const res = await fetch(`${SERVER_BASE_URL}/api/chat/send/${username}`, {
@@ -25,7 +25,7 @@
 				body: JSON.stringify({ content: message, type: 'text' })
 			});
 
-			if (res.ok) {
+			if (!res.ok) {
 				throw new Error();
 			}
 
@@ -35,6 +35,14 @@
 			error = 'Error sending message';
 		} finally {
 			form.reset();
+			form.message.focus();
+		}
+	};
+
+	const handleKeydown = (event) => {
+		if (event.key === 'Enter' && !event.shiftKey) {
+			event.preventDefault();
+			event.target.form.dispatchEvent(new Event('submit'));
 		}
 	};
 </script>
@@ -46,15 +54,16 @@
 			<p class="text-red-500">{error}</p>
 		{/if}
 	</div>
-	<form class="flex w-full items-end gap-3" onsubmit={handleNewMessage}>
+	<form class="flex w-full items-end gap-3" onsubmit={handleFormSubmit}>
 		<textarea
 			id="message"
 			placeholder="Write a new message"
-			rows={4}
 			required
+			rows={3}
 			minlength={1}
 			maxlength={500}
 			class="w-full"
+			onkeydown={handleKeydown}
 		></textarea>
 		<Button type="submit" level="primary">Send</Button>
 	</form>

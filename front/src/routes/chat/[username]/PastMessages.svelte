@@ -1,12 +1,23 @@
 <script lang="ts">
-	const { messages } = $props();
+	import { messagesData } from '$lib/state/messages.svelte';
+	import { userData } from '$lib/state/user-data.svelte';
+
+	$effect(() => {
+		if (userData.value) {
+			const lastMessage = document.querySelector('#message-' + (messagesData.value.length - 1));
+			lastMessage?.scrollIntoView();
+		}
+	});
 </script>
 
-<ul class="flex flex-col items-start gap-2 px-3 py-6 bg-gray-50 rounded-md mb-4">
-	{#each messages as message}
+<ul
+	class="mb-4 flex max-h-[65vh] flex-col items-start gap-2 overflow-auto rounded-md bg-gray-100 px-3 py-6"
+>
+	{#each messagesData.value as message, i}
 		{$inspect(message)}
 		<li
 			class={`flex flex-col items-end ${message.fromMe ? 'self-end bg-teal-300' : 'bg-gray-300'} rounded-lg p-3`}
+			id={`message-${i}`}
 		>
 			{message.content}
 			<span class="text-xs">
