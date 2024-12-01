@@ -1,4 +1,5 @@
 <script lang="ts">
+	import EmptyState from './EmptyState.svelte';
 </script>
 
-<div>Start chatting now</div>
+<EmptyState />

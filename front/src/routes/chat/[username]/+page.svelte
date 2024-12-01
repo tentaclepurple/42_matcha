@@ -6,6 +6,7 @@
 	import { onDestroy } from 'svelte';
 	import { POLLING_INTERVAL } from '$lib/constants/polling';
 	import MessagesList from './MessagesList.svelte';
+	import ChatHeader from './ChatHeader.svelte';
 
 	let username = $state($page.params.username);
 	$effect(() => {
@@ -22,7 +23,7 @@
 </script>
 
 <div class="w-full">
-	<h2 class="mb-4">{username}</h2>
+	<ChatHeader {username} />
 	<MessagesList />
 	<NewMessageForm {username} />
 </div>
