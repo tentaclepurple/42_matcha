@@ -20,8 +20,6 @@
 				userProfileData?.value?.biography
 		)
 	);
-
-	console.log(userLocation.value);
 </script>
 
 <PageWrapper>
