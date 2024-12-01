@@ -1,6 +1,7 @@
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from '../$types';
 import { SERVER_BASE_URL } from '$lib/constants/api';
+import deserialize from '$lib/utils/deserialize';
 
 export const ssr = false;
 
@@ -30,11 +31,7 @@ export const load: PageLoad = async ({ params }) => {
 	}
 
 	const data = await res.json();
-	const selectedUser = {
-		...data,
-		fameRating: data.fame_rating,
-		sexualPreference: data.sexual_preferences
-	};
+	const selectedUser = deserialize(data);
 
 	if (!selectedUser) {
 		error(404, 'User not found');

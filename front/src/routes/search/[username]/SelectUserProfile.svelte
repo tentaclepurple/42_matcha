@@ -6,6 +6,7 @@
 	import PreferenceSymbol from '$lib/components/PreferenceSymbol.svelte';
 	import { DefaultMarker, MapLibre } from 'svelte-maplibre';
 	import getServerAsset from '$lib/utils/get-server-asset';
+	import UserActions from './UserActions.svelte';
 
 	const { selectedUser, origin } = $props();
 </script>
@@ -25,24 +26,15 @@
 				← Back
 			</Button>
 
-			<Button
-				type="button"
-				level="primary"
-				onclick={() => {
-					goto(`/chat/${selectedUser.username}`);
-				}}
-				aria-label="Send new message"
-			>
-				<img src="/icons/message.svg" alt="" class="h-7" />
-			</Button>
+			<UserActions {selectedUser} />
 		</nav>
 
-		<div>
-			<div class="flex items-center justify-between">
+		<div class="w-full">
+			<div class="mb-6 flex items-center justify-between">
 				<img
 					class="shadow-mg h-32 w-32 bg-white object-cover"
 					src={getServerAsset(
-						selectedUser.photos.filter((photo) => photo.is_profile)[0].url || 'icons/avatar.svg'
+						selectedUser.photos.filter((photo) => photo.isProfile)[0].url || 'icons/avatar.svg'
 					)}
 					alt=""
 				/>
