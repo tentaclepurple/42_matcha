@@ -32,7 +32,7 @@
 		<div class="w-full">
 			<div class="mb-6 flex items-center justify-between">
 				<img
-					class="shadow-mg h-32 w-32 bg-white object-cover"
+					class="shadow-xl h-40 w-40 bg-white object-cover rounded-lg"
 					src={getServerAsset(
 						selectedUser.photos.filter((photo) => photo.isProfile)[0].url || 'icons/avatar.svg'
 					)}
