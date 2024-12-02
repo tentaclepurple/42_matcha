@@ -6,11 +6,12 @@
 	import { userLocation } from '$lib/state/geolocation.svelte';
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
 	import { MapLibre, Marker, Popup } from 'svelte-maplibre';
+	import getServerAsset from '$lib/utils/get-server-asset';
 
 	const { results } = $props();
 </script>
 
-{#snippet marker({ user, coordinates, isCurrentUser })}
+{#snippet marker({ profilePicture, user, coordinates, isCurrentUser })}
 	<Marker lngLat={coordinates}>
 		<div
 			class={`h-6 w-6 rounded-full ${isCurrentUser ? 'bg-yellow-500' : 'bg-teal-500'} shadow-lg`}
@@ -19,7 +20,11 @@
 
 		<Popup openOn="click" offset={[0, 0]}>
 			<div class="flex flex-col items-center justify-center gap-2 px-2">
-				<img src={user.profile_photo} alt="" class="w-24 aspect-square" />
+				<img
+					src={profilePicture ? getServerAsset(profilePicture) : '/icons/avatar.svg'}
+					alt=""
+					class="aspect-square w-24"
+				/>
 				<span class="font-xs font-bold">{user.username}</span>
 				<span>{user.age}, {user.gender} <GenderSymbol gender={user.gender} /></span>
 				<Button
@@ -49,6 +54,7 @@
 	>
 		{#if userProfileData?.value}
 			{@render marker({
+				profilePicture: userProfileData.value.photos.filter((photo) => photo.is_profile)[0].url,
 				user: userProfileData.value,
 				coordinates: userLocation.value ?? DEFAULT_LOCATION,
 				isCurrentUser: true
@@ -56,8 +62,12 @@
 		{/if}
 
 		{#each results as user (user.user_id)}
-			{$inspect(user)}
-			{@render marker({ user, coordinates: user.location.coordinates, isCurrentUser: false })}
+			{@render marker({
+				profilePicture: user.profile_photo,
+				user,
+				coordinates: user.location.coordinates,
+				isCurrentUser: false
+			})}
 		{/each}
 	</MapLibre>
 </div>
