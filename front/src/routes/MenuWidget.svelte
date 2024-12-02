@@ -59,7 +59,7 @@
 	</button>
 	{#if showMenu}
 		<div
-			class="absolute right-0 top-full mt-2 flex min-h-32 min-w-48 justify-end rounded-md bg-teal-200 p-6 shadow-xl"
+			class="absolute right-0 z-50 top-full mt-2 flex min-h-32 min-w-48 justify-end rounded-md bg-teal-200 p-6 shadow-xl"
 		>
 			<nav class="flex flex-col items-end gap-3">
 				<a href="/search" onclick={handleShowMenu} class="flex items-center gap-1">
