@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import GenderSymbol from '$lib/components/GenderSymbol.svelte';
-	import { SERVER_BASE_URL } from '$lib/constants/api';
-	import type UserProfileData from '$lib/interfaces/user-profile-data.interface';
+	import getServerAsset from '$lib/utils/get-server-asset';
 
 	const { results } = $props();
 
@@ -21,9 +20,13 @@
 				type="button"
 				data-username={user.username}
 				onclick={handleOpenUser}
-				class="flex flex-col items-center gap-1"
+				class="flex w-full flex-col items-center gap-1"
 			>
-				<img src={user.profile_photo} alt="" class="mb-2" />
+				<img
+					src={getServerAsset(user.profile_photo)}
+					alt=""
+					class="mb-2 aspect-square object-cover w-full rounded-md"
+				/>
 				<span class="text-sm font-bold">{user.username}</span>
 				<span class="flex text-xs">
 					{user.age}, {user.gender}
