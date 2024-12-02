@@ -61,22 +61,22 @@
 		{#if isLoading}
 			<button
 				type="button"
-				class="flex aspect-square w-14 cursor-not-allowed items-center justify-center rounded-xl border border-2 border-black p-2 bg-gray-300"
+				class="flex aspect-square w-12 cursor-not-allowed items-center justify-center rounded-xl border border-2 border-black bg-gray-300 p-2"
 			>
 				<Lottie animationData={spinnerAnimationData} autoplay={true} loop={true} />
 			</button>
 		{:else}
 			<button
-				class={`flex aspect-square w-14 items-center justify-center rounded-xl border border-2 border-black ${isMatch ? 'bg-rose-400' : isLikedByMe ? 'bg-rose-200' : 'bg-transparent'} p-2`}
+				class={`flex aspect-square w-12 items-center justify-center rounded-xl border border-2 border-black ${isMatch ? 'bg-rose-400' : isLikedByMe ? 'bg-rose-200' : 'bg-transparent'} p-2`}
 				aria-label="Match"
 				onclick={handleMatch}
 			>
 				{#if isMatch}
-					<img src="/icons/like/heart-unlock.svg" alt="" class="h-7" />
+					<img src="/icons/like/heart-unlock.svg" alt="" class="w-full" />
 				{:else if isLikedByMe}
-					<img src="/icons/like/heart-lock.svg" alt="" class="h-7" />
+					<img src="/icons/like/heart-lock.svg" alt="" class="w-full" />
 				{:else}
-					<img src="/icons/like/heart.svg" alt="" class="h-7" />
+					<img src="/icons/like/heart.svg" alt="" class="w-full" />
 				{/if}
 			</button>
 		{/if}
