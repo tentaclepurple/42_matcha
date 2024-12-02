@@ -35,6 +35,14 @@
 		const form = e.target;
 		const formData = new FormData(form);
 
+		const username = formData.get('username') as string;
+		const hasWhiteSpace = username.match(/\s/);
+		if (hasWhiteSpace) {
+			error = 'Username cannot contain spaces';
+			isLoading = false;
+			return;
+		}
+
 		const password = formData.get('password') as string;
 		const confirmPassword = formData.get('confirm') as string;
 		if (password !== confirmPassword) {
