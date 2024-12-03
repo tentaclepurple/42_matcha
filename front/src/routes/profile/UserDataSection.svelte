@@ -30,11 +30,6 @@
 			/>
 		{:else}
 			<dl class="flex flex-col gap-3">
-				<div>
-					<dt class="font-bold">About me</dt>
-					<dd class="max-w-xl">{userProfileData.value.biography}</dd>
-				</div>
-
 				<div class="flex items-baseline gap-2">
 					<dt class="font-bold">Gender:</dt>
 					<dd>
@@ -49,6 +44,11 @@
 						{userProfileData.value.sexualPreference}
 						<PreferenceSymbol preference={userProfileData.value.sexualPreference} />
 					</dd>
+				</div>
+
+				<div>
+					<dt class="font-bold">About me</dt>
+					<dd class="max-w-xl">{userProfileData.value.biography}</dd>
 				</div>
 			</dl>
 		{/if}
