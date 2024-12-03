@@ -308,6 +308,7 @@ def advanced_search():
                 ),
                 'age': result.get('age'),
                 'gender': result.get('gender'),
+                'location': result.get('location'),
                 'sexual_preferences': result.get('sexual_preferences'),
                 'distance': round(result['distance'] / 1000, 2),  # km
                 'fame_rating': result.get('fame_rating'),

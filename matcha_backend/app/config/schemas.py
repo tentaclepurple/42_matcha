@@ -45,7 +45,20 @@ USER_SCHEMA = {
                 "bsonType": "date",
                 "description": "account creation date"
             },
-            
+			# Login attempts tracking
+            "login_attempts": {
+                "bsonType": "int",
+                "minimum": 0,
+                "description": "number of failed login attempts"
+            },
+            "last_failed_login": {
+                "bsonType": ["date", "null"],
+                "description": "timestamp of last failed login attempt"
+            },
+            "locked_until": {
+                "bsonType": ["date", "null"],
+                "description": "account locked until this timestamp"
+            },
             # status
             "online": {
                 "bsonType": "bool",
@@ -121,7 +134,6 @@ USER_SCHEMA = {
                 "minimum": 0,
                 "description": "user popularity rating"
             },
-            
             # Other
             "blocked_users": {
                 "bsonType": ["array", "null"],
