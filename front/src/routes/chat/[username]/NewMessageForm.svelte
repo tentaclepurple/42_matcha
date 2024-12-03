@@ -59,7 +59,7 @@
 			id="message"
 			placeholder="Write a new message"
 			required
-			rows={3}
+			rows={2}
 			minlength={1}
 			maxlength={500}
 			class="w-full"
