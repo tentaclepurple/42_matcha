@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { userProfileData } from '$lib/stores/user-profile-data';
-	import GenderSymbol from './GenderSymbol.svelte';
-	import PreferenceSymbol from './PreferenceSymbol.svelte';
+	import { userProfileData } from '$lib/state/user-profile-data.svelte';
+	import GenderSymbol from '$lib/components/GenderSymbol.svelte';
+	import PreferenceSymbol from '$lib/components/PreferenceSymbol.svelte';
 	import UserDataForm from './UserDataForm.svelte';
 
 	let isEditing: boolean = $state(false);
 </script>
 
-{#if $userProfileData}
+{#if userProfileData?.value}
 	<div class="relative flex min-w-full flex-col justify-center rounded-lg bg-teal-100 px-12 py-6">
 		{#if !isEditing}
 			<button
@@ -32,22 +32,22 @@
 			<dl class="flex flex-col gap-3">
 				<div>
 					<dt class="font-bold">About me</dt>
-					<dd class="max-w-xl">{$userProfileData.biography}</dd>
+					<dd class="max-w-xl">{userProfileData.value.biography}</dd>
 				</div>
 
 				<div class="flex items-baseline gap-2">
 					<dt class="font-bold">Gender:</dt>
 					<dd>
-						{$userProfileData.gender}
-						<GenderSymbol gender={$userProfileData.gender} />
+						{userProfileData.value.gender}
+						<GenderSymbol gender={userProfileData.value.gender} />
 					</dd>
 				</div>
 
 				<div class="flex items-baseline gap-2">
 					<dt class="font-bold">Interested in:</dt>
 					<dd>
-						{$userProfileData.sexualPreference}
-						<PreferenceSymbol preference={$userProfileData.sexualPreference} />
+						{userProfileData.value.sexualPreference}
+						<PreferenceSymbol preference={userProfileData.value.sexualPreference} />
 					</dd>
 				</div>
 			</dl>

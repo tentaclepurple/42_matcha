@@ -4,18 +4,23 @@
 	import { onMount } from 'svelte';
 
 	import '../app.css';
-	import { fetchUserData } from '$lib/stores/user-data';
 	import MenuWidget from './MenuWidget.svelte';
 	import { userAuth } from '$lib/state/auth.svelte';
+	import { userLocation } from '$lib/state/geolocation.svelte';
+	import { userData } from '$lib/state/user-data.svelte';
+	import { userProfileData } from '$lib/state/user-profile-data.svelte';
 
 	onMount(async () => {
 		const accessToken = localStorage.getItem('access_token');
 
 		if (accessToken) {
 			userAuth.login();
+			await userData.fetch();
+			await userProfileData.fetch();
+			await userLocation.getUserLocation();
+		} else {
+			userAuth.logout();
 		}
-
-		await fetchUserData();
 	});
 </script>
 

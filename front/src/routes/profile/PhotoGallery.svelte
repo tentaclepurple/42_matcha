@@ -3,8 +3,9 @@
 	import { DEFAULT_AVATAR_NAME } from '$lib/constants/avatar';
 	import type UserProfileData from '$lib/interfaces/user-profile-data.interface';
 	import getServerAsset from '$lib/utils/get-server-asset';
-	import { fetchUserProfileData } from '$lib/stores/user-profile-data';
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
+	import { userProfileData } from '$lib/state/user-profile-data.svelte';
+	import { userData } from '$lib/state/user-data.svelte';
 
 	const { photos }: { photos: UserProfileData['photos'] } = $props();
 
@@ -48,7 +49,8 @@
 				throw new Error('Failed to upload photo');
 			}
 
-			await fetchUserProfileData();
+			await userProfileData.fetch();
+			await userData.fetch();
 		} catch (e) {
 			console.error(error);
 			error = 'There was an error uploading the photo. Please try again.';
@@ -89,7 +91,8 @@
 
 			await res.json();
 
-			await fetchUserProfileData();
+			await userProfileData.fetch();
+			await userData.fetch();
 		} catch (e) {
 			console.error(e);
 			error = 'There was an error deleting the photo. Please try again.';

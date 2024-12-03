@@ -24,7 +24,11 @@ export const load: PageLoad = async () => {
 
 	const { results } = await res.json();
 
+	const sortedResults = results.sort((a, b) => {
+		return a.distance - b.distance;
+	});
+
 	return {
-		results
+		results: sortedResults
 	};
 };
