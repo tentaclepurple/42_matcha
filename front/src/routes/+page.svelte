@@ -1,10 +1,9 @@
 <script>
-	import { goto } from '$app/navigation';
+	import { beforeNavigate, goto } from '$app/navigation';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
 	import { userAuth } from '$lib/state/auth.svelte';
-	import { onMount } from 'svelte';
 
-	onMount(() => {
+	beforeNavigate(() => {
 		if (userAuth.isAuthenticated) {
 			goto('/search', { replaceState: true });
 		}
@@ -20,12 +19,17 @@
 	</PageWrapper>
 </div>
 
-<div class="flex items-center justify-center bg-teal-500 p-4">
-	<footer class="w-full max-w-screen-2xl">
-		<nav class="flex items-baseline justify-between gap-2">
-			<a href="/about">About</a>
-			This is the footer. Here we can mention something about ourselves.
-		</nav>
+<div class="flex items-center justify-center bg-teal-500 p-3">
+	<footer class="flex w-full max-w-screen-2xl justify-end text-sm">
+		<small>
+			Made with ♡ by
+			<a href="https://github.com/tentaclepurple" target="_blank" rel="noopener noreferrer">
+				imontero
+			</a>
+			and
+			<a href="https://github.com/nicolasgasco" target="_blank" rel="noopener noreferrer">ngasco</a
+			>.
+		</small>
 	</footer>
 </div>
 
