@@ -13,6 +13,7 @@ from .routes.match_endpoints import match_bp
 from .routes.notification_endpoints import notification_bp
 from .routes.chat_endpoints import chat_bp
 from .models.iamatcha import BotModel
+from .scripts.generate_test_users import generate_test_users
 
 from dotenv import load_dotenv
 import os
@@ -26,13 +27,12 @@ def create_app():
 
     app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=40)
-    
-    
+
     app.config["MONGO_URI"] = (
-    f"mongodb://{os.getenv('MONGO_ROOT_USERNAME')}:"
-    f"{os.getenv('MONGO_ROOT_PASSWORD')}@mongodb:27017/"
-    f"{os.getenv('MONGO_DATABASE')}?authSource=admin"
-)
+        f"mongodb://{os.getenv('MONGO_ROOT_USERNAME')}:"
+        f"{os.getenv('MONGO_ROOT_PASSWORD')}@mongodb:27017/"
+        f"{os.getenv('MONGO_DATABASE')}?authSource=admin"
+    )
 
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
@@ -41,10 +41,15 @@ def create_app():
     app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
     app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 
-
     mongo.init_app(app)
+
+    num_users = mongo.db.users.count_documents({})
+    num_test_users = 200
+    if (num_users < num_test_users):
+        generate_test_users(mongo, num_test_users - num_users)
+
     jwt = JWTManager(app)
-    
+
     # Register blueprints
     app.register_blueprint(user_bp, url_prefix='/api/users')
     app.register_blueprint(profile_bp, url_prefix='/api/profile')
@@ -56,7 +61,7 @@ def create_app():
 
     with app.app_context():
         init_db()
-        
+
     BotModel.check_and_create_bot()
-        
+
     return app

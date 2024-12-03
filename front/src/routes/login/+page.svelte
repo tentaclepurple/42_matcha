@@ -6,10 +6,11 @@
 
 	import { goto } from '$app/navigation';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
-	import { fetchUserData } from '$lib/stores/user-data';
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
 	import { userLocation } from '$lib/state/geolocation.svelte';
 	import { userAuth } from '$lib/state/auth.svelte';
+	import { userData } from '$lib/state/user-data.svelte';
+	import { userProfileData } from '$lib/state/user-profile-data.svelte';
 
 	let error: string = $state('');
 	$effect(() => {
@@ -63,10 +64,11 @@
 			localStorage.setItem('access_token', access_token);
 			userAuth.login();
 			await userLocation.getUserLocation();
-			await fetchUserData();
+			await userData.fetch();
+			await userProfileData.fetch();
 
 			const { profile_completed: profileCompleted } = user;
-			return profileCompleted ? goto('/dashboard') : goto('/profile');
+			return profileCompleted ? goto('/search') : goto('/profile');
 		} catch (err) {
 			error = 'An error occurred. Please try again later.';
 			return;

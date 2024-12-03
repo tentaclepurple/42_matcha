@@ -157,7 +157,7 @@ def toggle_like(user_identifier):
         if existing_like:
             # If like exists, remove it
             mongo.db.likes.delete_one({"_id": existing_like["_id"]})
-            return jsonify({'message': 'Like removed'}), 200
+            return jsonify({'message': 'Like removed', 'like_removed': True}), 200
             
         # Remove unlike if exists and add like
         if existing_unlike:
@@ -196,7 +196,8 @@ def toggle_like(user_identifier):
         
         return jsonify({
             'message': 'Like added',
-            'is_match': is_match
+            'is_match': is_match,
+            'like_added': True
         }), 200
 
     except Exception as e:

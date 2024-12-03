@@ -2,7 +2,7 @@
 	import Button from '$lib/components/Button.svelte';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
-	import { userData } from '$lib/stores/user-data';
+	import { userData } from '$lib/state/user-data.svelte';
 
 	let isEditing: boolean = $state(false);
 
@@ -64,10 +64,10 @@
 			error = 'An error occurred. Please try again later.';
 
 			// Reset form values to the current user data
-			e.target.username.value = $userData?.username || '';
-			e.target.first_name.value = $userData?.firstName || '';
-			e.target.last_name.value = $userData?.lastName || '';
-			e.target.email.value = $userData?.email || '';
+			e.target.username.value = userData?.value?.username ?? '';
+			e.target.first_name.value = userData?.value?.firstName ?? '';
+			e.target.last_name.value = userData?.value?.lastName ?? '';
+			e.target.email.value = userData?.value?.email ?? '';
 		} finally {
 			isEditing = false;
 		}
@@ -82,7 +82,7 @@
 				type="text"
 				id="username"
 				name="username"
-				value={$userData ? $userData.username : ''}
+				value={userData?.value ? userData.value.username : ''}
 				required
 				readonly={!isEditing}
 				minlength="5"
@@ -97,7 +97,7 @@
 				type="text"
 				id="first_name"
 				name="first_name"
-				value={$userData ? $userData.firstName : ''}
+				value={userData?.value ? userData.value.firstName : ''}
 				readonly={!isEditing}
 				maxlength="30"
 				required
@@ -111,7 +111,7 @@
 				type="text"
 				id="last_name"
 				name="last_name"
-				value={$userData ? $userData.lastName : ''}
+				value={userData?.value ? userData.value.lastName : ''}
 				readonly={!isEditing}
 				maxlength="30"
 				required
@@ -126,7 +126,7 @@
 				id="email"
 				name="email"
 				required
-				value={$userData ? $userData.email : ''}
+				value={userData?.value ? userData.value.email : ''}
 				readonly={!isEditing}
 				autocomplete="email"
 				class="w-full"

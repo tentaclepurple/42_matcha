@@ -4,13 +4,13 @@
 	import getServerAsset from '$lib/utils/get-server-asset';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
 	import { onDestroy, onMount } from 'svelte';
-	import { userData } from '$lib/stores/user-data';
 	import { userAuth } from '$lib/state/auth.svelte';
+	import { userData } from '$lib/state/user-data.svelte';
 
 	let showMenu: boolean = $state(false);
 
 	const avatarUrl: string = $derived(
-		$userData?.profilePhoto ? getServerAsset($userData.profilePhoto) : '/icons/avatar.svg'
+		userData.value?.profilePhoto ? getServerAsset(userData.value.profilePhoto) : '/icons/avatar.svg'
 	);
 
 	const handleLogOut = () => {
@@ -59,12 +59,12 @@
 	</button>
 	{#if showMenu}
 		<div
-			class="absolute right-0 top-full mt-2 flex min-h-32 min-w-48 justify-end rounded-md bg-teal-200 p-6 shadow-xl"
+			class="absolute right-0 z-50 top-full mt-2 flex min-h-32 min-w-48 justify-end rounded-md bg-teal-200 p-6 shadow-xl"
 		>
 			<nav class="flex flex-col items-end gap-3">
-				<a href="/dashboard" onclick={handleShowMenu} class="flex items-center gap-1">
+				<a href="/search" onclick={handleShowMenu} class="flex items-center gap-1">
 					<img src="/icons/home.svg" alt="" class="w-4" />
-					Dashboard
+					Search
 				</a>
 				<a href="/account" onclick={handleShowMenu} class="flex items-center gap-1">
 					<img src="/icons/settings.svg" alt="" class="w-5" />

@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
-	import { userData } from '$lib/stores/user-data';
+	import { userData } from '$lib/state/user-data.svelte';
 	import PersonalInfoForm from './PersonalInfoForm.svelte';
 	import ProfileAvatar from './ProfileAvatar.svelte';
 
-	userData.subscribe((value) => {
-		if (!value) {
-			return goto('/', { replaceState: true });
+	$effect(() => {
+		if (!userData.value) {
+			goto('/', { replaceState: true });
 		}
 	});
 </script>

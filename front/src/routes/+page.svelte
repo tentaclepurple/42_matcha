@@ -6,7 +6,7 @@
 
 	onMount(() => {
 		if (userAuth.isAuthenticated) {
-			goto('/dashboard', { replaceState: true });
+			goto('/search', { replaceState: true });
 		}
 	});
 </script>
