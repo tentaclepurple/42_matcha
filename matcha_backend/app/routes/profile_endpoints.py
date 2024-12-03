@@ -18,6 +18,19 @@ UPLOAD_FOLDER = 'app/static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
+INTERESTS = interests = [
+    "Movies", "Music", "Traveling", "Cooking", "Fitness", "Hiking", "Reading", 
+    "Gaming", "Photography", "Dancing", "Sports", "Art", "Fashion", 
+    "Volunteering", "Yoga", "Tech", "DIY", "Meditation", "Comedy", 
+    "Writing", "Cycling", "Swimming", "Gardening", "Foodie", "Board Games", 
+    "Puzzles", "Astrology", "Podcasts", "Running", "Camping", "Languages", 
+    "Skating", "Skiing", "Surfing", "Collecting", "Karaoke", 
+    "Animals", "Fishing", "Anime", "Science", "History", "Theater", 
+    "Crafts", "Investing", "Drinks", "Blogging", "Cars", "Technology", 
+    "Magic", "Politics", "Fashion", "Beauty", "Health", "Philosophy", "Nature"
+    "Traditions", "Theatre", "Religion", "Sex", "Nightlife", "Partying"
+]
+
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -57,6 +70,9 @@ def update_profile():
        interests = data.pop('interests')
        if not all(isinstance(tag, str) for tag in interests):
            return jsonify({'error': 'Invalid tag format'}), 400
+       for tag in interests:
+           if tag not in INTERESTS:
+               return jsonify({'error': f'Tag {tag} not allowed'}), 400
        
        # update interests
        UserModel.update_interests(current_user_id, interests)

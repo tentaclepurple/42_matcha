@@ -25,8 +25,8 @@ BOT_PROFILES = {
         "age": 22,
         "gender": "female",
         "sexual_preferences": "bisexual",
-        "biography": "Hi! I'm Maria, from Urduliz. I'm a programming student",
-        "interests": ["Dancing", "Music", "Tech", "Nightlife", "Partying", "Sex"],
+        "biography": "¡Hola! Soy María de Urduliz",
+        "interests": ["fiesta", "baile", "música"],
         "location": {"type": "Point", "coordinates": [-2.9716, 43.3666]},
         "context": context1
     },
@@ -38,8 +38,8 @@ BOT_PROFILES = {
         "age": 25,
         "gender": "male",
         "sexual_preferences": "female",
-        "biography": "Kaixo! I'm Jon, from Bilbao. I'm a sportsman",
-        "interests": ["Surfing", "Fitness", "Hiking", "Traveling", "Cycling", "Swimming", "Skateboarding"],	
+        "biography": "Kaixo! Soy Jon, surfer y montañero",
+        "interests": ["surf", "montaña", "deporte", "viajar"],
         "location": {"type": "Point", "coordinates": [-2.9349, 43.2627]},
         "context": context2
     },
@@ -51,8 +51,9 @@ BOT_PROFILES = {
         "age": 40,
         "gender": "male",
         "sexual_preferences": "female",
-        "biography": "Hi girls! I'm Cayetano, a bullfighter and businessman",
-        "interests": ["Politics", "Traditions", "Nature", "Traditions", "Religion", "Sex"],
+        "biography": "Buenas mozas, soy Cayetano Rivera, torero y empresario",
+        "interests": ["caza", "toros", "falange española", "politica de derechas",
+                        "religion catolica"],
         "location": {"type": "Point", "coordinates": [-2.9349, 43.2627]},
         "context": context3
     },
@@ -64,8 +65,8 @@ BOT_PROFILES = {
 		"age": 35,
 		"gender": "male",
 		"sexual_preferences": "female",
-		"biography": "Hi! I'm James, a British entrepreneur living in Getxo",
-		"interests": ["Reading", "Tech", "Traveling", "Theater", "Investing"],
+		"biography": "Hola, soy James, emprendedor londinense viviendo en Getxo.",
+		"interests": ["tecnología", "startups", "viajar", "lectura", "programacion"],
 		"location": {"type": "Point", "coordinates": [-3.0114, 43.3569]},
 		"context": context4
 	},
@@ -77,10 +78,10 @@ BOT_PROFILES = {
 		"age": 50,
 		"gender": "female",
 		"sexual_preferences": "male",
-		"biography": "Cultured and elegant civil servant. I am interested in intelligence and good taste.",
-		"interests": ["Reading", "Art", "Traveling", "Theater"],
+		"biography": "Funcionaria culta y elegante. Me interesa la inteligencia y el buen gusto.",
+		"interests": ["lectura", "arte", "viajes", "teatro"],
 		"location": {"type": "Point", "coordinates": [-3.7038, 40.4168]},
-		"context": "context5"
+		"context": context5
 	},
 	"SURGEON_SERIOUS_BOT" : {
 		"_id": ObjectId("673cfa0e31047a77946f398f"),
@@ -90,10 +91,10 @@ BOT_PROFILES = {
 		"age": 28,
 		"gender": "female",
 		"sexual_preferences": "bisexual",
-		"biography": "Surgeon from Barakaldo looking for a serious relationship. I love cinema and dancing.",
-		"interests": ["Movies", "Sports", "Dancing"],
+		"biography": "Cirujana de Barakaldo buscando una relación seria. Me encanta el cine y el baile.",
+		"interests": ["cine", "deporte", "baile", "medicina"],
 		"location": {"type": "Point", "coordinates": [-2.9896, 43.2956]},
-		"context": "context6"
+		"context": context6
 	},
 	"PARTY_LOVER_BOT" : {
 		"_id": ObjectId("673cfa0e09147e88946f398f"),
@@ -103,10 +104,10 @@ BOT_PROFILES = {
 		"age": 24,
 		"gender": "male",
 		"sexual_preferences": "bisexual",
-		"biography": "Party lover from Sestao, 24 years old, looking for action. Direct and to the point.",
-		"interests": ["Partying", "Music", "Cars", "Sex", "Nightlife"],
+		"biography": "Fiestero de Sestao de 24 años buscando acción. Directo y sin rodeos.",
+		"interests": ["fiesta", "sexo", "coche"],
 		"location": {"type": "Point", "coordinates": [-2.9262, 43.2569]},
-		"context": "context7"
+		"context": context7
 	},
 	"FITNESS_GURU_BOT" : {
 		"_id": ObjectId("673cfa0e31047012f46f398f"),
@@ -116,10 +117,10 @@ BOT_PROFILES = {
 		"age": 26,
 		"gender": "female",
 		"sexual_preferences": "bisexual",
-		"biography": "Personal trainer and fitness lover. Looking for active and healthy people.",
-		"interests": ["Fitness", "Running", "Yoga", "Health"],
+		"biography": "Entrenadora personal y amante del fitness. Busco personas activas y saludables.",
+		"interests": ["fitness", "running", "yoga", "comida saludable"],
 		"location": {"type": "Point", "coordinates": [-3.7072, 40.4153]},
-		"context": "context9"
+		"context": context9
 	},
 	"PARTY_QUEEN_BOT": {
 		"_id": ObjectId("923cfe0e31047e88946f398f"),
@@ -129,10 +130,10 @@ BOT_PROFILES = {
 		"age": 23,
 		"gender": "female",
 		"sexual_preferences": "bisexual",
-		"biography": "Queen of the party looking for someone to have fun with.",
-		"interests": ["Partying", "Music", "Dancing", "Nightlife", "Sex"],
+		"biography": "Reina de la fiesta buscando a alguien para pasarlo bien.",
+		"interests": ["fiesta", "musica", "baile", "vida nocturna"],
 		"location": {"type": "Point", "coordinates": [-2.9262, 43.2568]},
-		"context": "context10"
+		"context": context10
 	},
 	"DOMINATRIX_BOT": {
 		"_id": ObjectId("673cfa0e31047e88946f240e"),
@@ -142,10 +143,10 @@ BOT_PROFILES = {
 		"age": 29,
 		"gender": "female",
 		"sexual_preferences": "male",
-		"biography": "Security guard and dominatrix from Bernago. I am looking for men who know how to obey.",
-		"interests": ["Politics", "Sex"],
+		"biography": "Vigilante de seguridad y dominatrix de Bernago. Busco hombres que sepan obedecer.",
+		"interests": ["armas", "lucha", "dominacion", "ejercito", "politica de derechas"],
 		"location": {"type": "Point", "coordinates": [-2.8354, 43.3173]},
-		"context": "context11"
+		"context": context11
 	},
 	"EL_FARY_BOT": {
 		"_id": ObjectId("673cfe3c31047d88946f108f"),
@@ -155,9 +156,9 @@ BOT_PROFILES = {
 		"age": 65,
 		"gender": "male",
 		"sexual_preferences": "female",
-		"biography": "Traditional copla singer and defender of old-fashioned values. Lover of singing, bullfighting, and women. I hate weak men above all else.",
-		"interests": ["Music", "Traditions", "Politics", "Sex"],
+		"biography": "Cantante tradicional de copla y defensor de los valores de toda la vida. Amante del cante, los toros y las mujeres. Odio al hombre blandengue por encima de todas las cosas.",
+		"interests": ["musica", "cante", "toros", "tradiciones", "valores tradicionales", "España", "politica de derechas"],
 		"location": {"type": "Point", "coordinates": [-3.7038, 40.4168]},
-		"context": "context12"
+		"context": context12
 	}
 }
