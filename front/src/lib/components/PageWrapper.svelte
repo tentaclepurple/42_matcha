@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let children: () => any;
+	const { children } = $props();
 </script>
 
 <div class="flex flex-1 justify-center p-4">

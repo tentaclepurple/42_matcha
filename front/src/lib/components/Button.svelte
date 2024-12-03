@@ -10,6 +10,7 @@
 		isLoading = false as boolean,
 		level = 'primary' as ButtonLevel,
 		type = 'button' as ButtonType,
+		class: CLASS = '' as string,
 		...restProps
 	} = $props();
 
@@ -22,7 +23,7 @@
 <button
 	{type}
 	{...restProps}
-	class={`${styles} flex items-center justify-center gap-2 ${restProps.class}`}
+	class={`${styles} flex items-center justify-center gap-2 ${CLASS}`}
 >
 	{@render children()}
 	{#if isLoading === true}

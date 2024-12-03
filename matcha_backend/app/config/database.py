@@ -28,7 +28,7 @@ def init_db():
         # INDEXES
         # Unique indexes for users
         mongo.db.users.create_index("username", unique=True)
-        #mongo.db.users.create_index("email", unique=True)
+        mongo.db.users.create_index("email", unique=True)
         
         # Geospatial index for location
         mongo.db.users.create_index([("location", "2dsphere")])
@@ -41,6 +41,12 @@ def init_db():
         mongo.db.users.create_index("online")    
         mongo.db.users.create_index("last_connection")
         mongo.db.users.create_index("profile_completed")
+        
+		# Login attempts monitoring indexes
+        mongo.db.users.create_index([
+            ("locked_until", 1),
+            ("login_attempts", 1)
+        ], sparse=True)
 
         # Indexes for profile views
         mongo.db.profile_views.create_index([("viewer_id", 1), ("viewed_id", 1)])

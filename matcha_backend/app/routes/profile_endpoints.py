@@ -39,6 +39,34 @@ def allowed_file(filename):
 profile_bp = Blueprint('profiles', __name__)
 
 
+@profile_bp.route('/update_location', methods=['PUT'])
+@jwt_required()
+def update_location():
+    try:
+        current_user_id = get_jwt_identity()
+        data = request.get_json()
+
+        if 'location' in data:
+           if not isinstance(data['location'], dict) or \
+              'type' not in data['location'] or \
+              'coordinates' not in data['location'] or \
+              data['location']['type'] != 'Point' or \
+              not isinstance(data['location']['coordinates'], list) or \
+              len(data['location']['coordinates']) != 2:
+               return jsonify({'error': 'Invalid location format'}), 400
+        
+        # update profile
+        result = UserModel.update_profile(current_user_id, data)
+
+        return jsonify({
+            'message': 'Location updated successfully',
+            'profile_completed': True
+        }), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @profile_bp.route('/update_profile', methods=['POST'])
 @jwt_required()
 def update_profile():
