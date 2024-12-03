@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
-	import * as Tabs from '$lib/components/ui/tabs/index.ts';
+	import * as Tabs from '$lib/components/ui/tabs';
 	import UsersList from './UsersList.svelte';
 	import UsersMap from './UsersMap.svelte';
 
@@ -18,18 +18,24 @@
 
 	<div class="mx-auto w-full max-w-5xl px-12">
 		<Tabs.Root value={viewParam} class="w-full bg-teal-100 shadow-lg">
-			<Tabs.List class="grid w-full grid-cols-2">
+			<Tabs.List class="grid w-full grid-cols-3">
 				<Tabs.Trigger value="map">Map</Tabs.Trigger>
-				<Tabs.Trigger value="list">List</Tabs.Trigger>
+				<Tabs.Trigger value="list">All users</Tabs.Trigger>
+				<Tabs.Trigger value="recommended">Recommended for you</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="map">
 				<div class="min-h-[750px]">
-					<UsersMap results={data.results} />
+					<UsersMap results={data.searchResults} />
 				</div>
 			</Tabs.Content>
 			<Tabs.Content value="list">
 				<div class="min-h-[750px]">
-					<UsersList results={data.results} />
+					<UsersList results={data.searchResults} />
+				</div>
+			</Tabs.Content>
+			<Tabs.Content value="recommended">
+				<div class="min-h-[750px]">
+					<UsersList results={data.suggestionsResults} />
 				</div>
 			</Tabs.Content>
 		</Tabs.Root>
