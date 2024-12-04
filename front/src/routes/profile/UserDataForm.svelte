@@ -112,27 +112,16 @@
 		<label class="flex justify-between gap-2">
 			<span class="font-bold">Gender:</span>
 			<select name="gender" id="gender">
-				<option value={null} disabled selected={Boolean(!userProfileData.value?.gender)}
-					>Choose an option</option
-				>
-				<option
-					value={GENDER_OPTIONS.MALE}
-					selected={userProfileData.value?.gender === GENDER_OPTIONS.MALE}
-				>
+				<option value={null} disabled selected>Choose an option</option>
+				<option value={GENDER_OPTIONS.MALE}>
 					{GENDER_OPTIONS.MALE}
 					<GenderSymbol gender={GENDER_OPTIONS.MALE} />
 				</option>
-				<option
-					value={GENDER_OPTIONS.FEMALE}
-					selected={userProfileData.value?.gender === GENDER_OPTIONS.FEMALE}
-				>
+				<option value={GENDER_OPTIONS.FEMALE}>
 					{GENDER_OPTIONS.FEMALE}
 					<GenderSymbol gender={GENDER_OPTIONS.FEMALE} />
 				</option>
-				<option
-					value={GENDER_OPTIONS.OTHER}
-					selected={userProfileData.value?.gender === GENDER_OPTIONS.OTHER}
-				>
+				<option value={GENDER_OPTIONS.OTHER}>
 					{GENDER_OPTIONS.OTHER}
 					<GenderSymbol gender={GENDER_OPTIONS.OTHER} />
 				</option>
@@ -142,27 +131,16 @@
 		<label class="flex justify-between gap-2">
 			<span class="font-bold">Interested in:</span>
 			<select name="sexual_preferences" id="sexual_preferences">
-				<option value={null} disabled selected={!userProfileData.value?.sexualPreference}>
-					Choose an option
-				</option>
-				<option
-					value={PREFERENCES_OPTIONS.MALE}
-					selected={userProfileData.value?.sexualPreference === PREFERENCES_OPTIONS.MALE}
-				>
+				<option value={null} disabled selected> Choose an option </option>
+				<option value={PREFERENCES_OPTIONS.MALE}>
 					{PREFERENCES_OPTIONS.MALE}
 					<PreferenceSymbol preference={PREFERENCES_OPTIONS.MALE} />
 				</option>
-				<option
-					value={PREFERENCES_OPTIONS.FEMALE}
-					selected={userProfileData.value?.sexualPreference === PREFERENCES_OPTIONS.FEMALE}
-				>
+				<option value={PREFERENCES_OPTIONS.FEMALE}>
 					{PREFERENCES_OPTIONS.FEMALE}
 					<PreferenceSymbol preference={PREFERENCES_OPTIONS.FEMALE} />
 				</option>
-				<option
-					value={PREFERENCES_OPTIONS.BISEXUAL}
-					selected={userProfileData.value?.sexualPreference === PREFERENCES_OPTIONS.BISEXUAL}
-				>
+				<option value={PREFERENCES_OPTIONS.BISEXUAL}>
 					{PREFERENCES_OPTIONS.BISEXUAL}
 					<PreferenceSymbol preference={PREFERENCES_OPTIONS.BISEXUAL} />
 				</option>
@@ -181,7 +159,6 @@
 					rows="4"
 					minlength="1"
 					maxlength="500"
-					value={userProfileData.value?.biography ?? ''}
 					oninput={handleTextareaUpdate}
 				></textarea>
 				<p class="flex w-full items-baseline justify-between gap-6 text-xs text-gray-500">
@@ -194,15 +171,18 @@
 		</label>
 	</fieldset>
 
-	<div class="ml-auto flex w-fit items-baseline justify-end gap-2">
-		{#if onCancel}
-			<Button type="button" level="secondary" onclick={onCancel}>Cancel</Button>
+	<div class="flex w-full items-baseline justify-between gap-6">
+		{#if success}
+			<p class="text-green-500">{success}</p>
+		{:else if error}
+			<p class="mt-4 text-red-500">{error}</p>
 		{/if}
-		<Button type="submit" level="primary">Save</Button>
+
+		<div class="ml-auto flex w-fit items-baseline justify-between gap-2">
+			{#if onCancel}
+				<Button type="button" level="secondary" onclick={onCancel}>Cancel</Button>
+			{/if}
+			<Button type="submit" level="primary">Save</Button>
+		</div>
 	</div>
 </form>
-{#if success}
-	<p class="text-green-500">{success}</p>
-{:else if error}
-	<p class="mt-4 text-red-500">{error}</p>
-{/if}
