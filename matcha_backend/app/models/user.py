@@ -285,3 +285,23 @@ class UserModel:
                 UserModel.reset_login_attempts(user_id)
                 return None
         return None
+    
+    @staticmethod
+    def update_fame_rating(user_id: str, points: int) -> bool:
+        """Update user's fame rating within bounds 0-100"""
+        result = mongo.db.users.update_one(
+            {"_id": ObjectId(user_id)},
+            [
+                {
+                    "$set": {
+                        "fame_rating": {
+                            "$min": [
+                                100,
+                                {"$max": [0, {"$add": ["$fame_rating", points]}]}
+                            ]
+                        }
+                    }
+                }
+            ]
+        )
+        return result.modified_count > 0

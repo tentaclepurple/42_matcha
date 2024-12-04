@@ -110,7 +110,7 @@ class BotModel:
                    "profile_completed": True,
                    "photos": [
                        {
-                           "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2swWp5UgJHG0IUxDq808p-JHNTCRzttQtKw&s",
+                           "url": f"static/default/{bot_data['username']}.png",
                            "is_profile": True,
                            "uploaded_at": datetime.now()
                        }

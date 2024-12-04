@@ -157,15 +157,18 @@ def toggle_like(user_identifier):
         if existing_like:
             # If like exists, remove it
             mongo.db.likes.delete_one({"_id": existing_like["_id"]})
+            UserModel.update_fame_rating(to_user_id, -13)
             return jsonify({'message': 'Like removed', 'like_removed': True}), 200
             
         # Remove unlike if exists and add like
         if existing_unlike:
             mongo.db.likes.delete_one({"_id": existing_unlike["_id"]})
+            UserModel.update_fame_rating(to_user_id, 7)
             
         # Add new like
         LikeModel.add_like(current_user_id, to_user_id, "like")
-        
+        UserModel.update_fame_rating(to_user_id, 13)
+
         # Create like notification
         NotificationModel.create(
             user_id=to_user_id,
@@ -238,14 +241,17 @@ def toggle_unlike(user_identifier):
         if existing_unlike:
             # If unlike exists, remove it
             mongo.db.likes.delete_one({"_id": existing_unlike["_id"]})
+            UserModel.update_fame_rating(to_user_id, 7)
             return jsonify({'message': 'Unlike removed'}), 200
             
         # Remove like if exists and add unlike
         if existing_like:
             mongo.db.likes.delete_one({"_id": existing_like["_id"]})
+            UserModel.update_fame_rating(to_user_id, -13)
             
         # Add new unlike
         LikeModel.add_like(current_user_id, to_user_id, "unlike")
+        UserModel.update_fame_rating(to_user_id, -7)
 
         # Create unlike notification
         NotificationModel.create(
