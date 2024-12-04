@@ -16,15 +16,17 @@
 		class="items-between m-8 flex w-3/5 flex-col items-start justify-between rounded-lg bg-teal-200 p-6"
 	>
 		<nav class="mb-12 flex w-full items-center justify-between">
-			<Button
-				type="button"
-				level="primary"
-				onclick={() => {
-					goto(`/search?view=${origin}`, { replaceState: true });
-				}}
-			>
-				← Back
-			</Button>
+			{#if origin}
+				<Button
+					type="button"
+					level="primary"
+					onclick={() => {
+						goto(`/search?view=${origin}`, { replaceState: true });
+					}}
+				>
+					← Back
+				</Button>
+			{/if}
 
 			<UserActions {selectedUser} />
 		</nav>
@@ -32,7 +34,7 @@
 		<div class="w-full">
 			<div class="mb-6 flex items-center justify-between">
 				<img
-					class="shadow-xl h-40 w-40 bg-white object-cover rounded-lg"
+					class="h-40 w-40 rounded-lg bg-white object-cover shadow-xl"
 					src={getServerAsset(
 						selectedUser.photos.filter((photo) => photo.isProfile)[0].url || 'icons/avatar.svg'
 					)}
