@@ -1,3 +1,6 @@
+# app/config/database.py
+
+
 from flask_pymongo import PyMongo
 from .schemas import *
 
