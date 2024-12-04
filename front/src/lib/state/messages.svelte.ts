@@ -1,15 +1,15 @@
 import { SERVER_BASE_URL } from '$lib/constants/api';
-import type Message from '$lib/interfaces/message.interface';
+import type Messages from '$lib/interfaces/messages.interface';
 import deserialize from '$lib/utils/deserialize';
 
 class MessagesClass {
-	#value = $state<Message[]>([]);
+	#value = $state<Messages | null>(null);
 
-	get value(): Message[] {
+	get value(): Messages | null {
 		return this.#value;
 	}
 
-	set value(newValue: Message[]) {
+	set value(newValue: Messages | null) {
 		this.#value = newValue;
 	}
 
@@ -28,7 +28,7 @@ class MessagesClass {
 				throw new Error('Failed to fetch messages');
 			}
 
-			const { messages } = await res.json();
+			const { messages, other_user: otherUser } = await res.json();
 
 			const sortedMessages = deserialize(messages).sort((a, b) => {
 				const aDate = new Date(a.createdAt);
@@ -41,7 +41,10 @@ class MessagesClass {
 				return;
 			}
 
-			this.#value = sortedMessages;
+			this.#value = {
+				messages: sortedMessages,
+				otherUser: deserialize(otherUser)
+			};
 		} catch (e) {
 			throw new Error(e);
 		}

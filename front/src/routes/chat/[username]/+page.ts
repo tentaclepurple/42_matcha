@@ -11,7 +11,8 @@ export const load: PageLoad = async ({ params }) => {
 		await messagesData.fetchMessages({ username });
 
 		return {
-			messages: messagesData.value
+			messages: messagesData.value?.messages ?? [],
+			otherUser: messagesData.value?.otherUser ?? null
 		};
 	} catch (e) {
 		console.error(e);
