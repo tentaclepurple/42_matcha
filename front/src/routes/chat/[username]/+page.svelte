@@ -25,7 +25,7 @@
 </script>
 
 <div class="w-full">
-	<ChatHeader username={otherUser.username} profilePhoto={otherUser.avatar} />
+	<ChatHeader username={otherUser.username} profilePhoto={otherUser.profilePhoto} />
 	<MessagesList />
 	<NewMessageForm {username} />
 </div>

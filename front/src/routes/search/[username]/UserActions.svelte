@@ -43,7 +43,7 @@
 	};
 </script>
 
-<div class="flex items-start justify-center gap-3">
+<div class="flex items-start justify-center gap-3 ml-auto">
 	{#if isMatch}
 		<Button
 			type="button"

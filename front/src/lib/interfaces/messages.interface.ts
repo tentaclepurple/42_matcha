@@ -9,5 +9,6 @@ export default interface Messages {
 		online: boolean;
 		userId: string;
 		username: string;
+		profilePhoto: string;
 	};
 }
