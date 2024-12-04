@@ -11,24 +11,44 @@ export const load: PageLoad = async () => {
 		return redirect(302, '/login');
 	}
 
-	const res = await fetch(`${SERVER_BASE_URL}/api/match/search`, {
+	const searchRes = await fetch(`${SERVER_BASE_URL}/api/match/search`, {
 		method: 'GET',
 		headers: {
 			Authorization: `Bearer ${token}`
 		}
 	});
 
-	if (!res.ok) {
+	if (!searchRes.ok) {
 		return redirect(302, '/login');
 	}
 
-	const { results } = await res.json();
+	const { results: searchResults } = await searchRes.json();
+	const sortedSearchResults = searchResults.sort((a, b) => {
+		return a.distance - b.distance;
+	});
 
-	const sortedResults = results.sort((a, b) => {
+	const queryParams = new URLSearchParams({
+		max_distance: '10'
+	}).toString();
+
+	const suggestionsRes = await fetch(`${SERVER_BASE_URL}/api/match/suggestions?${queryParams}`, {
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	});
+
+	if (!suggestionsRes.ok) {
+		return redirect(302, '/login');
+	}
+
+	const { matches: suggestionsResults } = await suggestionsRes.json();
+	const sortedSuggestionsResults = suggestionsResults.sort((a, b) => {
 		return a.distance - b.distance;
 	});
 
 	return {
-		results: sortedResults
+		searchResults: sortedSearchResults,
+		suggestionsResults: sortedSuggestionsResults
 	};
 };

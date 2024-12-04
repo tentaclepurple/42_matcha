@@ -13,7 +13,7 @@
 	switch (size) {
 		case 's':
 			wrapperStyles = 'p-0';
-			pictureStyles = 'min-w-12 w-12';
+			pictureStyles = 'min-w-11 w-11';
 			break;
 		case 'm':
 			wrapperStyles = 'p-0';
