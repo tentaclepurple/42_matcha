@@ -1,4 +1,4 @@
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { SERVER_BASE_URL } from '$lib/constants/api';
 
@@ -19,7 +19,7 @@ export const load: PageLoad = async () => {
 	});
 
 	if (!searchRes.ok) {
-		return redirect(302, '/login');
+		return error(searchRes.status, 'An error occurred while fetching search results');
 	}
 
 	const { results: searchResults } = await searchRes.json();
@@ -39,7 +39,7 @@ export const load: PageLoad = async () => {
 	});
 
 	if (!suggestionsRes.ok) {
-		return redirect(302, '/login');
+		return error(suggestionsRes.status, 'An error occurred while fetching suggestions results');
 	}
 
 	const { matches: suggestionsResults } = await suggestionsRes.json();
