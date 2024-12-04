@@ -20,7 +20,7 @@ KEY = os.getenv('GOOGLE_KEY')
 model1 = 'gemini-1.5-flash'
 model2 = 'gemini-1.5-flash-8b'
 model3 = 'gemini-1.5-pro'
-model_selection = model2
+model_selection = model1
 
 
 

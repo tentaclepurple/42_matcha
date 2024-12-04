@@ -117,6 +117,12 @@ def get_messages(user_identifier):
         # Mark received messages as read
         ChatModel.mark_messages_as_read(other_user_id, current_user_id)
         
+        profile_photo = next(
+                (photo['url'] for photo in other_user.get('photos', []) 
+                if photo.get('is_profile')), 
+                None
+            )
+
         # Format response
         response = [{
             'message_id': str(msg['_id']),
@@ -131,6 +137,7 @@ def get_messages(user_identifier):
             'other_user': {
                 'user_id': other_user_id,
                 'username': other_user['username'],
+                'profile_photo': profile_photo,
                 'online': other_user.get('online', False),
                 'last_connection': other_user.get('last_connection')
             },
