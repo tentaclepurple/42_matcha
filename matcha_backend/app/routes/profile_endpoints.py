@@ -230,7 +230,12 @@ def my_profile_info():
        
        if not user:
            return jsonify({'error': 'User not found'}), 404
-           
+       # Get profile viewers
+       recent_viewers = ProfileViewModel.get_profile_viewers(current_user_id, limit=10)
+      
+      # Get likes received
+       likes_received = LikeModel.get_likes_received(current_user_id, like_type="like")
+
        profile_info = {
            # Profile
            'username': user.get('username'),
@@ -251,6 +256,18 @@ def my_profile_info():
            'online': user.get('online'),
            'last_connection': user.get('last_connection'),
            'profile_completed': user.get('profile_completed'),
+           'profile_views': [{
+              'username': view['viewer']['username'],
+              'user_id': str(view['viewer']['_id']),
+              'view_count': view['view_count'],
+              'last_view': view['last_view']
+            } for view in recent_viewers],
+          
+            'likes_received': [{
+              'username': like['from_user']['username'],
+              'user_id': str(like['from_user']['_id']),
+              'created_at': like['created_at']
+            } for like in likes_received]
        }
        
        return jsonify(profile_info), 200
