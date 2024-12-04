@@ -64,7 +64,7 @@ def generate_test_users(mongo, num_users=50):
             'password': user['login']['sha256'],
             'first_name': user['name']['first'],
             'last_name': user['name']['last'],
-            'age': user['registered']['age'] if user['registered']['age'] > 18 else 18,
+            'age': random.randint(18, 30),
             'verified': True,
             'created_at': datetime.now(UTC) - timedelta(days=random.randint(1, 365)),
             'gender': user['gender'],
