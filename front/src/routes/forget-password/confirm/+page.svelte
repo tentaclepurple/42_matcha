@@ -6,17 +6,19 @@
 
 <PageWrapper>
 	<h1 class="mb-4">Your new password is on the way!</h1>
-	<p class="mb-4">
-		If you have an account with us, you'll receive an e-mail with instructions on how to set a new
-		password.
-	</p>
-	<Button
-		level="primary"
-		type="button"
-		onclick={() => {
-			goto('/', { replaceState: true });
-		}}
-	>
-		Back to home
-	</Button>
+	<div>
+		<p class="mb-4">
+			If you have an account with us, you'll receive an e-mail with instructions on how to set a new
+			password.
+		</p>
+		<Button
+			level="primary"
+			type="button"
+			onclick={() => {
+				goto('/', { replaceState: true });
+			}}
+		>
+			Back to home
+		</Button>
+	</div>
 </PageWrapper>

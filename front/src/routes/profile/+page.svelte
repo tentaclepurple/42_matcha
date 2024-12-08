@@ -26,10 +26,11 @@
 	{#if userProfileData?.value}
 		<div class="mb-12">
 			<h1>Profile</h1>
-			<p>This is the profile page.</p>
+			<p class="max-w-lg">This is where you can update your public profile.</p>
+			<p>If you're looking for your account info, click <a href="/account">here</a>.</p>
 		</div>
 
-		<div class="mb-4 flex w-fit flex-col items-start">
+		<div class="m-auto mb-4 flex w-fit flex-col items-start justify-center">
 			<PhotoGallery photos={userProfileData.value.photos} />
 
 			<div class="mb-6 flex w-full items-baseline justify-between">

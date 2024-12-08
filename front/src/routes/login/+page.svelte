@@ -86,45 +86,45 @@
 	<h1>Log in</h1>
 	<div>
 		<p class="mb-4">This is where you can log in</p>
-		<div>
-			<Form onSubmit={handleSubmit}>
-				<fieldset disabled={isLoading}>
-					<label>
-						E-mail
-						<input
-							type="email"
-							id="email"
-							name="email"
-							value="chiamatemi.nico@gmail.com"
-							autocomplete="email"
-							required
-						/>
-					</label>
+		<Form onSubmit={handleSubmit}>
+			<fieldset disabled={isLoading} class="flex w-full flex-col items-start gap-3">
+				<label>
+					E-mail
+					<input
+						type="email"
+						id="email"
+						name="email"
+						value="chiamatemi.nico@gmail.com"
+						autocomplete="email"
+						required
+						class="min-w-[300px]"
+					/>
+				</label>
 
-					<label>
-						Password
-						<PasswordInput
-							id="password"
-							name="password"
-							value="Ciaociao1!"
-							required
-							autocomplete="current-password"
-						/>
-					</label>
-				</fieldset>
+				<label>
+					Password
+					<PasswordInput
+						id="password"
+						name="password"
+						value="Ciaociao1!"
+						required
+						autocomplete="current-password"
+						class="min-w-[300px]"
+					/>
+				</label>
+			</fieldset>
 
-				<a href="/forget-password">Forgot your password?</a>
+			<a href="/forget-password">Forgot your password?</a>
 
-				<div class="flex items-baseline justify-center gap-2">
-					<Button type="button" level="secondary" onclick={handleCancel}>Cancel</Button>
-					<Button type="submit" {isLoading}>Log in</Button>
-				</div>
+			<div class="flex items-baseline justify-center gap-2">
+				<Button type="button" level="secondary" onclick={handleCancel}>Cancel</Button>
+				<Button type="submit" {isLoading}>Log in</Button>
+			</div>
 
-				{#if error}
-					<p class="mt-2 text-red-500">{error}</p>
-				{/if}
-			</Form>
-		</div>
+			{#if error}
+				<p class="mt-2 text-red-500">{error}</p>
+			{/if}
+		</Form>
 
 		<p class="mt-4">
 			Don't have an account yet? <a href="/signup">Sign up</a>
