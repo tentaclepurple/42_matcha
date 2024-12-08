@@ -7,6 +7,7 @@
 	import { DefaultMarker, MapLibre } from 'svelte-maplibre';
 	import getServerAsset from '$lib/utils/get-server-asset';
 	import UserActions from './UserActions.svelte';
+	import { COLORS_PALETTE } from '$lib/constants/colors';
 
 	const { selectedUser, origin } = $props();
 </script>
@@ -43,16 +44,21 @@
 
 				<FameRating fameRating={selectedUser.fameRating} />
 			</div>
-			<h2>{selectedUser.username}, {selectedUser.age}</h2>
+			<h2 class="mb-4">{selectedUser.username}, {selectedUser.age}</h2>
 
 			<div class="description-list mb-6 flex flex-col gap-3">
+				<dl>
+					<dt>Bio:</dt>
+					<dd>{selectedUser.biography}</dd>
+				</dl>
+
 				<dl>
 					<dt>Gender:</dt>
 					<dd>{selectedUser.gender} <GenderSymbol gender={selectedUser.gender} /></dd>
 				</dl>
 
 				<dl>
-					<dt>Interested in:</dt>
+					<dt>Preference:</dt>
 					<dd>
 						{selectedUser.sexualPreferences}
 						<PreferenceSymbol preference={selectedUser.sexualPreferences} />
@@ -60,8 +66,19 @@
 				</dl>
 
 				<dl>
-					<dt>Bio:</dt>
-					<dd>{selectedUser.biography}</dd>
+					<dt class="mb-1">Interests</dt>
+					<dd>
+						<ul class="flex items-baseline gap-1">
+							{#each selectedUser.interests.sort() as interest, index}
+								<li
+									class="rounded-md px-2 py-1"
+									style={`background-color: ${COLORS_PALETTE[index % COLORS_PALETTE.length]}`}
+								>
+									{interest}
+								</li>
+							{/each}
+						</ul>
+					</dd>
 				</dl>
 			</div>
 		</div>
