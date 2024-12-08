@@ -54,8 +54,8 @@
 				<dl>
 					<dt>Interested in:</dt>
 					<dd>
-						{selectedUser.sexualPreference}
-						<PreferenceSymbol preference={selectedUser.sexualPreference} />
+						{selectedUser.sexualPreferences}
+						<PreferenceSymbol preference={selectedUser.sexualPreferences} />
 					</dd>
 				</dl>
 
