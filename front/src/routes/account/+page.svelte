@@ -19,13 +19,11 @@
 		<p>Looking for your profile info? Go to the <a href="/profile">Profile page</a>.</p>
 	</header>
 
-	<div>
-		<div class="flex flex-col items-start gap-4">
-			<ProfileAvatar />
-			<div>
-				<h2 class="mb-4">Information</h2>
-				<PersonalInfoForm />
-			</div>
+	<div class="flex flex-col items-start gap-4">
+		<ProfileAvatar />
+		<div>
+			<h2 class="mb-4">Information</h2>
+			<PersonalInfoForm />
 		</div>
 	</div>
 </PageWrapper>

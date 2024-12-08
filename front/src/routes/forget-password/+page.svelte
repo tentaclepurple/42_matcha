@@ -60,6 +60,7 @@
 					value="chiamatemi.Nico@gmail.com"
 					required
 					autocomplete="email"
+					class="min-w-[300px]"
 				/>
 			</label>
 

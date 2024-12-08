@@ -6,15 +6,19 @@
 
 <PageWrapper>
 	<h1 class="mb-4">Welcome back!</h1>
-	<p class="mb-4">Your password has been successfully reset. You can now log in with your new password.</p>
+	<div>
+		<p class="mb-4">
+			Your password has been successfully reset. You can now log in with your new password.
+		</p>
 
-	<Button
-		type="button"
-		level="primary"
-		onclick={() => {
-			goto('/login', { replaceState: true });
-		}}
-	>
-		Go to login
-	</Button>
+		<Button
+			type="button"
+			level="primary"
+			onclick={() => {
+				goto('/login', { replaceState: true });
+			}}
+		>
+			Go to login
+		</Button>
+	</div>
 </PageWrapper>
