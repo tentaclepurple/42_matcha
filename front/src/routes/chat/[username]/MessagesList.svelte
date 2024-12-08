@@ -19,7 +19,7 @@
 		{#each messagesData.value.messages as message, i}
 			{$inspect(message)}
 			<li
-				class={`flex flex-col items-end gap-1 ${message.fromMe ? 'self-end bg-teal-300' : 'bg-gray-300'} max-w-[70%] rounded-lg p-3`}
+				class={`flex flex-col items-end gap-1 ${message.fromMe ? 'self-end bg-teal-300' : 'bg-gray-300'} max-w-lg rounded-lg p-3`}
 				id={`message-${i}`}
 			>
 				{message.content}
