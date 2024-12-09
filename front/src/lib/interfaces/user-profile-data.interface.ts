@@ -7,6 +7,7 @@ export default interface UserProfileData {
 		coordinates: [number, number];
 	};
 	gender: 'male' | 'female' | 'other';
+	interests: string[];
 	photos: {
 		is_profile: boolean;
 		uploaded_at: string;
