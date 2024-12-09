@@ -24,17 +24,17 @@
 				<Tabs.Trigger value="recommended">Recommended for you</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="map">
-				<div class="min-h-[750px]">
+				<div class="flex min-h-[750px] flex-col">
 					<UsersMap results={data.searchResults} />
 				</div>
 			</Tabs.Content>
 			<Tabs.Content value="list">
-				<div class="min-h-[750px]">
+				<div class="flex min-h-[750px] flex-col">
 					<UsersList results={data.searchResults} />
 				</div>
 			</Tabs.Content>
 			<Tabs.Content value="recommended">
-				<div class="min-h-[750px]">
+				<div class="flex min-h-[750px] flex-col">
 					<UsersList results={data.suggestionsResults} />
 				</div>
 			</Tabs.Content>
