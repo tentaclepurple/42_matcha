@@ -53,7 +53,7 @@
 						{#if userProfileData.value.interests.length === 0}
 							<span>No interests yet</span>
 						{:else}
-							<ul class="flex items-baseline gap-1">
+							<ul class="flex items-baseline flex-wrap gap-1 max-w-[500px]">
 								{#each [...userProfileData.value?.interests].sort() as interest, index}
 									<li
 										class="rounded-md px-2 py-1"
