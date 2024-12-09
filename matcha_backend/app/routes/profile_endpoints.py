@@ -27,8 +27,8 @@ INTERESTS = interests = [
     "Skating", "Skiing", "Surfing", "Collecting", "Karaoke", 
     "Animals", "Fishing", "Anime", "Science", "History", "Theater", 
     "Crafts", "Investing", "Drinks", "Blogging", "Cars", "Technology", 
-    "Magic", "Politics", "Fashion", "Beauty", "Health", "Philosophy", "Nature"
-    "Traditions", "Theatre", "Religion", "Sex", "Nightlife", "Partying"
+    "Magic", "Politics", "Beauty", "Health", "Philosophy", "Nature"
+    "Traditions", "Religion", "Sex", "Nightlife", "Partying"
 ]
 
 
