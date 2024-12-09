@@ -6,6 +6,10 @@
 	import GenderSymbol from '$lib/components/GenderSymbol.svelte';
 	import PreferenceSymbol from '$lib/components/PreferenceSymbol.svelte';
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
+	import { INTERESTS } from '$lib/constants/interests';
+	import { COLORS_PALETTE } from '$lib/constants/colors';
+
+	const MAX_INTERESTS = 10;
 
 	const {
 		onSuccess = undefined,
@@ -51,6 +55,23 @@
 		textAreaLength = textArea.value.length;
 	};
 
+	let interestsList = $state<string[]>([]);
+
+	const handleInterestsUpdate = (event: Event) => {
+		const select = event.target as HTMLSelectElement;
+		const newInterests = Array.from(select.selectedOptions)
+			.map((option) => option.value)
+			.sort();
+
+		if (newInterests.length > MAX_INTERESTS) {
+			interestsList = newInterests.slice(0, MAX_INTERESTS);
+			error = 'You can only select up to 10 interests';
+			return;
+		}
+
+		interestsList = newInterests;
+	};
+
 	const handleFormSubmit = async (event: Event) => {
 		event.preventDefault();
 		error = '';
@@ -88,7 +109,7 @@
 					Authorization: `Bearer ${token}`,
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ ...payload, interests: [] }) // TODO add logic for interests
+				body: JSON.stringify({ ...payload, interests: interestsList })
 			});
 
 			if (!res.ok) {
@@ -108,7 +129,7 @@
 </script>
 
 <form onsubmit={handleFormSubmit}>
-	<fieldset class="mb-6 flex flex-col gap-5">
+	<fieldset class="mb-6 flex min-w-[500px] flex-col gap-6">
 		<label class="flex justify-between gap-2">
 			<span class="font-bold">Gender:</span>
 			<select name="gender" id="gender">
@@ -129,7 +150,7 @@
 		</label>
 
 		<label class="flex justify-between gap-2">
-			<span class="font-bold">Interested in:</span>
+			<span class="font-bold">Preference:</span>
 			<select name="sexual_preferences" id="sexual_preferences">
 				<option value={null} disabled selected> Choose an option </option>
 				<option value={PREFERENCES_OPTIONS.MALE}>
@@ -146,6 +167,34 @@
 				</option>
 			</select>
 		</label>
+
+		<label class="flex justify-between gap-2">
+			<span class="font-bold">Interests:</span>
+			<select
+				name="interests"
+				id="interests"
+				multiple
+				class="min-h-[150px] min-w-[150px]"
+				onchange={handleInterestsUpdate}
+				value={interestsList}
+			>
+				{#each INTERESTS.sort() as interest}
+					<option value={interest} class="text-right text-sm">{interest}</option>
+				{/each}
+			</select>
+		</label>
+		{#if interestsList.length > 0}
+			<ul class="flex max-w-[500px] flex-wrap items-baseline gap-1">
+				{#each interestsList as interest, index}
+					<li
+						class="shrink-0 rounded-md px-2 py-1"
+						style={`background-color: ${COLORS_PALETTE[index % COLORS_PALETTE.length]}`}
+					>
+						{interest}
+					</li>
+				{/each}
+			</ul>
+		{/if}
 
 		<label class="flex justify-between gap-2">
 			<span class="font-bold">Bio:</span>
