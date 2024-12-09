@@ -48,7 +48,7 @@
 				</div>
 
 				<div>
-					<dt class="font-bold">Interests</dt>
+					<dt class="font-bold mb-1">Interests</dt>
 					<dd>
 						{#if userProfileData.value.interests.length === 0}
 							<span>No interests yet</span>
