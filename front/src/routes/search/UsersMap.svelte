@@ -14,7 +14,7 @@
 {#snippet marker({ profilePicture, user, coordinates, isCurrentUser })}
 	<Marker lngLat={coordinates}>
 		<div
-			class={`h-6 w-6 rounded-full ${isCurrentUser ? 'bg-yellow-500' : 'bg-teal-500'} shadow-lg`}
+			class={`rounded-full ${isCurrentUser ? 'h-9 w-9 bg-yellow-500' : 'h-5 w-5 bg-teal-500'} shadow-lg`}
 			aria-label="User marker"
 		></div>
 
