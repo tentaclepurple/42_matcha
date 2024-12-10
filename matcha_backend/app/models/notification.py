@@ -63,7 +63,7 @@ class NotificationModel:
                 },
                 {
                     "$project": {
-                        "_id": {"$toString": "$_id"},  # Convertir a string
+                        "_id": {"$toString": "$_id"},
                         "type": 1,
                         "created_at": 1,
                         "read": 1,
@@ -72,7 +72,7 @@ class NotificationModel:
                                 "if": {"$eq": ["$from_user", None]},
                                 "then": None,
                                 "else": {
-                                    "_id": {"$toString": "$from_user._id"},  # Convertir a string
+                                    "_id": {"$toString": "$from_user._id"},
                                     "username": "$from_user.username"
                                 }
                             }
@@ -113,3 +113,5 @@ class NotificationModel:
         except Exception as e:
             print(f"Error marking notifications as read: {str(e)}")
             return 0
+    
+    

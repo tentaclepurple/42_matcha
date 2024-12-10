@@ -40,3 +40,19 @@ def mark_notifications_read():
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@notification_bp.route('/mark_as_read/<notification_id>', methods=['POST'])
+@jwt_required()
+def mark_notifications_read(notification_id):
+    """Mark all notifications as read for the current user"""
+    try:
+        current_user_id = get_jwt_identity()
+        count = NotificationModel.mark_as_read(current_user_id, [notification_id])
+        
+        return jsonify({
+            'message': f'Marked {count} notifications as read'
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
