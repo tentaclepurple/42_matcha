@@ -44,7 +44,7 @@ def mark_notifications_read():
 
 @notification_bp.route('/mark_as_read/<notification_id>', methods=['POST'])
 @jwt_required()
-def mark_notifications_read(notification_id):
+def mark_one_notification_read(notification_id):
     """Mark all notifications as read for the current user"""
     try:
         current_user_id = get_jwt_identity()
