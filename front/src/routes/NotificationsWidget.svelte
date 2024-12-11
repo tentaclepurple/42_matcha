@@ -24,8 +24,12 @@
 		const username = notification.fromUser.username;
 		switch (notification.type) {
 			case NOTIFICATIONS_TYPES.MESSAGE:
-				await messagesData.fetchMessages({ username });
-				goto(`/chat/${username}`);
+				try {
+					await messagesData.fetchMessages({ username });
+					goto(`/chat/${username}`);
+				} catch (error) {
+					console.error(error);
+				}
 				break;
 			case NOTIFICATIONS_TYPES.MATCH:
 			case NOTIFICATIONS_TYPES.LIKE:

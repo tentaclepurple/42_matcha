@@ -6,13 +6,11 @@
 
 	const username = $page.params.username;
 	const origin = $page.url.searchParams.get('origin');
-
-	const { selectedUser } = $page.data;
 </script>
 
 <PageWrapper>
-	<div class="flex flex-col justify-center items-center">
+	<div class="flex flex-col items-center justify-center">
 		<h1>Profile of {username}</h1>
-		<SelectUserProfile {selectedUser} {origin} />
+		<SelectUserProfile {origin} />
 	</div>
 </PageWrapper>

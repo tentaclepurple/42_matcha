@@ -5,11 +5,19 @@
 	import deserialize from '$lib/utils/deserialize';
 	import spinnerAnimationData from '$lib/lotties/spinner.json';
 	import Lottie from '$lib/components/Lottie.svelte';
+	import { visitedProfileData } from '$lib/state/visited-profile-data.svelte';
+	import { onMount } from 'svelte';
 
-	const { selectedUser } = $props();
+	const selectedUser = $derived(visitedProfileData.value);
 
-	let isLikedByMe = $state(selectedUser.likeInfo?.likedByMe);
-	let isMatch = $state(selectedUser.likeInfo?.isMatch);
+	onMount(() => {
+		if (!selectedUser) {
+			goto('/search');
+		}
+	});
+
+	let isLikedByMe = $derived(Boolean(selectedUser?.likeInfo?.likedByMe));
+	let isMatch = $derived(Boolean(selectedUser?.likeInfo?.isMatch));
 
 	let isLoading = $state(false);
 
@@ -34,7 +42,7 @@
 
 			const { likeAdded } = deserialize(data);
 
-			isLikedByMe = Boolean(likeAdded);
+			await visitedProfileData.fetch(selectedUser?.username);
 		} catch (error) {
 			console.error(error);
 		} finally {
@@ -43,7 +51,7 @@
 	};
 </script>
 
-<div class="flex items-start justify-center gap-3 ml-auto">
+<div class="ml-auto flex items-start justify-center gap-3">
 	{#if isMatch}
 		<Button
 			type="button"
