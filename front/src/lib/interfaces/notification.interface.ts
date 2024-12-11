@@ -1,8 +1,8 @@
 export default interface Notification {
-	_id: string;
+	id: string;
 	createdAt: string;
 	fromUser: {
-		_id: string;
+		id: string;
 		username: string;
 	};
 	read: boolean;
