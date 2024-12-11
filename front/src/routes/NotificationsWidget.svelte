@@ -4,6 +4,7 @@
 	import type Notification from '$lib/interfaces/notification.interface';
 	import { messagesData } from '$lib/state/messages.svelte';
 	import { notificationsData } from '$lib/state/notifications.svelte';
+	import { visitedProfileData } from '$lib/state/visited-profile-data.svelte';
 	import { onDestroy, onMount } from 'svelte';
 
 	let showMenu: boolean = $state(false);
@@ -35,7 +36,12 @@
 			case NOTIFICATIONS_TYPES.LIKE:
 			case NOTIFICATIONS_TYPES.UNLIKE:
 			case NOTIFICATIONS_TYPES.PROFILE_VIEW:
-				goto(`/search/${username}`);
+				try {
+					await visitedProfileData.fetch(username);
+					goto(`/search/${username}`);
+				} catch (error) {
+					console.error(error);
+				}
 				break;
 		}
 

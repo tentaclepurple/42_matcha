@@ -1,4 +1,4 @@
-export const NOTIFICATIONS_POLLING_INTERVAL = 5_000;
+export const NOTIFICATIONS_POLLING_INTERVAL = 2_500;
 
 export const NOTIFICATIONS_TYPES = {
 	LIKE: 'like',
