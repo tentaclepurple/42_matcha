@@ -42,15 +42,6 @@ class NotificationsDataClass {
 		const deserializedData = deserialize(data);
 		const sortedNotifications = deserializedData.notifications.sort(
 			(a: Notification, b: Notification) => {
-				if (a.read && b.read) {
-					return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-				}
-				if (a.read) {
-					return 1;
-				}
-				if (b.read) {
-					return -1;
-				}
 				return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
 			}
 		);
@@ -67,20 +58,31 @@ class NotificationsDataClass {
 	};
 
 	markAsRead = async (notificationId: string) => {
+		if (!notificationId) {
+			console.error('No notification ID provided');
+			return;
+		}
+
 		const token = localStorage.getItem('access_token');
 
 		if (!token) {
 			return;
 		}
 
-		// const res = await fetch(`${SERVER_BASE_URL}/api/notifications/mark_as_read`, {
-		//   method: 'POST',
-		//   headers: {
-		//     'Content-Type': 'application/json',
-		//     Authorization: `Bearer ${token}`
-		//   },
-		//   body: JSON.stringify({ notificationId })
-		// });
+		const res = await fetch(`${SERVER_BASE_URL}/api/notifications/mark_as_read/${notificationId}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`
+			}
+		});
+
+		if (!res.ok) {
+			console.error('Failed to mark notification as read');
+			return;
+		}
+
+		this.fetch();
 	};
 }
 

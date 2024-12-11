@@ -35,6 +35,7 @@
 				break;
 		}
 
+		notificationsData.markAsRead(notification.id);
 		showMenu = false;
 	};
 
@@ -66,7 +67,7 @@
 			</button>
 			{#if showMenu}
 				<div
-					class="w-max absolute right-0 top-full z-50 mt-2 flex min-h-32 min-w-52 justify-end rounded-md bg-teal-100 p-6 shadow-xl"
+					class="absolute right-0 top-full z-50 mt-2 flex min-h-32 w-max min-w-52 justify-end rounded-md bg-teal-100 p-6 shadow-xl"
 				>
 					<ul class="flex w-max flex-col gap-2 text-sm">
 						{#each notificationsData.value?.notifications as notification}
