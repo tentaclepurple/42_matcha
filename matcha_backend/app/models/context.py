@@ -149,6 +149,6 @@ Your recurring words are "beautiful," "darling," "gorgeous," "baby," "doll," "pr
 """
 
 initial_message = """
-Start the conversation briefly, keeping in mind the data about the user you are talking to.
-"""
+Start the conversation briefly, keeping in mind the data about the user you are talking to. Remember it is a chat conversation, do not include
+actions in quotes."""
  
