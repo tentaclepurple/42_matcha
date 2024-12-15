@@ -6,7 +6,8 @@ app = create_app()
 cors_config = {
     "origins": [
         "http://localhost:5173",  # development frontend
-        "http://127.0.0.1:5173"   # common alias
+        "http://127.0.0.1:5173",
+        "http://51.195.220.248:5173"
     ],
     "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],  # methods allowed
     "allow_headers": [
