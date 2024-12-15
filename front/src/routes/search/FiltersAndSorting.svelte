@@ -1,22 +1,32 @@
 <script lang="ts">
 	import {
-		DEFAULT_ALL_RESULTS_FILTER_ORDER,
-		DEFAULT_ALL_RESULTS_FILTER_PROP,
-		FILTERS_ORDER
+		DEFAULT_ALL_RESULTS_SORTING_ORDER,
+		DEFAULT_ALL_RESULTS_SORTING_PROP,
+		SORTING_LS_KEY,
+		SORTING_ORDER
 	} from '$lib/constants/filters';
+	import { onMount } from 'svelte';
 
 	const { results, setResults } = $props();
 
-	const currentFilter: string = $state(
-		`${DEFAULT_ALL_RESULTS_FILTER_PROP};${DEFAULT_ALL_RESULTS_FILTER_ORDER}`
+	let currentFilter = $state(
+		`${DEFAULT_ALL_RESULTS_SORTING_PROP};${DEFAULT_ALL_RESULTS_SORTING_ORDER}`
 	);
+
+	onMount(() => {
+		const storedSortingCriteria = localStorage?.getItem(SORTING_LS_KEY);
+
+		if (storedSortingCriteria) {
+			currentFilter = storedSortingCriteria;
+		}
+	});
 
 	const handleFilterChange = (event: Event) => {
 		const target = event.target as HTMLSelectElement;
 		const [prop, order] = target.value.split(';');
 
 		const orderedResults = [...results].sort((a, b) => {
-			if (order === FILTERS_ORDER.ASC) {
+			if (order === SORTING_ORDER.ASC) {
 				return a[prop] - b[prop];
 			} else {
 				return b[prop] - a[prop];
@@ -24,6 +34,7 @@
 		});
 
 		setResults(orderedResults);
+		localStorage.setItem(SORTING_LS_KEY, target.value);
 	};
 </script>
 
