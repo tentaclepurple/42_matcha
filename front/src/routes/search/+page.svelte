@@ -13,9 +13,14 @@
 	const viewParam = $page.url.searchParams.get('view') ?? 'map';
 
 	let results = $state(data.searchResults);
+	let unfilteredResults = $state(data.searchResults);
 
 	const setResults = (newResults) => {
 		results = newResults;
+	};
+
+	const setUnfilteredResults = (newResults) => {
+		unfilteredResults = newResults;
 	};
 
 	beforeNavigate(() => {
@@ -42,7 +47,7 @@
 				</div>
 			</Tabs.Content>
 			<Tabs.Content value="list">
-				<FiltersAndSorting {results} {setResults} />
+				<FiltersAndSorting {results} {setResults} {unfilteredResults} {setUnfilteredResults} />
 				<div class="flex min-h-[750px] flex-col">
 					<UsersList {results} />
 				</div>
