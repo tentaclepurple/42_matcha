@@ -54,16 +54,16 @@
 	>
 		{#if userProfileData?.value}
 			{@render marker({
-				profilePicture: userProfileData.value.photos.filter((photo) => photo.is_profile)[0].url,
+				profilePicture: userProfileData.value.photos.filter((photo) => photo.isProfile)[0].url,
 				user: userProfileData.value,
 				coordinates: userLocation.value ?? DEFAULT_LOCATION,
 				isCurrentUser: true
 			})}
 		{/if}
 
-		{#each results as user (user.user_id)}
+		{#each results as user (user.userId)}
 			{@render marker({
-				profilePicture: user.profile_photo,
+				profilePicture: user.profilePhoto,
 				user,
 				coordinates: user.location.coordinates,
 				isCurrentUser: false

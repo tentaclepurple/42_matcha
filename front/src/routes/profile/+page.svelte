@@ -16,7 +16,7 @@
 	let isProfileComplete = $derived(
 		Boolean(
 			userProfileData?.value?.gender &&
-				userProfileData?.value?.sexualPreference &&
+				userProfileData?.value?.sexualPreferences &&
 				userProfileData?.value?.biography
 		)
 	);
