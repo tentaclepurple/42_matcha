@@ -49,7 +49,6 @@
 
 <div class="flex flex-col items-end">
 	<div class="mb-4">
-		{$inspect(error)}
 		{#if error}
 			<p class="text-red-500">{error}</p>
 		{/if}
