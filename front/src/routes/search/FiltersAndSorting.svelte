@@ -65,10 +65,10 @@
 				</option>
 				<option value="age;asc" selected={currentFilter === 'age;asc'}>age (youngest)</option>
 				<option value="age;desc" selected={currentFilter === 'age;desc'}>age (oldest)</option>
-				<option value="fame_rating;asc" selected={currentFilter === 'fame_rating;asc'}>
+				<option value="fameRating;asc" selected={currentFilter === 'fameRating;asc'}>
 					popularity (lowest)
 				</option>
-				<option value="fame_rating;desc" selected={currentFilter === 'fame_rating;desc'}>
+				<option value="fameRating;desc" selected={currentFilter === 'fameRating;desc'}>
 					popularity (highest)
 				</option>
 			</select>
@@ -95,7 +95,7 @@
 	<ButtonSelector>
 		<label>
 			Likes:
-			<select onchange={(e) => handleFilterChange(e, 'sexual_preferences')}>
+			<select onchange={(e) => handleFilterChange(e, 'sexualPreferences')}>
 				<option value={PREFERENCES_OPTIONS.FEMALE}>
 					female <PreferenceSymbol preference={PREFERENCES_OPTIONS.FEMALE} />
 				</option>

@@ -37,7 +37,7 @@
 	{:else}
 		<div class="items-between flex h-full w-full flex-1 flex-col">
 			<ul class="grid w-full grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3 p-8">
-				{#each currentResults as user (user.user_id)}
+				{#each currentResults as user}
 					<li class="flex items-center justify-center rounded-md bg-teal-50 p-3 shadow-md">
 						<button
 							type="button"
@@ -46,7 +46,7 @@
 							class="flex w-full flex-col items-center gap-1 text-xs"
 						>
 							<img
-								src={getServerAsset(user.profile_photo)}
+								src={getServerAsset(user.profilePhoto)}
 								alt=""
 								class="mb-2 aspect-square w-full rounded-md object-cover"
 							/>
@@ -56,17 +56,17 @@
 								<GenderSymbol gender={user.gender} />
 							</span>
 							<span>
-								Likes: {user.sexual_preferences}
-								<PreferenceSymbol preference={user.sexual_preferences} />
+								Likes: {user.sexualPreferences}
+								<PreferenceSymbol preference={user.sexualPreferences} />
 							</span>
 							<span>{user.distance} km away</span>
-							<span>{user.fame_rating}% popularity</span>
+							<span>{user.fameRating}% popularity</span>
 						</button>
 					</li>
 				{/each}
 			</ul>
 			<nav class="mt-auto flex items-center justify-center gap-4 pb-6">
-				{#each Array.from({ length: totalPages }, (_, i) => i) as page, index}
+				{#each Array.from({ length: totalPages }, (_, i) => i) as _, index}
 					<button
 						type="button"
 						class={`${index === currentPage ? 'underline' : ''}`}
