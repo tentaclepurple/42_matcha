@@ -37,7 +37,6 @@ class NotificationsDataClass {
 		}
 
 		const data = await res.json();
-		console.log('Fetching notifications', deserialize(data));
 
 		const deserializedData = deserialize(data);
 		const sortedNotifications = deserializedData.notifications.sort(
@@ -81,6 +80,28 @@ class NotificationsDataClass {
 			console.error('Failed to mark notification as read');
 			return;
 		}
+
+		const notificationType = this.#value?.notifications.find((n) => n.id === notificationId)?.type;
+		const sameTypeNotifications = this.#value?.notifications.filter(
+			(n) => n.type === notificationType
+		);
+
+		await sameTypeNotifications?.forEach(async (n) => {
+			if (!n.id) return;
+
+			const res = await fetch(`${SERVER_BASE_URL}/api/notifications/mark_as_read/${n.id}`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`
+				}
+			});
+
+			if (!res.ok) {
+				console.error('Failed to mark other similar notification as read');
+				return;
+			}
+		});
 
 		this.fetch();
 	};
