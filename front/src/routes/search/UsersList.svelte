@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import GenderSymbol from '$lib/components/GenderSymbol.svelte';
+	import PreferenceSymbol from '$lib/components/PreferenceSymbol.svelte';
 	import getServerAsset from '$lib/utils/get-server-asset';
 
 	const NUM_RESULTS = 15;
@@ -22,7 +23,7 @@
 	};
 </script>
 
-<div class="items-between flex flex-col h-full w-full flex-1">
+<div class="items-between flex h-full w-full flex-1 flex-col">
 	<ul class="grid w-full grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3 p-8">
 		{#each currentResults as user (user.user_id)}
 			<li class="flex items-center justify-center rounded-md bg-teal-50 p-3 shadow-md">
@@ -42,7 +43,12 @@
 						{user.age}, {user.gender}
 						<GenderSymbol gender={user.gender} />
 					</span>
+					<span class="text-xs">
+						Likes: {user.sexual_preferences}
+						<PreferenceSymbol preference={user.sexual_preferences} />
+					</span>
 					<span class="text-xs">{user.distance} km away</span>
+					<span class="text-xs">{user.fame_rating}% popularity</span>
 				</button>
 			</li>
 		{/each}
