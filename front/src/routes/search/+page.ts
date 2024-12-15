@@ -1,6 +1,11 @@
 import { error, redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { SERVER_BASE_URL } from '$lib/constants/api';
+import {
+	DEFAULT_ALL_RESULTS_FILTER_ORDER,
+	DEFAULT_ALL_RESULTS_FILTER_PROP,
+	FILTERS_ORDER
+} from '$lib/constants/filters';
 
 export const ssr = false;
 
@@ -24,7 +29,17 @@ export const load: PageLoad = async () => {
 
 	const { results: searchResults } = await searchRes.json();
 	const sortedSearchResults = searchResults.sort((a, b) => {
-		return a.distance - b.distance;
+		if (!a[DEFAULT_ALL_RESULTS_FILTER_PROP] || !b[DEFAULT_ALL_RESULTS_FILTER_PROP]) {
+			return 0;
+		}
+
+		if (DEFAULT_ALL_RESULTS_FILTER_ORDER === FILTERS_ORDER.ASC) {
+			return a[DEFAULT_ALL_RESULTS_FILTER_PROP] - b[DEFAULT_ALL_RESULTS_FILTER_PROP];
+		} else if (DEFAULT_ALL_RESULTS_FILTER_ORDER === FILTERS_ORDER.DESC) {
+			return b[DEFAULT_ALL_RESULTS_FILTER_PROP] - a[DEFAULT_ALL_RESULTS_FILTER_PROP];
+		}
+
+		return 0;
 	});
 
 	const queryParams = new URLSearchParams({
