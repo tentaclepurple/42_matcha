@@ -311,16 +311,18 @@ def get_user_profile(user_identifier):
         is_own_profile = user_id == current_user_id
 
         if not is_own_profile:
-            ProfileViewModel.record_view(
+            view_result = ProfileViewModel.record_view(
                 viewer_id=current_user_id,
                 viewed_id=str(user['_id'])
             )
             
-            NotificationModel.create(
-                user_id=user_id,
-                type="profile_view",
-                from_user_id=current_user_id
-            )
+            # Only create notification if it's not a duplicate view
+            if view_result:
+                NotificationModel.create(
+                    user_id=user_id,
+                    type="profile_view",
+                    from_user_id=current_user_id
+                )
         
         like_status = LikeModel.get_mutual_status(current_user_id, user_id)
 
