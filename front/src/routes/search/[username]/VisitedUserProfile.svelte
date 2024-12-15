@@ -71,10 +71,10 @@
 				<dl>
 					<dt class="mb-1">Interests</dt>
 					<dd>
-						<ul class="flex items-baseline gap-1">
+						<ul class="flex items-baseline gap-1 flex-wrap">
 							{#each [...selectedUser.interests].sort() as interest, index}
 								<li
-									class="rounded-md px-2 py-1"
+									class="rounded-md px-2 py-1 shrink-0"
 									style={`background-color: ${COLORS_PALETTE[index % COLORS_PALETTE.length]}`}
 								>
 									{interest}
