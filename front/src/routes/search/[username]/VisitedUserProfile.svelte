@@ -37,13 +37,21 @@
 
 		<div class="w-full">
 			<div class="mb-6 flex items-center justify-between">
-				<img
-					class="h-40 w-40 rounded-lg bg-white object-cover shadow-xl"
-					src={getServerAsset(
-						selectedUser.photos.filter((photo) => photo.isProfile)[0].url || 'icons/avatar.svg'
-					)}
-					alt=""
-				/>
+				<div class="relative">
+					<img
+						class="h-40 w-40 rounded-lg bg-white object-cover shadow-md"
+						src={getServerAsset(
+							selectedUser.photos.filter((photo) => photo.isProfile)[0].url || 'icons/avatar.svg'
+						)}
+						alt=""
+					/>
+					<p
+						class={`absolute bottom-0 right-0 h-7 w-7 rounded-full border border-2 border-teal-200 ${selectedUser.online ? 'bg-green-500' : 'bg-slate-400'}`}
+						style="right: -8px; bottom: -8px;"
+					>
+						<span class="sr-only">{selectedUser.online ? 'Online' : 'Offline'}</span>
+					</p>
+				</div>
 
 				<FameRating fameRating={selectedUser.fameRating} />
 			</div>
@@ -71,10 +79,10 @@
 				<dl>
 					<dt class="mb-1">Interests</dt>
 					<dd>
-						<ul class="flex items-baseline gap-1 flex-wrap">
+						<ul class="flex flex-wrap items-baseline gap-1">
 							{#each [...selectedUser.interests].sort() as interest, index}
 								<li
-									class="rounded-md px-2 py-1 shrink-0"
+									class="shrink-0 rounded-md px-2 py-1"
 									style={`background-color: ${COLORS_PALETTE[index % COLORS_PALETTE.length]}`}
 								>
 									{interest}
