@@ -3,9 +3,17 @@
 
 	import { page } from '$app/stores';
 	import VisitedUserProfile from './VisitedUserProfile.svelte';
+	import { notificationsData } from '$lib/state/notifications.svelte';
+	import { visitedProfileData } from '$lib/state/visited-profile-data.svelte';
 
 	const username = $page.params.username;
 	const origin = $page.url.searchParams.get('origin');
+
+	$effect(() => {
+		if (notificationsData.value) {
+			visitedProfileData.fetch(username);
+		}
+	});
 </script>
 
 <PageWrapper>
