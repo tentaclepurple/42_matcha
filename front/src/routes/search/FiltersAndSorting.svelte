@@ -4,7 +4,7 @@
 		DEFAULT_ALL_RESULTS_SORTING_PROP,
 		SORTING_LS_KEY,
 		SORTING_ORDER
-	} from '$lib/constants/filters';
+	} from '$lib/constants/sorting';
 	import { onMount } from 'svelte';
 
 	const { results, setResults } = $props();
