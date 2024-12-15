@@ -1,5 +1,6 @@
 import { SERVER_BASE_URL } from '$lib/constants/api';
 import type UserProfileData from '$lib/interfaces/user-profile-data.interface';
+import deserialize from '$lib/utils/deserialize';
 
 class UserProfileDataClass {
 	#value = $state<null | UserProfileData>(null);
@@ -27,27 +28,29 @@ class UserProfileDataClass {
 				throw new Error('Failed to fetch user profile data');
 			}
 
+			const data = await response.json();
+
 			const {
 				age,
 				biography,
-				fame_rating,
+				fameRating,
 				gender,
 				interests,
 				location,
 				photos,
-				sexual_preferences,
+				sexualPreferences,
 				username
-			} = await response.json();
+			} = deserialize(data);
 
 			this.#value = {
 				age,
 				biography,
-				fameRating: fame_rating,
+				fameRating,
 				gender,
 				interests,
 				location,
 				photos,
-				sexualPreference: sexual_preferences,
+				sexualPreferences,
 				username
 			};
 		} catch (error: unknown) {

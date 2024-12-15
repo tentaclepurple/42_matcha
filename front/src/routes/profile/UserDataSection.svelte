@@ -42,8 +42,8 @@
 				<div>
 					<dt class="font-bold">Preference</dt>
 					<dd>
-						{userProfileData.value.sexualPreference}
-						<PreferenceSymbol preference={userProfileData.value.sexualPreference} />
+						{userProfileData.value.sexualPreferences}
+						<PreferenceSymbol preference={userProfileData.value.sexualPreferences} />
 					</dd>
 				</div>
 

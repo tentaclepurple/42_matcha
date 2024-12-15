@@ -89,7 +89,7 @@
 				return;
 			}
 
-			const sexualPreferences = formData.get('sexual_preferences') as string;
+			const sexualPreferences = formData.get('sexualPreferences') as string;
 			if (!sexualPreferences) {
 				error = 'Please provide your sexual preferences';
 				return;
