@@ -13,6 +13,9 @@
 		const form = event.target;
 		const message = form.message.value;
 
+		form.reset();
+		form.message.focus();
+
 		try {
 			const token = localStorage.getItem('access_token');
 
@@ -33,9 +36,6 @@
 		} catch (e) {
 			console.error(e);
 			error = 'Error sending message';
-		} finally {
-			form.reset();
-			form.message.focus();
 		}
 	};
 
