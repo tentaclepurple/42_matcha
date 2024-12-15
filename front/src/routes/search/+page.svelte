@@ -2,12 +2,19 @@
 	import { page } from '$app/stores';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
 	import * as Tabs from '$lib/components/ui/tabs';
+	import FiltersAndSorting from './FiltersAndSorting.svelte';
 	import UsersList from './UsersList.svelte';
 	import UsersMap from './UsersMap.svelte';
 
 	const { data } = $props();
 
 	const viewParam = $page.url.searchParams.get('view') ?? 'map';
+
+	let results = $state(data.searchResults);
+
+	const setResults = (newResults) => {
+		results = newResults;
+	};
 </script>
 
 <PageWrapper>
@@ -29,8 +36,9 @@
 				</div>
 			</Tabs.Content>
 			<Tabs.Content value="list">
+				<FiltersAndSorting {results} {setResults} />
 				<div class="flex min-h-[750px] flex-col">
-					<UsersList results={data.searchResults} />
+					<UsersList {results} />
 				</div>
 			</Tabs.Content>
 			<Tabs.Content value="recommended">
