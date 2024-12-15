@@ -31,7 +31,7 @@
 					type="button"
 					data-username={user.username}
 					onclick={handleOpenUser}
-					class="flex w-full flex-col items-center gap-1"
+					class="flex w-full flex-col items-center gap-1 text-xs"
 				>
 					<img
 						src={getServerAsset(user.profile_photo)}
@@ -39,16 +39,16 @@
 						class="mb-2 aspect-square w-full rounded-md object-cover"
 					/>
 					<span class="text-sm font-bold">{user.username}</span>
-					<span class="flex text-xs">
+					<span class="flex">
 						{user.age}, {user.gender}
 						<GenderSymbol gender={user.gender} />
 					</span>
-					<span class="text-xs">
+					<span>
 						Likes: {user.sexual_preferences}
 						<PreferenceSymbol preference={user.sexual_preferences} />
 					</span>
-					<span class="text-xs">{user.distance} km away</span>
-					<span class="text-xs">{user.fame_rating}% popularity</span>
+					<span>{user.distance} km away</span>
+					<span>{user.fame_rating}% popularity</span>
 				</button>
 			</li>
 		{/each}
