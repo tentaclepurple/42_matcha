@@ -14,13 +14,28 @@
 <ul class="flex flex-col gap-2">
 	{#each conversations as conversation}
 		<li class={`${username === conversation.user.username && 'bg-gray-200'} rounded-md p-1`}>
-			<a href={`/chat/${conversation.user.username}`} class="flex items-center gap-2">
-				<img
-					src={getServerAsset(conversation.user.profilePhoto) ?? '/icons/avatar.svg'}
-					alt=""
-					class="h-6 w-6 rounded-md bg-white object-cover"
-				/>
-				<span>{conversation.user.username}</span>
+			<a href={`/chat/${conversation.user.username}`} class="flex items-center gap-2 no-underline">
+				<div class="relative" aria-hidden="true">
+					<img
+						src={getServerAsset(conversation.user.profilePhoto) ?? '/icons/avatar.svg'}
+						alt=""
+						class="h-6 w-6 rounded-md bg-white object-cover"
+					/>
+					<span
+						class={`border-1 absolute h-2 w-2 rounded-full border ${conversation.user.online ? 'border-black bg-green-500' : 'border-slate-700 bg-slate-200'}`}
+						style="bottom: -1px; right: -1px"
+					></span>
+				</div>
+				<span>
+					{conversation.user.username}
+					<span class="sr-only">
+						{#if conversation.user.online}
+							Online
+						{:else}
+							Offline
+						{/if}
+					</span>
+				</span>
 			</a>
 		</li>
 	{/each}

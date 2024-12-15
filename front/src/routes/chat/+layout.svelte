@@ -2,7 +2,6 @@
 	import { page } from '$app/stores';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
 	import ConversationsList from './ConversationsList.svelte';
-	import Conversations from './ConversationsList.svelte';
 
 	const { children } = $props();
 	const { conversations } = $page.data;
