@@ -6,6 +6,9 @@ import {
 	DEFAULT_ALL_RESULTS_SORTING_PROP,
 	SORTING_ORDER
 } from '$lib/constants/sorting';
+import deserialize from '$lib/utils/deserialize';
+import type UserFromList from '$lib/interfaces/user-from-list.interface';
+import type UserFromSuggestion from '$lib/interfaces/user-from-suggestion.interface';
 
 export const ssr = false;
 
@@ -28,7 +31,10 @@ export const load: PageLoad = async () => {
 	}
 
 	const { results: searchResults } = await searchRes.json();
-	const sortedSearchResults = searchResults.sort((a, b) => {
+	const deserializedSearchResults: UserFromList[] = searchResults.map((result) =>
+		deserialize(result)
+	);
+	const sortedSearchResults = deserializedSearchResults.sort((a, b) => {
 		if (!a[DEFAULT_ALL_RESULTS_SORTING_PROP] || !b[DEFAULT_ALL_RESULTS_SORTING_PROP]) {
 			return 0;
 		}
@@ -58,7 +64,10 @@ export const load: PageLoad = async () => {
 	}
 
 	const { matches: suggestionsResults } = await suggestionsRes.json();
-	const sortedSuggestionsResults = suggestionsResults.sort((a, b) => {
+	const deserializedSuggestionsResults: UserFromSuggestion[] = suggestionsResults.map((result) =>
+		deserialize(result)
+	);
+	const sortedSuggestionsResults = deserializedSuggestionsResults.sort((a, b) => {
 		return a.distance - b.distance;
 	});
 
