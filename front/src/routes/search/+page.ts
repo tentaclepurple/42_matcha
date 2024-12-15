@@ -5,7 +5,7 @@ import {
 	DEFAULT_ALL_RESULTS_SORTING_ORDER,
 	DEFAULT_ALL_RESULTS_SORTING_PROP,
 	SORTING_ORDER
-} from '$lib/constants/filters';
+} from '$lib/constants/sorting';
 
 export const ssr = false;
 

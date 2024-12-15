@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
 	import * as Tabs from '$lib/components/ui/tabs';
-	import { SORTING_LS_KEY } from '$lib/constants/filters';
+	import { SORTING_LS_KEY } from '$lib/constants/sorting';
 	import FiltersAndSorting from './FiltersAndSorting.svelte';
 	import UsersList from './UsersList.svelte';
 	import UsersMap from './UsersMap.svelte';
