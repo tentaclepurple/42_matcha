@@ -1,4 +1,5 @@
 import { SERVER_BASE_URL } from '$lib/constants/api';
+import type Location from '$lib/interfaces/location.interface';
 
 class UserLocation {
 	#location = $state<null | [number, number]>(null);
@@ -20,7 +21,9 @@ class UserLocation {
 
 				const token = localStorage.getItem('access_token');
 
-				const body = {
+				const body: {
+					location: Location;
+				} = {
 					location: {
 						type: 'Point',
 						coordinates: this.#location

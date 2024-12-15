@@ -1,3 +1,7 @@
+import type { Interest } from './interest.type';
+import type Location from './location.interface';
+import type Photo from './photo.interface';
+
 export default interface VisitedProfileData {
 	age: number;
 	biography: string;
@@ -6,7 +10,7 @@ export default interface VisitedProfileData {
 	fameRating: number;
 	firstName: string;
 	gender: string;
-	interests: string[];
+	interests: Interest[];
 	isOwnProfile: boolean;
 	lastConnection: string;
 	lastName: string;
@@ -17,16 +21,9 @@ export default interface VisitedProfileData {
 		unlikedByMe: boolean;
 		unlikesMe: boolean;
 	};
-	location: {
-		coordinates: [number, number];
-		type: 'Point';
-	};
+	location: Location;
 	online: boolean;
-	photos: {
-		isProfile: boolean;
-		uploadedAt: string;
-		url: string;
-	}[];
+	photos: Photo[];
 	profileCompleted: boolean;
 	reported: boolean;
 	sexualPreferences: string;
