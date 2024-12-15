@@ -59,7 +59,6 @@
 </script>
 
 <div>
-	{$inspect(notificationsData.value)}
 	{#if notificationsData.value?.count && notificationsData.value.count > 0 && notificationsData.value?.notifications}
 		<div class="relative" id="notifications-wrapper">
 			<button
