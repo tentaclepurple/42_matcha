@@ -43,18 +43,18 @@
 		Sort by:
 		<select name="filter" onchange={handleFilterChange}>
 			<option value="distance;asc" selected={currentFilter === 'distance;asc'}>
-				distance (nearest first)
+				distance (nearest)
 			</option>
 			<option value="distance;desc" selected={currentFilter === 'distance;desc'}>
-				distance (farthest first)
+				distance (farthest)
 			</option>
-			<option value="age;asc" selected={currentFilter === 'age;asc'}>age (youngest first)</option>
-			<option value="age;desc" selected={currentFilter === 'age;desc'}>age (oldest first)</option>
+			<option value="age;asc" selected={currentFilter === 'age;asc'}>age (youngest)</option>
+			<option value="age;desc" selected={currentFilter === 'age;desc'}>age (oldest)</option>
 			<option value="fame_rating;asc" selected={currentFilter === 'fame_rating;asc'}>
-				Popularity (lowest first)
+				popularity (lowest)
 			</option>
 			<option value="fame_rating;desc" selected={currentFilter === 'fame_rating;desc'}>
-				Popularity (highest first)
+				popularity (highest)
 			</option>
 		</select>
 	</label>
