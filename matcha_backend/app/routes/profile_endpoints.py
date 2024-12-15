@@ -29,7 +29,7 @@ INTERESTS = interests = [
     "Crafts", "Investing", "Drinks", "Blogging", "Cars", "Technology", 
     "Magic", "Politics", "Beauty", "Health", "Philosophy", "Nature"
     "Traditions", "Religion", "Sex", "Nightlife", "Partying"
-]
+] # Keep in sync with FE
 
 
 def allowed_file(filename):
