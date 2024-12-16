@@ -56,11 +56,11 @@ def update_location():
                return jsonify({'error': 'Invalid location format'}), 400
         
         # update profile
-        result = UserModel.update_profile(current_user_id, data)
+        result = UserModel.update_profile(current_user_id, data, True)
 
         return jsonify({
-            'message': 'Location updated successfully',
-            'profile_completed': True
+            'message': 'Location updated successfully'
+            #'profile_completed': True
         }), 200
 
     except Exception as e:
