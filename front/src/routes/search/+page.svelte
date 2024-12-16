@@ -37,7 +37,7 @@
 				</div>
 			</Tabs.Content>
 			<Tabs.Content value="list">
-				<FiltersAndSorting {setResults} {unfilteredResults} />
+				<FiltersAndSorting {results} {setResults} {unfilteredResults} />
 				<div class="flex min-h-[750px] flex-col">
 					<UsersList {results} />
 				</div>
