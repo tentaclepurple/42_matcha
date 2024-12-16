@@ -55,22 +55,24 @@ class UserModel:
         )
 
     @staticmethod
-    def update_profile(user_id: str, profile_data: Dict[str, Any]) -> bool:
+    def update_profile(user_id: str, profile_data: Dict[str, Any], is_location=False) -> bool:
         """
         Update user profile data
         Returns: True if successful
         """
         user = UserModel.find_by_id(user_id)
+        print(f"---->PROFILE COMPLETED: {user['profile_completed']}")
         
         try:
-            if not user['profile_completed']:
+            if not user['profile_completed'] and not is_location:
                 # Select bot for user if not already selected
                 if BotModel.handle_profile_completion(user_id):
                     pass
         except Exception as e:
             print(e)
             pass
-        profile_data['profile_completed'] = True    
+        if not is_location:
+            profile_data['profile_completed'] = True    
 
         result = mongo.db.users.update_one(
             {"_id": ObjectId(user_id)},
