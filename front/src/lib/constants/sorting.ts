@@ -7,3 +7,4 @@ export const SORTING_ORDER = {
 };
 
 export const SORTING_LS_KEY = 'SORTING_CRITERIA';
+export const FILTERS_LS_KEY = 'FILTERS_CRITERIA';
