@@ -8,6 +8,7 @@
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
 	import { INTERESTS } from '$lib/constants/interests';
 	import { COLORS_PALETTE } from '$lib/constants/colors';
+	import serialize from '$lib/utils/serialize';
 
 	const MAX_INTERESTS = 10;
 
@@ -102,6 +103,7 @@
 			}
 
 			const payload = Object.fromEntries(formData);
+			const serializedPayload = serialize(payload);
 
 			const res = await fetch(`${SERVER_BASE_URL}/api/profile/update_profile`, {
 				method: 'POST',
@@ -109,7 +111,7 @@
 					Authorization: `Bearer ${token}`,
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ ...payload, interests: interestsList })
+				body: JSON.stringify({ ...serializedPayload, interests: interestsList })
 			});
 
 			if (!res.ok) {
@@ -151,7 +153,7 @@
 
 		<label class="flex justify-between gap-2">
 			<span class="font-bold">Preference:</span>
-			<select name="sexual_preferences" id="sexual_preferences">
+			<select name="sexualPreferences" id="sexualPreferences">
 				<option value={null} disabled selected> Choose an option </option>
 				<option value={PREFERENCES_OPTIONS.MALE}>
 					{PREFERENCES_OPTIONS.MALE}
