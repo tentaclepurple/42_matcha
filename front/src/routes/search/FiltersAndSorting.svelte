@@ -12,7 +12,7 @@
 	import { GENDER_OPTIONS, PREFERENCES_OPTIONS } from '$lib/constants/user-profile-data';
 	import { onMount } from 'svelte';
 
-	const { setResults, unfilteredResults } = $props();
+	const { results, setResults, unfilteredResults } = $props();
 
 	let currentSorting = $state(
 		`${DEFAULT_ALL_RESULTS_SORTING_PROP};${DEFAULT_ALL_RESULTS_SORTING_ORDER}`
@@ -25,8 +25,8 @@
 		sexualPreferences: string | null;
 	}>({
 		gender: null,
-		minAge: 18,
-		maxAge: 99,
+		minAge: results.reduce((acc, curr) => (curr.age < acc ? curr.age : acc), 65),
+		maxAge: results.reduce((acc, curr) => (curr.age > acc ? curr.age : acc), 18),
 		sexualPreferences: null
 	});
 
@@ -174,32 +174,35 @@
 	</ButtonSelector>
 
 	<ButtonSelector>
-		<label class="flex items-center gap-1">
-			<span>Age (min): {currentFilters.minAge}</span>
-			<input
-				type="range"
-				min="18"
-				max="99"
-				value={currentFilters.minAge}
-				step="1"
-				oninput={(e) => (currentFilters.minAge = e.target?.value)}
-				class="w-20"
-			/>
-		</label>
-	</ButtonSelector>
+		<div class="flex items-center gap-1">
+			<p aria-hidden="true">Age:</p>
+			<label class="flex items-center gap-1">
+				<span class="sr-only">Age (min): {currentFilters.minAge}</span>
+				<p aria-hidden="true">{currentFilters.minAge}</p>
+				<input
+					type="range"
+					min="18"
+					max="65"
+					value={currentFilters.minAge}
+					step="1"
+					oninput={(e) => (currentFilters.minAge = e.target?.value)}
+					class="w-20"
+				/>
+			</label>
 
-	<ButtonSelector>
-		<label class="flex items-center gap-1">
-			<span>Age (max): {currentFilters.maxAge}</span>
-			<input
-				type="range"
-				min="18"
-				max="99"
-				value={currentFilters.maxAge}
-				step="1"
-				oninput={(e) => (currentFilters.maxAge = e.target?.value)}
-				class="w-20"
-			/>
-		</label>
+			<label class="flex items-center gap-1">
+				<span class="sr-only">Age (max): {currentFilters.maxAge}</span>
+				<input
+					type="range"
+					min="18"
+					max="65"
+					value={currentFilters.maxAge}
+					step="1"
+					oninput={(e) => (currentFilters.maxAge = e.target?.value)}
+					class="w-20"
+				/>
+				<p aria-hidden="true">{currentFilters.maxAge}</p>
+			</label>
+		</div>
 	</ButtonSelector>
 </div>
