@@ -11,7 +11,11 @@
 	const { results } = $props();
 
 	let currentPage = $state<number>(0);
-	const totalPages = Math.ceil(results.length / NUM_RESULTS);
+	let totalPages = $state(Math.ceil(results.length / NUM_RESULTS));
+
+	$effect(() => {
+		totalPages = Math.ceil(results.length / NUM_RESULTS);
+	});
 
 	const currentResults = $derived(
 		results.slice(currentPage * NUM_RESULTS, currentPage * NUM_RESULTS + NUM_RESULTS)
