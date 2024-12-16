@@ -20,9 +20,13 @@
 
 	let currentFilters = $state<{
 		gender: string | null;
+		minAge: number;
+		maxAge: number;
 		sexualPreferences: string | null;
 	}>({
 		gender: null,
+		minAge: 18,
+		maxAge: 99,
 		sexualPreferences: null
 	});
 
@@ -30,6 +34,8 @@
 		if (
 			currentSorting ||
 			currentFilters.gender ||
+			currentFilters.minAge ||
+			currentFilters.maxAge ||
 			currentFilters.sexualPreferences ||
 			currentFilters
 		) {
@@ -80,6 +86,20 @@
 			);
 		}
 
+		// Min age
+		if (currentFilters['minAge']) {
+			filteredResults = filteredResults.filter(
+				(result) => result['age'] >= currentFilters['minAge']
+			);
+		}
+
+		// Max age
+		if (currentFilters['maxAge']) {
+			filteredResults = filteredResults.filter(
+				(result) => result['age'] <= currentFilters['maxAge']
+			);
+		}
+
 		return filteredResults;
 	};
 
@@ -90,7 +110,7 @@
 		localStorage.setItem(SORTING_LS_KEY, currentSorting);
 	};
 
-	const handleFilterChange = (event: Event, prop: keyof typeof currentFilters) => {
+	const handleFilterChange = (event: Event, prop: 'gender' | 'sexualPreferences') => {
 		const target = event.target as HTMLSelectElement;
 		const filter = target.value;
 
@@ -150,6 +170,36 @@
 				</option>
 				<option value={null}>No filter</option>
 			</select>
+		</label>
+	</ButtonSelector>
+
+	<ButtonSelector>
+		<label class="flex items-center gap-1">
+			<span>Age (min): {currentFilters.minAge}</span>
+			<input
+				type="range"
+				min="18"
+				max="99"
+				value={currentFilters.minAge}
+				step="1"
+				oninput={(e) => (currentFilters.minAge = e.target?.value)}
+				class="w-20"
+			/>
+		</label>
+	</ButtonSelector>
+
+	<ButtonSelector>
+		<label class="flex items-center gap-1">
+			<span>Age (max): {currentFilters.maxAge}</span>
+			<input
+				type="range"
+				min="18"
+				max="99"
+				value={currentFilters.maxAge}
+				step="1"
+				oninput={(e) => (currentFilters.maxAge = e.target?.value)}
+				class="w-20"
+			/>
 		</label>
 	</ButtonSelector>
 </div>
