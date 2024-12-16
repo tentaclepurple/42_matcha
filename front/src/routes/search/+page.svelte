@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { beforeNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
 	import * as Tabs from '$lib/components/ui/tabs';
-	import { SORTING_LS_KEY } from '$lib/constants/sorting';
 	import FiltersAndSorting from './FiltersAndSorting.svelte';
 	import UsersList from './UsersList.svelte';
 	import UsersMap from './UsersMap.svelte';
@@ -18,14 +16,6 @@
 	const setResults = (newResults) => {
 		results = newResults;
 	};
-
-	const setUnfilteredResults = (newResults) => {
-		unfilteredResults = newResults;
-	};
-
-	beforeNavigate(() => {
-		localStorage.removeItem(SORTING_LS_KEY);
-	});
 </script>
 
 <PageWrapper>
@@ -47,7 +37,7 @@
 				</div>
 			</Tabs.Content>
 			<Tabs.Content value="list">
-				<FiltersAndSorting {results} {setResults} {unfilteredResults} {setUnfilteredResults} />
+				<FiltersAndSorting {setResults} {unfilteredResults} />
 				<div class="flex min-h-[750px] flex-col">
 					<UsersList {results} />
 				</div>
