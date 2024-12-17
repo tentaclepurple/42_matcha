@@ -7,8 +7,8 @@
 	import { DefaultMarker, MapLibre } from 'svelte-maplibre';
 	import getServerAsset from '$lib/utils/get-server-asset';
 	import UserActions from './UserActions.svelte';
-	import { COLORS_PALETTE } from '$lib/constants/colors';
 	import { visitedProfileData } from '$lib/state/visited-profile-data.svelte';
+	import InterestsList from '$lib/components/InterestsList.svelte';
 
 	const { origin } = $props();
 
@@ -79,16 +79,7 @@
 				<dl>
 					<dt class="mb-1">Interests</dt>
 					<dd>
-						<ul class="flex flex-wrap items-baseline gap-1">
-							{#each [...selectedUser.interests].sort() as interest, index}
-								<li
-									class="shrink-0 rounded-md px-2 py-1"
-									style={`background-color: ${COLORS_PALETTE[index % COLORS_PALETTE.length]}`}
-								>
-									{interest}
-								</li>
-							{/each}
-						</ul>
+						<InterestsList interests={selectedUser.interests} />
 					</dd>
 				</dl>
 			</div>

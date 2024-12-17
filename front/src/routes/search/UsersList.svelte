@@ -5,6 +5,7 @@
 	import PreferenceSymbol from '$lib/components/PreferenceSymbol.svelte';
 	import getServerAsset from '$lib/utils/get-server-asset';
 	import emptyAnimationData from '$lib/lotties/empty-users.json';
+	import InterestsList from '$lib/components/InterestsList.svelte';
 
 	const NUM_RESULTS = 15;
 
@@ -40,14 +41,14 @@
 		</div>
 	{:else}
 		<div class="items-between flex h-full w-full flex-1 flex-col">
-			<ul class="grid w-full grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3 p-8">
+			<ul class="grid w-full grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-3 p-8">
 				{#each currentResults as user}
 					<li class="flex items-center justify-center rounded-md bg-teal-50 p-3 shadow-md">
 						<button
 							type="button"
 							data-username={user.username}
 							onclick={handleOpenUser}
-							class="flex w-full flex-col items-center gap-1 text-xs"
+							class="flex h-full w-full flex-col items-center gap-1 text-xs"
 						>
 							<img
 								src={getServerAsset(user.profilePhoto)}
@@ -64,7 +65,8 @@
 								<PreferenceSymbol preference={user.sexualPreferences} />
 							</span>
 							<span>{user.distance} km away</span>
-							<span>{user.fameRating}% popularity</span>
+							<span class="mb-4">{user.fameRating}% popularity</span>
+							<InterestsList interests={user.interests} class="flex justify-center items-center" />
 						</button>
 					</li>
 				{/each}
