@@ -11,6 +11,7 @@
 	} from '$lib/constants/sorting';
 	import { GENDER_OPTIONS, PREFERENCES_OPTIONS } from '$lib/constants/user-profile-data';
 	import { onMount } from 'svelte';
+	import RangeFilter from './RangeFilter.svelte';
 
 	interface Age {
 		age: number;
@@ -130,6 +131,20 @@
 			);
 		}
 
+		// Min distance
+		if (currentFilters['minDistance']) {
+			filteredResults = filteredResults.filter(
+				(result) => result['distance'] >= currentFilters['minDistance']
+			);
+		}
+
+		// Max distance
+		if (currentFilters['maxDistance']) {
+			filteredResults = filteredResults.filter(
+				(result) => result['distance'] <= currentFilters['maxDistance']
+			);
+		}
+
 		return filteredResults;
 	};
 
@@ -204,68 +219,28 @@
 	</ButtonSelector>
 
 	<ButtonSelector>
-		<div class="flex items-center gap-1">
-			<p aria-hidden="true">Age:</p>
-			<label class="flex items-center gap-1">
-				<span class="sr-only">Age (min): {currentFilters.minAge}</span>
-				<p aria-hidden="true">{currentFilters.minAge}</p>
-				<input
-					type="range"
-					min="18"
-					max="65"
-					value={currentFilters.minAge}
-					step="1"
-					oninput={(e) => (currentFilters.minAge = e.target?.value)}
-					class="w-20"
-				/>
-			</label>
-
-			<label class="flex items-center gap-1">
-				<span class="sr-only">Age (max): {currentFilters.maxAge}</span>
-				<input
-					type="range"
-					min="18"
-					max="65"
-					value={currentFilters.maxAge}
-					step="1"
-					oninput={(e) => (currentFilters.maxAge = e.target?.value)}
-					class="w-20"
-				/>
-				<p aria-hidden="true">{currentFilters.maxAge}</p>
-			</label>
-		</div>
+		<RangeFilter
+			label="Age"
+			minValue={currentFilters.minAge}
+			maxValue={currentFilters.maxAge}
+			min="18"
+			max="99"
+			step="1"
+			onChangeMin={(value: number) => (currentFilters.minAge = value)}
+			onChangeMax={(value: number) => (currentFilters.maxAge = value)}
+		/>
 	</ButtonSelector>
 
 	<ButtonSelector>
-		<div class="flex items-center gap-1">
-			<p aria-hidden="true">Distance:</p>
-			<label class="flex items-center gap-1">
-				<span class="sr-only">Distance (min): {currentFilters.minDistance}</span>
-				<p aria-hidden="true">{currentFilters.minDistance}</p>
-				<input
-					type="range"
-					min="0"
-					max="1000"
-					value={currentFilters.minDistance}
-					step="1"
-					oninput={(e) => (currentFilters.minDistance = e.target?.value)}
-					class="w-20"
-				/>
-			</label>
-
-			<label class="flex items-center gap-1">
-				<span class="sr-only">Distance (max): {currentFilters.maxDistance}</span>
-				<input
-					type="range"
-					min="0"
-					max="1000"
-					value={currentFilters.maxDistance}
-					step="1"
-					oninput={(e) => (currentFilters.maxDistance = e.target?.value)}
-					class="w-20"
-				/>
-				<p aria-hidden="true">{currentFilters.maxDistance}</p>
-			</label>
-		</div>
+		<RangeFilter
+			label="Distance"
+			minValue={currentFilters.minDistance}
+			maxValue={currentFilters.maxDistance}
+			min="0"
+			max="2000"
+			step="10"
+			onChangeMin={(value: number) => (currentFilters.minDistance = value)}
+			onChangeMax={(value: number) => (currentFilters.maxDistance = value)}
+		/>
 	</ButtonSelector>
 </div>
