@@ -33,6 +33,8 @@
 		maxAge: number;
 		minDistance: number;
 		maxDistance: number;
+		minFameRating: number;
+		maxFameRating: number;
 		sexualPreferences: string | null;
 	}>({
 		gender: null,
@@ -56,6 +58,8 @@
 				(acc: number, { distance: curr }: Distance) => (curr > acc ? curr : acc),
 				results[0]?.distance
 			) ?? 1_000,
+		minFameRating: 0,
+		maxFameRating: 100,
 		sexualPreferences: null
 	});
 
@@ -142,6 +146,20 @@
 		if (currentFilters['maxDistance']) {
 			filteredResults = filteredResults.filter(
 				(result) => result['distance'] <= currentFilters['maxDistance']
+			);
+		}
+
+		// Min popularity
+		if (currentFilters['minFameRating']) {
+			filteredResults = filteredResults.filter(
+				(result) => result['fameRating'] >= currentFilters['minFameRating']
+			);
+		}
+
+		// Max popularity
+		if (currentFilters['maxFameRating']) {
+			filteredResults = filteredResults.filter(
+				(result) => result['fameRating'] <= currentFilters['maxFameRating']
 			);
 		}
 
@@ -241,6 +259,19 @@
 			step="10"
 			onChangeMin={(value: number) => (currentFilters.minDistance = value)}
 			onChangeMax={(value: number) => (currentFilters.maxDistance = value)}
+		/>
+	</ButtonSelector>
+
+	<ButtonSelector>
+		<RangeFilter
+			label="Popularity"
+			minValue={currentFilters.minFameRating}
+			maxValue={currentFilters.maxFameRating}
+			min="0"
+			max="100"
+			step="1"
+			onChangeMin={(value: number) => (currentFilters.minFameRating = value)}
+			onChangeMax={(value: number) => (currentFilters.maxFameRating = value)}
 		/>
 	</ButtonSelector>
 </div>
