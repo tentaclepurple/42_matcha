@@ -7,8 +7,8 @@
 	import PreferenceSymbol from '$lib/components/PreferenceSymbol.svelte';
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
 	import { INTERESTS } from '$lib/constants/interests';
-	import { COLORS_PALETTE } from '$lib/constants/colors';
 	import serialize from '$lib/utils/serialize';
+	import InterestsList from '$lib/components/InterestsList.svelte';
 
 	const MAX_INTERESTS = 10;
 
@@ -186,16 +186,10 @@
 			</select>
 		</label>
 		{#if interestsList.length > 0}
-			<ul class="flex max-w-[500px] flex-wrap items-baseline gap-1">
-				{#each interestsList as interest, index}
-					<li
-						class="shrink-0 rounded-md px-2 py-1"
-						style={`background-color: ${COLORS_PALETTE[index % COLORS_PALETTE.length]}`}
-					>
-						{interest}
-					</li>
-				{/each}
-			</ul>
+			<InterestsList
+				interests={interestsList}
+				class="flex max-w-[500px] flex-wrap items-baseline gap-1"
+			/>
 		{/if}
 
 		<label class="flex justify-between gap-2">

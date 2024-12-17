@@ -3,7 +3,7 @@
 	import GenderSymbol from '$lib/components/GenderSymbol.svelte';
 	import PreferenceSymbol from '$lib/components/PreferenceSymbol.svelte';
 	import UserDataForm from './UserDataForm.svelte';
-	import { COLORS_PALETTE } from '$lib/constants/colors';
+	import InterestsList from '$lib/components/InterestsList.svelte';
 
 	let isEditing: boolean = $state(false);
 </script>
@@ -48,21 +48,15 @@
 				</div>
 
 				<div>
-					<dt class="font-bold mb-1">Interests</dt>
+					<dt class="mb-1 font-bold">Interests</dt>
 					<dd>
 						{#if userProfileData.value.interests.length === 0}
 							<span>No interests yet</span>
 						{:else}
-							<ul class="flex items-baseline flex-wrap gap-1 max-w-[500px]">
-								{#each [...userProfileData.value?.interests].sort() as interest, index}
-									<li
-										class="rounded-md px-2 py-1"
-										style={`background-color: ${COLORS_PALETTE[index % COLORS_PALETTE.length]}`}
-									>
-										{interest}
-									</li>
-								{/each}
-							</ul>
+							<InterestsList
+								interests={userProfileData.value?.interests}
+								class="flex max-w-[500px] flex-wrap items-baseline gap-1"
+							/>
 						{/if}
 					</dd>
 				</div>
