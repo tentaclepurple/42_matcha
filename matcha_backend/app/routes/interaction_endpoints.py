@@ -121,6 +121,16 @@ def toggle_like(user_identifier):
     try:
         current_user_id = get_jwt_identity()
         user = get_user_by_identifier(user_identifier)
+        this_user = UserModel.find_by_id(current_user_id)
+        profile_photos = [photo for photo in this_user['photos'] 
+                         if photo['is_profile'] and photo['url'] != 'static/default/default.svg']
+        
+        if not profile_photos:
+            print(f"NO PROFILE PHOTSSSSSSS", flush=True)
+
+        if not profile_photos:
+            return jsonify({'error': 'You must set a valid profile photo before liking other users'}), 400
+
         if not user:
             return jsonify({'error': 'User not found'}), 404
         
