@@ -57,7 +57,7 @@
 					type="email"
 					id="email"
 					name="email"
-					value="chiamatemi.Nico@gmail.com"
+					value=""
 					required
 					autocomplete="email"
 					class="min-w-[300px]"

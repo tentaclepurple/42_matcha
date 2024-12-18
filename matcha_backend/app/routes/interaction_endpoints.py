@@ -144,9 +144,6 @@ def toggle_like(user_identifier):
             "type": "like"
         })
 
-        if bot and not existing_like:
-            # Inicia conversación con el bot específico
-            BotModel.handle_user_like(current_user_id, to_user_id)
         
         existing_unlike = mongo.db.likes.find_one({
             "from_user_id": ObjectId(current_user_id),
@@ -158,6 +155,11 @@ def toggle_like(user_identifier):
             # If like exists, remove it
             mongo.db.likes.delete_one({"_id": existing_like["_id"]})
             UserModel.update_fame_rating(to_user_id, -13)
+            NotificationModel.create(
+                user_id=to_user_id,
+                type="rmlike",
+                from_user_id=current_user_id
+            )
             return jsonify({'message': 'Like removed', 'like_removed': True}), 200
             
         # Remove unlike if exists and add like
@@ -182,6 +184,10 @@ def toggle_like(user_identifier):
             "to_user_id": ObjectId(current_user_id),
             "type": "like"
         })
+
+        if bot and not existing_like and other_user_like:
+            # Inicia conversación con el bot específico
+            BotModel.handle_user_like(current_user_id, to_user_id)
         
         is_match = bool(other_user_like)
         if is_match:
@@ -196,6 +202,8 @@ def toggle_like(user_identifier):
                 type="match",
                 from_user_id=to_user_id
             )
+            #if bot:
+             #   BotModel.handle_user_match(current_user_id, to_user_id)
         
         return jsonify({
             'message': 'Like added',

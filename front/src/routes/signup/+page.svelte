@@ -104,7 +104,7 @@
 							type="text"
 							id="username"
 							name="username"
-							value="ngasco"
+							value=""
 							required
 							minlength="5"
 							maxlength="12"
@@ -117,7 +117,7 @@
 							type="email"
 							id="email"
 							name="email"
-							value="chiamatemi.nico@gmail.com"
+							value=""
 							required
 							autocomplete="email"
 						/>
@@ -132,7 +132,7 @@
 								type="text"
 								id="first_name"
 								name="first_name"
-								value="Nicolas"
+								value=""
 								required
 								maxlength="30"
 								autocomplete="given-name"
@@ -144,7 +144,7 @@
 								type="text"
 								id="last_name"
 								name="last_name"
-								value="Gasco"
+								value=""
 								required
 								maxlength="30"
 								autocomplete="family-name"
@@ -173,7 +173,7 @@
 						<PasswordInput
 							id="password"
 							name="password"
-							value="Ciaociao1!"
+							value=""
 							required
 							autocomplete="current-password"
 						/>
@@ -183,7 +183,7 @@
 						<PasswordInput
 							id="confirm"
 							name="confirm"
-							value="Ciaociao1!"
+							value=""
 							required
 							autocomplete="current-password"
 						/>

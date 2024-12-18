@@ -94,7 +94,7 @@
 						type="email"
 						id="email"
 						name="email"
-						value="chiamatemi.nico@gmail.com"
+						value=""
 						autocomplete="email"
 						required
 						class="min-w-[300px]"
@@ -106,7 +106,7 @@
 					<PasswordInput
 						id="password"
 						name="password"
-						value="Ciaociao1!"
+						value=""
 						required
 						autocomplete="current-password"
 						class="min-w-[300px]"

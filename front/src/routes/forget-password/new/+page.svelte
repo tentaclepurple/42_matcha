@@ -71,7 +71,7 @@
 				<PasswordInput
 					id="password"
 					name="password"
-					value="Ciaociao1!"
+					value=""
 					required
 					autocomplete="new-password"
 				/>
@@ -81,7 +81,7 @@
 				<PasswordInput
 					id="confirm"
 					name="confirm"
-					value="Ciaociao1!"
+					value=""
 					required
 					autocomplete="new-password"
 				/>

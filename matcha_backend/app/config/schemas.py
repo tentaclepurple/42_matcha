@@ -247,7 +247,7 @@ NOTIFICATION_SCHEMA = {
                 "description": "User who triggered the notification"
             },
             "type": {
-                "enum": ["profile_view", "like", "unlike", "match", "message"],
+                "enum": ["profile_view", "like", "rmlike", "unlike", "match", "message"],
                 "description": "Type of notification"
             },
             "created_at": {
