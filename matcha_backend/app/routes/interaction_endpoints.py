@@ -124,9 +124,6 @@ def toggle_like(user_identifier):
         this_user = UserModel.find_by_id(current_user_id)
         profile_photos = [photo for photo in this_user['photos'] 
                          if photo['is_profile'] and photo['url'] != 'static/default/default.svg']
-        
-        if not profile_photos:
-            print(f"NO PROFILE PHOTSSSSSSS", flush=True)
 
         if not profile_photos:
             return jsonify({'error': 'You must set a valid profile photo before liking other users'}), 400
@@ -212,8 +209,6 @@ def toggle_like(user_identifier):
                 type="match",
                 from_user_id=to_user_id
             )
-            #if bot:
-             #   BotModel.handle_user_match(current_user_id, to_user_id)
         
         return jsonify({
             'message': 'Like added',
