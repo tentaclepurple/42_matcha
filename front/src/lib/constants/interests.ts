@@ -50,7 +50,6 @@ export const INTERESTS: string[] = [
 	'Sports',
 	'Surfing',
 	'Swimming',
-	'Tech',
 	'Technology',
 	'Theater',
 	'Traditions',
