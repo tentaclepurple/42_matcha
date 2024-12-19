@@ -94,8 +94,8 @@
 						type="email"
 						id="email"
 						name="email"
-						value=""
 						autocomplete="email"
+						placeholder="Your e-mail"
 						required
 						class="min-w-[300px]"
 					/>
@@ -106,9 +106,9 @@
 					<PasswordInput
 						id="password"
 						name="password"
-						value=""
 						required
 						autocomplete="current-password"
+						placeholder="Your password"
 						class="min-w-[300px]"
 					/>
 				</label>

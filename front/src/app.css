@@ -23,7 +23,7 @@ form input {
 	padding: 4px 12px;
 	border-radius: 4px;
 
-	&:invalid {
+	&:focus:invalid {
 		outline: 2px red solid;
 	}
 
