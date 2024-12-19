@@ -96,15 +96,15 @@
 	<h1>Create a new account</h1>
 	<div>
 		<Form onSubmit={handleSubmit}>
-			<fieldset disabled={isLoading} class="flex flex-col gap-3">
-				<div class="mb-4 flex items-baseline justify-center gap-4">
+			<fieldset disabled={isLoading} class="flex flex-col gap-4">
+				<div class="flex items-baseline justify-center gap-4">
 					<label>
 						Username
 						<input
 							type="text"
 							id="username"
 							name="username"
-							value=""
+							placeholder="Username"
 							required
 							minlength="5"
 							maxlength="12"
@@ -112,27 +112,20 @@
 						/>
 					</label>
 					<label>
-						Email
-						<input
-							type="email"
-							id="email"
-							name="email"
-							value=""
-							required
-							autocomplete="email"
-						/>
+						E-mail
+						<input type="email" id="email" name="email" placeholder="E-mail" autocomplete="email" />
 					</label>
 				</div>
 
-				<div class="mb-4">
-					<div class="flex items-baseline justify-center gap-4">
+				<div>
+					<div class="mb-4 flex items-baseline justify-center gap-4">
 						<label>
 							First name
 							<input
 								type="text"
 								id="first_name"
 								name="first_name"
-								value=""
+								placeholder="First name"
 								required
 								maxlength="30"
 								autocomplete="given-name"
@@ -144,7 +137,7 @@
 								type="text"
 								id="last_name"
 								name="last_name"
-								value=""
+								placeholder="Last name"
 								required
 								maxlength="30"
 								autocomplete="family-name"
@@ -153,12 +146,11 @@
 					</div>
 
 					<label>
-						Birth year
+						Birth date
 						<input
 							type="date"
 							id="age"
 							name="age"
-							value="1992-01-07"
 							min={MIN_BIRTH_DATA}
 							max={calcEighteenthBirthday()}
 							required
@@ -167,14 +159,14 @@
 					</label>
 				</div>
 
-				<div class="mb-4">
+				<div class="mb-4 flex flex-col gap-4">
 					<label class="flex flex-col items-start justify-center">
 						Password
 						<PasswordInput
 							id="password"
 							name="password"
-							value=""
 							required
+							placeholder="Password"
 							autocomplete="current-password"
 						/>
 					</label>
@@ -183,8 +175,8 @@
 						<PasswordInput
 							id="confirm"
 							name="confirm"
-							value=""
 							required
+							placeholder="Confirm password"
 							autocomplete="current-password"
 						/>
 					</label>

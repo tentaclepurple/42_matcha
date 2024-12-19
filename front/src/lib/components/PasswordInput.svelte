@@ -7,9 +7,20 @@
 		value?: string;
 		required?: boolean;
 		autocomplete?: FullAutoFill;
+		class?: string;
+		placeholder?: string;
 	}
 
-	let { id, name, value, required, autocomplete, ...restProps }: PasswordInputProps = $props();
+	let {
+		id,
+		name,
+		value,
+		required,
+		autocomplete,
+		class: CLASS,
+		placeholder,
+		...restProps
+	}: PasswordInputProps = $props();
 
 	let showPassword = $state(false);
 
@@ -26,6 +37,8 @@
 		{required}
 		{value}
 		{autocomplete}
+		{placeholder}
+		class={CLASS}
 		{...restProps}
 	/>
 	<button
