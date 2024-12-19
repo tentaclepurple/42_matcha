@@ -12,6 +12,7 @@
 	import { notificationsData } from '$lib/state/notifications.svelte';
 	import { NOTIFICATIONS_POLLING_INTERVAL } from '$lib/constants/notifications';
 	import NotificationsWidget from './NotificationsWidget.svelte';
+	import { goto } from '$app/navigation';
 
 	onMount(async (): Promise<unknown> => {
 		let interval: number;
@@ -19,20 +20,26 @@
 		const accessToken = localStorage.getItem('access_token');
 
 		if (accessToken) {
-			userAuth.login();
-			await userData.fetch();
-			await userProfileData.fetch();
-			await userLocation.getUserLocation();
+			try {
+				userAuth.login();
+				await userData.fetch();
+				await userProfileData.fetch();
+				await userLocation.getUserLocation();
 
-			if (userAuth.isAuthenticated) {
-				notificationsData.fetch();
-				interval = setInterval(() => {
+				if (userAuth.isAuthenticated) {
 					notificationsData.fetch();
-				}, NOTIFICATIONS_POLLING_INTERVAL);
+					interval = setInterval(() => {
+						notificationsData.fetch();
+					}, NOTIFICATIONS_POLLING_INTERVAL);
 
-				return () => {
-					clearInterval(interval);
-				};
+					return () => {
+						clearInterval(interval);
+					};
+				}
+			} catch (e) {
+				console.error(e);
+				userAuth.logout();
+				goto('/login');
 			}
 		} else {
 			userAuth.logout();
@@ -41,7 +48,7 @@
 </script>
 
 <div class="flex min-h-screen flex-col justify-between">
-	<div class="flex items-center justify-center bg-teal-300 py-0 px-4">
+	<div class="flex items-center justify-center bg-teal-300 px-4 py-0">
 		<header class="flex min-h-[68px] w-full max-w-screen-2xl items-center justify-between">
 			<nav class="flex items-baseline justify-center gap-2">
 				<a href="/" aria-label="Home">
