@@ -18,17 +18,16 @@ UPLOAD_FOLDER = 'app/static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
-INTERESTS = interests = [
-    "Movies", "Music", "Traveling", "Cooking", "Fitness", "Hiking", "Reading", 
-    "Gaming", "Photography", "Dancing", "Sports", "Art", "Fashion", 
-    "Volunteering", "Yoga", "Tech", "DIY", "Meditation", "Comedy", 
-    "Writing", "Cycling", "Swimming", "Gardening", "Foodie", "Board Games", 
-    "Puzzles", "Astrology", "Podcasts", "Running", "Camping", "Languages", 
-    "Skating", "Skiing", "Surfing", "Collecting", "Karaoke", 
-    "Animals", "Fishing", "Anime", "Science", "History", "Theater", 
-    "Crafts", "Investing", "Drinks", "Blogging", "Cars", "Technology", 
-    "Magic", "Politics", "Beauty", "Health", "Philosophy", "Nature"
-    "Traditions", "Religion", "Sex", "Nightlife", "Partying"
+INTERESTS = [
+    "Animals", "Anime", "Art", "Astrology", "Beauty", "Blogging", "Board Games", 
+    "Camping", "Cars", "Collecting", "Comedy", "Cooking", "Crafts", "Cycling", 
+    "Dancing", "DIY", "Drinks", "Fashion", "Fishing", "Fitness", "Foodie", 
+    "Gaming", "Gardening", "Health", "Hiking", "History", "Investing", 
+    "Karaoke", "Languages", "Magic", "Meditation", "Movies", "Music", 
+    "Nature", "Nightlife", "Partying", "Photography", "Podcasts", "Politics", 
+    "Puzzles", "Reading", "Religion", "Running", "Science", "Sex", "Skating", 
+    "Skiing", "Sports", "Surfing", "Swimming", "Technology", "Theater", 
+    "Traditions", "Traveling", "Volunteering", "Writing", "Yoga"
 ] # Keep in sync with FE
 
 
