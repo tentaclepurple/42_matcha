@@ -4,14 +4,21 @@ import { userProfileData } from '$lib/state/user-profile-data.svelte';
 
 export const ssr = false;
 
-export const load: PageLoad = async () => {
+export const load: PageLoad = async ({ url }) => {
+	const queryParams = new URLSearchParams(url.search);
+
+	const isNewUser = queryParams.get('welcome') === 'true';
 	try {
 		await userProfileData.fetch();
 
 		if (!userProfileData?.value) {
 			throw new Error('Failed to fetch user profile data');
 		}
-	} catch (error: unknown) {
+	} catch (error) {
 		redirect(302, '/login');
 	}
+
+	return {
+		isNewUser
+	};
 };
