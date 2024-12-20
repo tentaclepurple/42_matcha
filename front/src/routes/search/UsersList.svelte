@@ -76,7 +76,7 @@
 						</li>
 					{/each}
 				</ul>
-				<nav class="mt-auto flex items-center justify-center gap-4 pb-6">
+				<nav class="mt-auto flex flex-wrap items-center justify-center gap-4 pb-6 px-12">
 					{#each Array.from({ length: totalPages }, (_, i) => i) as _, index}
 						<button
 							type="button"
