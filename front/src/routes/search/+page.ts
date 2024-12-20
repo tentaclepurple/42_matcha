@@ -71,6 +71,8 @@ export const load: PageLoad = async () => {
 		return a.distance - b.distance;
 	});
 
+	console.log('searchResults', sortedSearchResults);
+
 	return {
 		searchResults: sortedSearchResults,
 		suggestionsResults: sortedSuggestionsResults

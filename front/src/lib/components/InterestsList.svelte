@@ -10,7 +10,7 @@
 			class="text-2xs shrink-0 rounded-md px-2 py-1"
 			style={`background-color: ${COLORS_PALETTE[index % COLORS_PALETTE.length]}`}
 		>
-			#{interest}
+			#{interest.toLowerCase()}
 		</li>
 	{/each}
 </ul>
