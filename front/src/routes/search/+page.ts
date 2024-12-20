@@ -19,11 +19,7 @@ export const load: PageLoad = async () => {
 		return redirect(302, '/login');
 	}
 
-	const queryParams = new URLSearchParams({
-		max_distance: '10'
-	}).toString();
-
-	const suggestionsRes = await fetch(`${SERVER_BASE_URL}/api/match/suggestions?${queryParams}`, {
+	const suggestionsRes = await fetch(`${SERVER_BASE_URL}/api/match/suggestions`, {
 		method: 'GET',
 		headers: {
 			Authorization: `Bearer ${token}`
