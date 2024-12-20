@@ -10,13 +10,9 @@
 	import FameRating from '$lib/components/FameRating.svelte';
 	import Button from '$lib/components/Button.svelte';
 
-	const { data } = $props();
-
 	if (!userProfileData.value) {
 		goto('/login');
 	}
-
-	let showWelcomeModal = $state(data.isNewUser);
 
 	let isProfileComplete = $derived(
 		Boolean(
@@ -25,14 +21,16 @@
 				userProfileData?.value?.biography
 		)
 	);
+
+	let showWelcomeModal = $state(true);
 </script>
 
 <PageWrapper class="relative">
 	{#if userProfileData?.value}
-		{#if showWelcomeModal}
+		{#if !isProfileComplete && showWelcomeModal}
 			<div class="absolute left-0 top-0 z-50 h-full w-full bg-gray-900 opacity-80"></div>
 			<div
-				class="max-w-xl text-center absolute left-1/2 top-40 z-50 flex -translate-x-1/2 transform flex-col items-center justify-center rounded-md bg-white px-12 py-6 shadow-xl"
+				class="absolute left-1/2 top-40 z-50 flex max-w-xl -translate-x-1/2 transform flex-col items-center justify-center rounded-md bg-white px-12 py-6 text-center shadow-xl"
 			>
 				<h1 class="mb-4">Welcome to your new profile!</h1>
 				<p class="mb-6">
