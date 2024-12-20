@@ -7,11 +7,22 @@
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
 	import { MapLibre, Marker, Popup } from 'svelte-maplibre';
 	import getServerAsset from '$lib/utils/get-server-asset';
+	import { userSearchData } from '$lib/state/user-search.svelte';
 
-	const { results } = $props();
+	const results = $derived(userSearchData.value ?? []);
 </script>
 
-{#snippet marker({ profilePicture, user, coordinates, isCurrentUser })}
+{#snippet marker({
+	profilePicture,
+	user,
+	coordinates,
+	isCurrentUser
+}: {
+	profilePicture: string;
+	user: any;
+	coordinates: [number, number];
+	isCurrentUser: boolean;
+})}
 	<Marker lngLat={coordinates}>
 		<div
 			class={`rounded-full ${isCurrentUser ? 'h-9 w-9 bg-yellow-500' : 'h-5 w-5 bg-teal-500'} shadow-lg`}

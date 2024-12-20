@@ -1,52 +1,23 @@
 import { error, redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { SERVER_BASE_URL } from '$lib/constants/api';
-import {
-	DEFAULT_ALL_RESULTS_SORTING_ORDER,
-	DEFAULT_ALL_RESULTS_SORTING_PROP,
-	SORTING_ORDER
-} from '$lib/constants/sorting';
 import deserialize from '$lib/utils/deserialize';
-import type UserFromList from '$lib/interfaces/user-from-list.interface';
 import type UserFromSuggestion from '$lib/interfaces/user-from-suggestion.interface';
+import { userSearchData } from '$lib/state/user-search.svelte';
 
 export const ssr = false;
 
 export const load: PageLoad = async () => {
+	try {
+		userSearchData.fetch({});
+	} catch (error) {
+		console.error(error);
+	}
 	const token = localStorage.getItem('access_token');
 
 	if (!token) {
 		return redirect(302, '/login');
 	}
-
-	const searchRes = await fetch(`${SERVER_BASE_URL}/api/match/search`, {
-		method: 'GET',
-		headers: {
-			Authorization: `Bearer ${token}`
-		}
-	});
-
-	if (!searchRes.ok) {
-		return error(searchRes.status, 'An error occurred while fetching search results');
-	}
-
-	const { results: searchResults } = await searchRes.json();
-	const deserializedSearchResults: UserFromList[] = searchResults.map((result) =>
-		deserialize(result)
-	);
-	const sortedSearchResults = deserializedSearchResults.sort((a, b) => {
-		if (!a[DEFAULT_ALL_RESULTS_SORTING_PROP] || !b[DEFAULT_ALL_RESULTS_SORTING_PROP]) {
-			return 0;
-		}
-
-		if (DEFAULT_ALL_RESULTS_SORTING_ORDER === SORTING_ORDER.ASC) {
-			return a[DEFAULT_ALL_RESULTS_SORTING_PROP] - b[DEFAULT_ALL_RESULTS_SORTING_PROP];
-		} else if (DEFAULT_ALL_RESULTS_SORTING_ORDER === SORTING_ORDER.DESC) {
-			return b[DEFAULT_ALL_RESULTS_SORTING_PROP] - a[DEFAULT_ALL_RESULTS_SORTING_PROP];
-		}
-
-		return 0;
-	});
 
 	const queryParams = new URLSearchParams({
 		max_distance: '10'
@@ -64,17 +35,14 @@ export const load: PageLoad = async () => {
 	}
 
 	const { matches: suggestionsResults } = await suggestionsRes.json();
-	const deserializedSuggestionsResults: UserFromSuggestion[] = suggestionsResults.map((result) =>
-		deserialize(result)
+	const deserializedSuggestionsResults: UserFromSuggestion[] = suggestionsResults.map(
+		(result: UserFromSuggestion) => deserialize(result)
 	);
 	const sortedSuggestionsResults = deserializedSuggestionsResults.sort((a, b) => {
 		return a.distance - b.distance;
 	});
 
-	console.log('searchResults', sortedSearchResults);
-
 	return {
-		searchResults: sortedSearchResults,
 		suggestionsResults: sortedSuggestionsResults
 	};
 };
