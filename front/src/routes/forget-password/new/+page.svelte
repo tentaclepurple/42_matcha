@@ -65,7 +65,7 @@
 	<p class="mb-4">You're one step away from getting a new password.</p>
 
 	<form onsubmit={handleSubmit}>
-		<fieldset class="mb-4">
+		<fieldset class="mb-8 flex flex-col gap-4">
 			<label class="flex flex-col items-start justify-center">
 				Password
 				<PasswordInput
