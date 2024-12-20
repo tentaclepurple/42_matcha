@@ -9,7 +9,7 @@ export const ssr = false;
 
 export const load: PageLoad = async () => {
 	try {
-		userSearchData.fetch({});
+		await userSearchData.fetch({});
 	} catch (error) {
 		console.error(error);
 	}
