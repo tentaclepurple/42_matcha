@@ -30,7 +30,7 @@
 	};
 </script>
 
-<div class="mt-12 flex items-center justify-center">
+<div class="flex items-center justify-center">
 	{#if results.length === 0}
 		<div class="flex flex-col items-center">
 			<h2 class="mb-2">It's lonely in here</h2>
@@ -66,7 +66,7 @@
 							</span>
 							<span>{user.distance} km away</span>
 							<span class="mb-4">{user.fameRating}% popularity</span>
-							<InterestsList interests={user.interests} class="flex justify-center items-center" />
+							<InterestsList interests={user.interests} class="flex items-center justify-center" />
 						</button>
 					</li>
 				{/each}

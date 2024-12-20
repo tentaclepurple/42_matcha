@@ -12,6 +12,7 @@
 	import { GENDER_OPTIONS, PREFERENCES_OPTIONS } from '$lib/constants/user-profile-data';
 	import { onMount } from 'svelte';
 	import RangeFilter from './RangeFilter.svelte';
+	import { INTERESTS } from '$lib/constants/interests';
 
 	interface Age {
 		age: number;
@@ -29,6 +30,7 @@
 
 	let currentFilters = $state<{
 		gender: string | null;
+		interests: string[];
 		minAge: number;
 		maxAge: number;
 		minDistance: number;
@@ -38,6 +40,7 @@
 		sexualPreferences: string | null;
 	}>({
 		gender: null,
+		interests: [],
 		minAge:
 			results.reduce(
 				(acc: number, { age: curr }: Age) => (curr < acc ? curr : acc),
@@ -67,6 +70,7 @@
 		if (
 			currentSorting ||
 			currentFilters.gender ||
+			currentFilters.interests ||
 			currentFilters.minAge ||
 			currentFilters.maxAge ||
 			currentFilters.minDistance ||
@@ -111,6 +115,13 @@
 		if (currentFilters['gender']) {
 			filteredResults = filteredResults.filter(
 				(result) => result['gender'] === currentFilters['gender']
+			);
+		}
+
+		// Interests
+		if (currentFilters['interests']) {
+			filteredResults = filteredResults.filter((result) =>
+				currentFilters['interests'].every((interest) => result['interests'].includes(interest))
 			);
 		}
 
@@ -183,6 +194,7 @@
 </script>
 
 <div class="flex flex-wrap items-center gap-2 px-4">
+	{$inspect(currentFilters)}
 	<ButtonSelector>
 		<label>
 			Sort by:
@@ -273,5 +285,33 @@
 			onChangeMin={(value: number) => (currentFilters.minFameRating = value)}
 			onChangeMax={(value: number) => (currentFilters.maxFameRating = value)}
 		/>
+	</ButtonSelector>
+
+	<ButtonSelector>
+		<div class="flex gap-1">
+			<span>Interests:</span>
+			{$inspect(unfilteredResults)}
+			<ul class="flex flex-wrap items-baseline gap-2">
+				{#each [...INTERESTS].sort() as interest}
+					<li
+						class={`text-2xs shrink-0 rounded-md ${currentFilters.interests.includes(interest) ? 'bg-teal-300' : 'bg-slate-300'} px-2 py-1`}
+					>
+						<button
+							onclick={() => {
+								if (currentFilters.interests.includes(interest)) {
+									currentFilters.interests = currentFilters.interests.filter(
+										(currentInterest) => currentInterest !== interest
+									);
+								} else {
+									currentFilters.interests = [...currentFilters.interests, interest];
+								}
+							}}
+						>
+							#{interest.toLowerCase()}
+						</button>
+					</li>
+				{/each}
+			</ul>
+		</div>
 	</ButtonSelector>
 </div>
