@@ -44,7 +44,7 @@ def create_app():
     mongo.init_app(app)
 
     num_users = mongo.db.users.count_documents({})
-    num_test_users = 200
+    num_test_users = 500
     if (num_users < num_test_users):
         generate_test_users(mongo, num_test_users - num_users)
 
