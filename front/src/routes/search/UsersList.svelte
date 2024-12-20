@@ -10,7 +10,7 @@
 
 	const NUM_RESULTS = 15;
 
-	const results = $derived(userSearchData.value ?? []);
+	const { results } = $props();
 
 	let currentPage = $state<number>(0);
 	let totalPages = $state(Math.ceil(results.length / NUM_RESULTS));
@@ -76,7 +76,7 @@
 						</li>
 					{/each}
 				</ul>
-				<nav class="mt-auto flex flex-wrap items-center justify-center gap-4 pb-6 px-12">
+				<nav class="mt-auto flex flex-wrap items-center justify-center gap-4 px-12 pb-6">
 					{#each Array.from({ length: totalPages }, (_, i) => i) as _, index}
 						<button
 							type="button"
