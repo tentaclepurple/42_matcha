@@ -8,7 +8,7 @@
 	import InterestsList from '$lib/components/InterestsList.svelte';
 	import { userSearchData } from '$lib/state/user-search.svelte';
 
-	const NUM_RESULTS = 15;
+	const NUM_RESULTS = 16;
 
 	const { results } = $props();
 
