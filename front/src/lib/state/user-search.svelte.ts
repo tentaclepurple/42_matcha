@@ -6,6 +6,7 @@ import {
 } from '$lib/constants/sorting';
 import type UserFromList from '$lib/interfaces/user-from-list.interface';
 import deserialize from '$lib/utils/deserialize';
+import { userAuth } from './auth.svelte';
 
 class UserSearchClass {
 	#value = $state<null | UserFromList[]>(null);
@@ -22,6 +23,7 @@ class UserSearchClass {
 		const token = localStorage.getItem('access_token');
 
 		if (!token) {
+			userAuth.logout();
 			goto('/login');
 		}
 
