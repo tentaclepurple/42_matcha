@@ -117,7 +117,7 @@
 		// Interests
 		if (currentFilters.interests.length) {
 			currentFilters.interests.forEach((interest) =>
-				queryParams.append('interests', interest.toLowerCase())
+				queryParams.append('interests', interest)
 			);
 		}
 

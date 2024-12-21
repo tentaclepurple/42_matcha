@@ -41,8 +41,15 @@ def generate_test_users(mongo, num_users=50):
     """Generate test users with complete profiles"""
 
     # Sample data pools
-    interests = ['music', 'movies', 'sports', 'reading', 'travel',
-                 'food', 'art', 'gaming', 'fitness', 'technology']
+    interests = ["Animals", "Anime", "Art", "Astrology", "Beauty", "Blogging", "Board Games", 
+    "Camping", "Cars", "Collecting", "Comedy", "Cooking", "Crafts", "Cycling", 
+    "Dancing", "DIY", "Drinks", "Fashion", "Fishing", "Fitness", "Foodie", 
+    "Gaming", "Gardening", "Health", "Hiking", "History", "Investing", 
+    "Karaoke", "Languages", "Magic", "Meditation", "Movies", "Music", 
+    "Nature", "Nightlife", "Partying", "Photography", "Podcasts", "Politics", 
+    "Puzzles", "Reading", "Religion", "Running", "Science", "Sex", "Skating", 
+    "Skiing", "Sports", "Surfing", "Swimming", "Technology", "Theater", 
+    "Traditions", "Traveling", "Volunteering", "Writing", "Yoga"]
 
     print("Creating test users...")
 
