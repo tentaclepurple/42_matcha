@@ -23,6 +23,10 @@
 	);
 
 	let showWelcomeModal = $state(true);
+
+	const handleLocationUpdate = async () => {
+		await userLocation.getUserLocation();
+	};
 </script>
 
 <PageWrapper class="relative">
@@ -40,7 +44,7 @@
 				<Button level="primary" onclick={() => (showWelcomeModal = false)}>Got it!</Button>
 			</div>
 		{/if}
-		<div aria-hidden={showWelcomeModal}>
+		<div>
 			<div class="mb-12">
 				<h1>Profile</h1>
 				<p class="max-w-lg">This is where you can update your public profile.</p>
@@ -64,22 +68,36 @@
 					</div>
 				{/if}
 
-				<div class="mt-6 w-full rounded-lg shadow-md">
-					<h2>Your location</h2>
-					<MapLibre
-						center={userLocation?.value ?? userProfileData.value.location.coordinates}
-						class="h-[250px] w-full rounded-md"
-						interactive={false}
-						maxZoom={18}
-						minZoom={10}
-						standardControls
-						style="https://tiles.basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
-						zoom={11}
-					>
-						<DefaultMarker
-							lngLat={userLocation?.value ?? userProfileData.value.location.coordinates}
-						/>
-					</MapLibre>
+				<div class="mt-6 w-full">
+					<h2 class="mb-2">Your location</h2>
+					<p class="mb-6">
+						Your location is detected automatically from your device. Use the Refresh button to
+						force an update.
+					</p>
+					<div class="relative rounded-lg shadow-md">
+						<Button
+							level="primary"
+							class="absolute right-0 top-0 z-20 mr-2 mt-2 shadow-md"
+							onclick={handleLocationUpdate}
+						>
+							Refresh
+							<img src="/icons/reload.svg" alt="" class="h-4 w-4" />
+						</Button>
+						<MapLibre
+							center={userLocation?.value ?? userProfileData.value.location.coordinates}
+							class="z-10 h-[250px] w-full rounded-md"
+							interactive={false}
+							maxZoom={18}
+							minZoom={10}
+							standardControls
+							style="https://tiles.basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
+							zoom={11}
+						>
+							<DefaultMarker
+								lngLat={userLocation?.value ?? userProfileData.value.location.coordinates}
+							/>
+						</MapLibre>
+					</div>
 				</div>
 			</div>
 		</div>
