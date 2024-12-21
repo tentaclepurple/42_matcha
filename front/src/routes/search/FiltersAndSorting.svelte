@@ -6,7 +6,7 @@
 		DEFAULT_ALL_RESULTS_SORTING_ORDER,
 		DEFAULT_ALL_RESULTS_SORTING_PROP,
 		FILTERS_LS_KEY,
-		SORTING_LS_KEY,
+		SORTING_LS_KEY
 	} from '$lib/constants/sorting';
 	import { GENDER_OPTIONS, PREFERENCES_OPTIONS } from '$lib/constants/user-profile-data';
 	import { onMount } from 'svelte';
@@ -116,7 +116,9 @@
 
 		// Interests
 		if (currentFilters.interests.length) {
-			queryParams.set('interests', currentFilters.interests.join(','));
+			currentFilters.interests.forEach((interest) =>
+				queryParams.append('interests', interest.toLowerCase())
+			);
 		}
 
 		// Sexual preference
