@@ -26,7 +26,7 @@ BOT_PROFILES = {
         "gender": "female",
         "sexual_preferences": "bisexual",
         "biography": "Hi! I'm Maria, from Urduliz. I'm a programming student",
-        "interests": ["Dancing", "Music", "Tech", "Nightlife", "Partying", "Sex"],
+        "interests": ["Dancing", "Music", "Technology", "Nightlife", "Partying", "Sex"],
         "location": {"type": "Point", "coordinates": [-2.9716, 43.3666]},
         "context": context1
     },
@@ -65,7 +65,7 @@ BOT_PROFILES = {
 		"gender": "male",
 		"sexual_preferences": "female",
 		"biography": "Hi! I'm James, a British entrepreneur living in Getxo",
-		"interests": ["Reading", "Tech", "Traveling", "Theater", "Investing"],
+		"interests": ["Reading", "Technology", "Traveling", "Theater", "Investing"],
 		"location": {"type": "Point", "coordinates": [-3.0114, 43.3569]},
 		"context": context4
 	},

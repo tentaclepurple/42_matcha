@@ -265,7 +265,7 @@ def advanced_search():
 
         # Interests filter
         if interests:
-            match_conditions['interests'] = {'$in': interests}
+            match_conditions['interests'] = {'$all': interests}
 
         # Add match conditions to pipeline
         if match_conditions:
