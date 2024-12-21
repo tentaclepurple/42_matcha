@@ -14,14 +14,6 @@
 		goto('/login');
 	}
 
-	let isProfileComplete = $derived(
-		Boolean(
-			userProfileData?.value?.gender &&
-				userProfileData?.value?.sexualPreferences &&
-				userProfileData?.value?.biography
-		)
-	);
-
 	let showWelcomeModal = $state(true);
 
 	const handleLocationUpdate = async () => {
@@ -31,7 +23,7 @@
 
 <PageWrapper class="relative">
 	{#if userProfileData?.value}
-		{#if !isProfileComplete && showWelcomeModal}
+		{#if !userProfileData.isProfileComplete && showWelcomeModal}
 			<div class="absolute left-0 top-0 z-50 h-full w-full bg-gray-900 opacity-80"></div>
 			<div
 				class="absolute left-1/2 top-40 z-50 flex max-w-xl -translate-x-1/2 transform flex-col items-center justify-center rounded-md bg-white px-12 py-6 text-center shadow-xl"
@@ -59,7 +51,7 @@
 					<FameRating fameRating={userProfileData.value.fameRating} />
 				</div>
 
-				{#if isProfileComplete}
+				{#if userProfileData.isProfileComplete}
 					<UserDataSection />
 				{:else}
 					<div class="flex flex-col justify-center rounded-lg bg-teal-100 px-12 py-6">
