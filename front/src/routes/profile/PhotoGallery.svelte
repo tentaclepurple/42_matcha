@@ -6,6 +6,7 @@
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
 	import { userData } from '$lib/state/user-data.svelte';
+	import { AVATAR_ALLOWED_TYPES } from '$lib/constants/files';
 
 	const { photos }: { photos: UserProfileData['photos'] } = $props();
 
@@ -80,6 +81,16 @@
 
 		const token = localStorage.getItem('access_token');
 
+		const isProfilePicture = photos[index].isProfile;
+		const isLastPicture =
+			photos.filter((photo) => !photo.url.endsWith(DEFAULT_AVATAR_NAME)).length === 1;
+
+		if (isProfilePicture && !isLastPicture) {
+			error =
+				'You cannot delete your profile picture. Please set another picture as profile picture first.';
+			return;
+		}
+
 		try {
 			const res = await fetch(`${SERVER_BASE_URL}/api/profile/delete_photo/${index}`, {
 				method: 'DELETE',
@@ -92,13 +103,34 @@
 				throw new Error('Failed to delete photo');
 			}
 
-			await res.json();
-
 			await userProfileData.fetch();
 			await userData.fetch();
 		} catch (e) {
 			console.error(e);
 			error = 'There was an error deleting the photo. Please try again.';
+		}
+	};
+
+	const handleNewAvatar = async (index: number) => {
+		const token = localStorage.getItem('access_token');
+
+		try {
+			const res = await fetch(`${SERVER_BASE_URL}/api/profile/update_avatar/${index}`, {
+				method: 'PUT',
+				headers: {
+					authorization: `Bearer ${token}`
+				}
+			});
+
+			if (!res.ok) {
+				throw new Error('Failed to delete photo');
+			}
+
+			await userProfileData.fetch();
+			await userData.fetch();
+		} catch (e) {
+			console.error(e);
+			error = 'There was an error setting the new avatar. Please try again.';
 		}
 	};
 </script>
@@ -109,7 +141,13 @@
 			{#if photo.url.endsWith(DEFAULT_AVATAR_NAME)}
 				<label class="h-full cursor-pointer hover:shadow-lg">
 					<span class="sr-only">Upload new picture</span>
-					<input type="file" class="hidden" onchange={handlePhotoUpload} data-id={index} />
+					<input
+						type="file"
+						accept={AVATAR_ALLOWED_TYPES}
+						class="hidden"
+						onchange={handlePhotoUpload}
+						data-id={index}
+					/>
 					<div class="flex h-full items-center justify-center bg-gray-300 shadow-md">
 						<img src="/icons/plus.svg" alt="" class="h-8 w-8" />
 					</div>
@@ -134,13 +172,23 @@
 								<img src="/icons/show.svg" alt="" class="h-10 w-10 rounded-full bg-teal-500 p-2" />
 							</button>
 
-							<button title="Choose as avatar">
-								<img
-									src="/icons/avatar.svg"
-									alt=""
-									class="h-10 w-10 rounded-full bg-slate-200 p-2"
-								/>
-							</button>
+							{#if !photo.isProfile}
+								<button title="Choose as avatar" onclick={() => handleNewAvatar(index)}>
+									<img
+										src="/icons/avatar.svg"
+										alt=""
+										class="h-10 w-10 rounded-full bg-slate-200 p-2"
+									/>
+								</button>
+							{/if}
+						</div>
+					{/if}
+					{#if photo.isProfile}
+						<div
+							class="absolute left-0 top-0 ml-1 mt-1 flex items-center gap-1 rounded-lg bg-teal-100 bg-opacity-80 px-2 py-1 shadow-xl"
+						>
+							<img src="/icons/avatar.svg" alt="" class="h-4 w-4" />
+							<p class="text-sm">Profile picture</p>
 						</div>
 					{/if}
 					<img

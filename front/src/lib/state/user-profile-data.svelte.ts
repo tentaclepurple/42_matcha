@@ -1,4 +1,5 @@
 import { SERVER_BASE_URL } from '$lib/constants/api';
+import { DEFAULT_AVATAR_NAME } from '$lib/constants/avatar';
 import type UserProfileData from '$lib/interfaces/user-profile-data.interface';
 import deserialize from '$lib/utils/deserialize';
 
@@ -11,6 +12,21 @@ class UserProfileDataClass {
 
 	set value(value: null | UserProfileData) {
 		this.#value = value;
+	}
+
+	get isProfileComplete() {
+		if (!this.#value) return false;
+
+		return Boolean(this.#value.gender && this.#value.sexualPreferences && this.#value.biography);
+	}
+
+	get hasProfilePicture() {
+		if (!this.#value) return false;
+
+		const profilePicture = this.#value.photos.find((photo) => photo.isProfile);
+		const isDefaultPicture = profilePicture?.url.includes(DEFAULT_AVATAR_NAME);
+
+		return !isDefaultPicture;
 	}
 
 	fetch = async (): Promise<void> => {

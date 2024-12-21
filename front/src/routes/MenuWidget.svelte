@@ -62,11 +62,16 @@
 			class="absolute right-0 top-full z-50 mt-2 flex min-h-32 min-w-48 justify-end rounded-md bg-teal-100 p-6 shadow-xl"
 		>
 			<nav class="flex flex-col items-end gap-3">
+				<a href="/" onclick={handleShowMenu} class="flex items-center gap-1 mb-6">
+					<img src="/icons/home.svg" alt="" class="w-5" />
+					Home
+				</a>
+
 				<a href="/search" onclick={handleShowMenu} class="flex items-center gap-1">
-					<img src="/icons/home.svg" alt="" class="w-4" />
+					<img src="/icons/search.svg" alt="" class="w-4" />
 					Search
 				</a>
-				<a href="/chat" onclick={handleShowMenu} class="flex items-center gap-1 mb-4">
+				<a href="/chat" onclick={handleShowMenu} class="mb-4 flex items-center gap-1">
 					<img src="/icons/messages.svg" alt="" class="w-5" />
 					Messages
 				</a>
@@ -74,7 +79,7 @@
 					<img src="/icons/settings.svg" alt="" class="w-5" />
 					Account
 				</a>
-				<a href="/profile" onclick={handleShowMenu} class="flex items-center gap-1 mb-6">
+				<a href="/profile" onclick={handleShowMenu} class="mb-6 flex items-center gap-1">
 					<img src="/icons/avatar.svg" alt="" class="w-5" />
 					Profile
 				</a>
