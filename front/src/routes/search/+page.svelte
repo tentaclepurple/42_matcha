@@ -8,6 +8,8 @@
 	import UsersMap from './UsersMap.svelte';
 
 	const viewParam = $page.url.searchParams.get('view') ?? 'map';
+
+	const { data } = $props();
 </script>
 
 <PageWrapper>
@@ -32,12 +34,12 @@
 				<Tabs.Content value="list">
 					<FiltersAndSorting />
 					<div class="flex min-h-[750px] flex-col">
-						<UsersList />
+						<UsersList results={userSearchData.value ? userSearchData.value : []} />
 					</div>
 				</Tabs.Content>
 				<Tabs.Content value="recommended">
 					<div class="flex min-h-[750px] flex-col">
-						<UsersList />
+						<UsersList results={data.suggestionsResults} />
 					</div>
 				</Tabs.Content>
 			</Tabs.Root>

@@ -11,7 +11,7 @@ export const load: PageLoad = async () => {
 		if (!userProfileData?.value) {
 			throw new Error('Failed to fetch user profile data');
 		}
-	} catch (error: unknown) {
+	} catch (error) {
 		redirect(302, '/login');
 	}
 };
