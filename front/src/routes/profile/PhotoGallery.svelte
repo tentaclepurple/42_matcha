@@ -24,7 +24,7 @@
 
 	let photoActionsIndex: null | number = $state(null);
 
-	let showPicturePreview = $state(false);
+	let showPicturePreviewIndex = $state<null | number>(null);
 
 	const handlePhotoUpload = async (e) => {
 		try {
@@ -130,7 +130,7 @@
 								<img src="/icons/delete.svg" alt="" class="h-10 w-10 rounded-full bg-red-500 p-2" />
 							</button>
 
-							<button title="Show" onclick={() => (showPicturePreview = true)}>
+							<button title="Show" onclick={() => (showPicturePreviewIndex = index)}>
 								<img src="/icons/show.svg" alt="" class="h-10 w-10 rounded-full bg-teal-500 p-2" />
 							</button>
 
@@ -148,11 +148,22 @@
 						alt=""
 						class={`h-full border-2 border-gray-500 object-cover shadow-md`}
 					/>
-					{#if showPicturePreview}
+					{#if showPicturePreviewIndex !== null}
 						<div
-							class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-80"
+							class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-80 p-12"
 						>
-							<img src={getServerAsset(photos[photoActionsIndex ?? 0].url)} alt="" class="w-6/7" />
+							<button
+								aria-label="Close"
+								class="absolute right-0 top-0 mr-3 mt-3 rounded-lg bg-teal-500 p-4 shadow-xl"
+								onclick={() => (showPicturePreviewIndex = null)}
+							>
+								<img src="/icons/close.svg" class="h-8 w-8" alt="" />
+							</button>
+							<img
+								src={getServerAsset(photos[showPicturePreviewIndex].url)}
+								alt=""
+								class="max-w-screen max-h-screen"
+							/>
 						</div>
 					{/if}
 				</div>
