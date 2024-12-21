@@ -15,7 +15,7 @@ from ..models.iamatcha import BotModel
 
 
 UPLOAD_FOLDER = 'app/static/uploads'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'} # Keep in sync with FE
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
 INTERESTS = [
