@@ -22,7 +22,9 @@
 		}
 	});
 
-	let showDeleteButton: null | number = $state(null);
+	let photoActionsIndex: null | number = $state(null);
+
+	let showPicturePreview = $state(false);
 
 	const handlePhotoUpload = async (e) => {
 		try {
@@ -46,14 +48,15 @@
 			});
 
 			if (!res.ok) {
-				throw new Error('Failed to upload photo');
+				const errorData = await res.json();
+				throw new Error(errorData.error);
 			}
 
 			await userProfileData.fetch();
 			await userData.fetch();
 		} catch (e) {
-			console.error(error);
-			error = 'There was an error uploading the photo. Please try again.';
+			console.error(e);
+			error = e;
 		} finally {
 			e.target.value = '';
 		}
@@ -63,15 +66,15 @@
 		const target = e.target as HTMLElement;
 		const targetIndex = Number(target?.dataset?.id);
 
-		if (targetIndex === index) showDeleteButton = index;
+		if (targetIndex === index) photoActionsIndex = index;
 	};
 
 	const handlePhotoMouseLeave = () => {
-		showDeleteButton = null;
+		photoActionsIndex = null;
 	};
 
 	const handlePhotoDelete = async (index: number) => {
-		const isRelevantButton = index === showDeleteButton;
+		const isRelevantButton = index === photoActionsIndex;
 
 		if (!isRelevantButton) return;
 
@@ -115,23 +118,43 @@
 				<div
 					onmouseenter={(event) => handlePhotoMouseEnter(event, index)}
 					onmouseleave={handlePhotoMouseLeave}
-					onclick={() => handlePhotoDelete(index)}
 					data-id={index}
-					class={`relative ${showDeleteButton === index ? 'shadow-lg' : ''} h-full`}
-					role={showDeleteButton === index ? 'button' : ''}
+					role="dialog"
+					class={`relative ${photoActionsIndex === index ? 'shadow-lg' : ''} h-full`}
 				>
-					{#if showDeleteButton === index}
-						<img
-							src="/icons/delete.svg"
-							alt=""
-							class="absolute inset-0 m-auto h-10 w-10 rounded-full bg-red-500 p-2"
-						/>
+					{#if photoActionsIndex === index}
+						<div
+							class="absolute inset-0 m-auto flex h-full w-full flex-col items-center justify-center gap-3 bg-gray-900 bg-opacity-50"
+						>
+							<button onclick={() => handlePhotoDelete(index)} title="Delete">
+								<img src="/icons/delete.svg" alt="" class="h-10 w-10 rounded-full bg-red-500 p-2" />
+							</button>
+
+							<button title="Show" onclick={() => (showPicturePreview = true)}>
+								<img src="/icons/show.svg" alt="" class="h-10 w-10 rounded-full bg-teal-500 p-2" />
+							</button>
+
+							<button title="Choose as avatar">
+								<img
+									src="/icons/avatar.svg"
+									alt=""
+									class="h-10 w-10 rounded-full bg-slate-200 p-2"
+								/>
+							</button>
+						</div>
 					{/if}
 					<img
 						src={getServerAsset(photo.url)}
 						alt=""
 						class={`h-full border-2 border-gray-500 object-cover shadow-md`}
 					/>
+					{#if showPicturePreview}
+						<div
+							class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-80"
+						>
+							<img src={getServerAsset(photos[photoActionsIndex ?? 0].url)} alt="" class="w-6/7" />
+						</div>
+					{/if}
 				</div>
 			{/if}
 		</div>
