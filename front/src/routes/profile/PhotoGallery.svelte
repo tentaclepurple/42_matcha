@@ -81,6 +81,16 @@
 
 		const token = localStorage.getItem('access_token');
 
+		const isProfilePicture = photos[index].isProfile;
+		const isLastPicture =
+			photos.filter((photo) => !photo.url.endsWith(DEFAULT_AVATAR_NAME)).length === 1;
+
+		if (isProfilePicture && !isLastPicture) {
+			error =
+				'You cannot delete your profile picture. Please set another picture as profile picture first.';
+			return;
+		}
+
 		try {
 			const res = await fetch(`${SERVER_BASE_URL}/api/profile/delete_photo/${index}`, {
 				method: 'DELETE',
