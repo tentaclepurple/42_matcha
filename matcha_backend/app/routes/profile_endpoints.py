@@ -19,15 +19,15 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'} # Keep in sync with FE
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
 INTERESTS = [
-    "Animals", "Anime", "Art", "Astrology", "Beauty", "Blogging", "Board Games", 
-    "Camping", "Cars", "Collecting", "Comedy", "Cooking", "Crafts", "Cycling", 
-    "Dancing", "DIY", "Drinks", "Fashion", "Fishing", "Fitness", "Foodie", 
-    "Gaming", "Gardening", "Health", "Hiking", "History", "Investing", 
-    "Karaoke", "Languages", "Magic", "Meditation", "Movies", "Music", 
-    "Nature", "Nightlife", "Partying", "Photography", "Podcasts", "Politics", 
-    "Puzzles", "Reading", "Religion", "Running", "Science", "Sex", "Skating", 
-    "Skiing", "Sports", "Surfing", "Swimming", "Technology", "Theater", 
-    "Traditions", "Traveling", "Volunteering", "Writing", "Yoga"
+    "animals", "anime", "art", "astrology", "beauty", "blogging", "board games", 
+    "camping", "cars", "collecting", "comedy", "cooking", "crafts", "cycling", 
+    "dancing", "diy", "drinks", "fashion", "fishing", "fitness", "foodie", 
+    "gaming", "gardening", "health", "hiking", "history", "investing", 
+    "karaoke", "languages", "magic", "meditation", "movies", "music", 
+    "nature", "nightlife", "partying", "photography", "podcasts", "politics", 
+    "puzzles", "reading", "religion", "running", "science", "sex", "skating", 
+    "skiing", "sports", "surfing", "swimming", "technology", "theater", 
+    "traditions", "traveling", "volunteering", "writing", "yoga"
 ] # Keep in sync with FE
 
 
