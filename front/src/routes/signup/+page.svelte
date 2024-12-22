@@ -97,7 +97,7 @@
 	<div>
 		<Form onSubmit={handleSubmit}>
 			<fieldset disabled={isLoading} class="flex flex-col gap-4">
-				<div class="flex items-baseline justify-center gap-4">
+				<div class="flex flex-col sm:flex-row items-baseline justify-center gap-4">
 					<label>
 						Username
 						<input
@@ -118,7 +118,7 @@
 				</div>
 
 				<div>
-					<div class="mb-4 flex items-baseline justify-center gap-4">
+					<div class="mb-4 flex sm:flex-row flex-col items-baseline justify-center gap-4">
 						<label>
 							First name
 							<input

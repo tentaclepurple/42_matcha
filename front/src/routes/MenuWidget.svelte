@@ -60,6 +60,7 @@
 	{#if showMenu}
 		<div
 			class="absolute right-0 top-full z-50 mt-2 flex min-h-32 min-w-48 justify-end rounded-md bg-teal-100 p-6 shadow-xl"
+			style="z-index: 99"
 		>
 			<nav class="flex flex-col items-end gap-3">
 				<a href="/search" onclick={handleShowMenu} class="flex items-center gap-1">
