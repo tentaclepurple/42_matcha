@@ -30,8 +30,8 @@
 			>
 				<h1 class="mb-4">Welcome to your new profile!</h1>
 				<p class="mb-6">
-					Please complete your info and upload some nice picture before starting your quest for
-					love.
+					Please complete your info and upload some nice pictures before starting your quest for
+					love ❤️‍🔥
 				</p>
 				<Button level="primary" onclick={() => (showWelcomeModal = false)}>Got it!</Button>
 			</div>
