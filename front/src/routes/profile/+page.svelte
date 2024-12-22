@@ -73,7 +73,9 @@
 							onclick={handleLocationUpdate}
 						>
 							Refresh
-							<img src="/icons/reload.svg" alt="" class="h-4 w-4" />
+							{#if userLocation.isLoading}
+								<img src="/icons/reload.svg" alt="" class="h-4 w-4 animate-spin" />
+							{/if}
 						</Button>
 						<MapLibre
 							center={userLocation?.value ?? userProfileData.value.location.coordinates}
