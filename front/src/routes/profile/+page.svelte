@@ -54,7 +54,7 @@
 				{#if userProfileData.isProfileComplete}
 					<UserDataSection />
 				{:else}
-					<div class="flex flex-col justify-center rounded-lg bg-teal-100 px-12 py-6 w-full">
+					<div class="flex flex-col justify-center rounded-lg bg-teal-100 px-6 sm:px-12 py-6 w-full">
 						<h2 class="mb-6">Complete your profile to find your soulmate</h2>
 						<UserDataForm />
 					</div>

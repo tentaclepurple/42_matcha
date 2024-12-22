@@ -75,7 +75,7 @@
 </script>
 
 <form onsubmit={handleSave}>
-	<fieldset class="grid grid-cols-2 grid-rows-3 gap-x-3 gap-y-5">
+	<fieldset class="grid grid-cols-1 grid-rows-4 gap-x-3 gap-y-5 sm:grid-cols-2 sm:grid-rows-3">
 		<label class="col-span-2">
 			Username:
 			<input
@@ -91,7 +91,7 @@
 			/>
 		</label>
 
-		<label>
+		<label class="col-span-2 sm:col-span-1">
 			First name:
 			<input
 				type="text"
@@ -105,7 +105,7 @@
 			/>
 		</label>
 
-		<label>
+		<label class="col-span-2 sm:col-span-1">
 			Last name:
 			<input
 				type="text"
