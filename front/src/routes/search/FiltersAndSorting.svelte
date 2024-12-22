@@ -265,7 +265,7 @@
 	<ButtonSelector>
 		<details>
 			<summary>
-				Filter by interest
+				Filter by interests
 				{#if currentFilters.interests.length}
 					({[...currentFilters.interests].sort().join(', ')})
 				{/if}
