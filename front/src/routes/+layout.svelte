@@ -63,7 +63,7 @@
 				{:else}
 					<a href="/login" class="flex items-center justify-center gap-1 no-underline">
 						Sign in
-						<img src="icons/login.svg" alt="" class="w-5" />
+						<img src="/icons/login.svg" alt="" class="w-5" />
 					</a>
 				{/if}
 			</div>
