@@ -85,17 +85,17 @@
 <PageWrapper>
 	<h1>Log in</h1>
 	<div>
-		<p class="mb-4">This is where you can log in</p>
+		<p class="mb-6">This is where you can log in.</p>
 		<Form onSubmit={handleSubmit}>
-			<fieldset disabled={isLoading} class="flex w-full flex-col items-start gap-3">
+			<fieldset disabled={isLoading} class="flex w-full flex-col items-start gap-3 mb-6">
 				<label>
-					E-mail
+					E-mail or username
 					<input
-						type="email"
+						type="text"
 						id="email"
 						name="email"
 						autocomplete="email"
-						placeholder="Your e-mail"
+						placeholder="Your e-mail or username"
 						required
 						class="min-w-[300px]"
 					/>
