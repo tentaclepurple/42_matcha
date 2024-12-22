@@ -1,7 +1,9 @@
 <script lang="ts">
+	import { beforeNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
 	import * as Tabs from '$lib/components/ui/tabs';
+	import { userProfileData } from '$lib/state/user-profile-data.svelte';
 	import { userSearchData } from '$lib/state/user-search.svelte';
 	import FiltersAndSorting from './FiltersAndSorting.svelte';
 	import UsersList from './UsersList.svelte';
@@ -19,7 +21,19 @@
 	</header>
 
 	{#if userSearchData.value}
-		<div class="mx-auto w-full max-w-5xl px-12">
+		{#if !userProfileData.isProfileComplete}
+			<div class="mx-auto mb-6 flex w-fit max-w-5xl gap-6 rounded-md bg-teal-200 px-12 py-6">
+				<span aria-hidden="true" class="text-xl">ℹ️</span>
+				<div>
+					<p>Please complete your profile to start searching for your soulmate.</p>
+					<p>Go to your <a href="/profile">Profile</a> page to fill out the missing data.</p>
+				</div>
+			</div>
+		{/if}
+		<div
+			class={`w-5xl mx-auto w-full px-12 ${userProfileData.isProfileComplete ? '' : 'pointer-events-none cursor-not-allowed opacity-50'}`}
+			aria-hidden={!userProfileData.isProfileComplete}
+		>
 			<Tabs.Root value={viewParam} class="w-full bg-teal-100 shadow-lg">
 				<Tabs.List class="grid w-full grid-cols-3">
 					<Tabs.Trigger value="map">Map</Tabs.Trigger>
