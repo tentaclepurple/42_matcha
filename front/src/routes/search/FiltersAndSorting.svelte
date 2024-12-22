@@ -116,7 +116,7 @@
 
 		// Interests
 		if (currentFilters.interests.length) {
-			currentFilters.interests.forEach((interest) => queryParams.append('interests', interest));
+			currentFilters.interests.forEach((interest) => queryParams.append('interests', interest.toLowerCase()));
 		}
 
 		// Sexual preference
