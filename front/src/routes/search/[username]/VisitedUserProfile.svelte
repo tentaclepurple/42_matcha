@@ -93,7 +93,7 @@
 			minZoom={11}
 			standardControls
 			style="https://tiles.basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
-			zoom={14}
+			zoom={15}
 		>
 			<DefaultMarker lngLat={selectedUser.location.coordinates} />
 		</MapLibre>
