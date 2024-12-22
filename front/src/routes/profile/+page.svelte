@@ -26,7 +26,7 @@
 		{#if !userProfileData.isProfileComplete && showWelcomeModal}
 			<div class="absolute left-0 top-0 z-50 h-full w-full bg-gray-900 opacity-80"></div>
 			<div
-				class="absolute left-1/2 top-40 z-50 flex max-w-xl -translate-x-1/2 transform flex-col items-center justify-center rounded-md bg-white px-12 py-6 text-center shadow-xl"
+				class="fixed left-1/2 top-40 z-50 flex max-w-xl -translate-x-1/2 transform flex-col items-center justify-center rounded-md bg-white px-12 py-6 text-center shadow-xl"
 			>
 				<h1 class="mb-4">Welcome to your new profile!</h1>
 				<p class="mb-6">
@@ -54,7 +54,7 @@
 				{#if userProfileData.isProfileComplete}
 					<UserDataSection />
 				{:else}
-					<div class="flex flex-col justify-center rounded-lg bg-teal-100 px-12 py-6">
+					<div class="flex flex-col justify-center rounded-lg bg-teal-100 px-12 py-6 w-full">
 						<h2 class="mb-6">Complete your profile to find your soulmate</h2>
 						<UserDataForm />
 					</div>
