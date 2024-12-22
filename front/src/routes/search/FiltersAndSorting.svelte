@@ -168,7 +168,7 @@
 	};
 </script>
 
-<div class="flex flex-wrap items-center gap-2 px-4">
+<div class="mb-2 flex flex-wrap items-center gap-2 px-4">
 	<ButtonSelector>
 		<label>
 			Sort by:
@@ -259,31 +259,40 @@
 			onChangeMax={(value: number) => (currentFilters.maxFameRating = value)}
 		/>
 	</ButtonSelector>
+</div>
 
+<div class="w-full px-4">
 	<ButtonSelector>
-		<div class="flex gap-1">
-			<span>Interests:</span>
-			<ul class="flex flex-wrap items-baseline gap-2">
-				{#each [...INTERESTS].sort() as interest}
-					<li
-						class={`text-2xs shrink-0 rounded-md ${currentFilters.interests.includes(interest) ? 'bg-teal-300' : 'bg-slate-300'} px-2 py-1`}
-					>
-						<button
-							onclick={() => {
-								if (currentFilters.interests.includes(interest)) {
-									currentFilters.interests = currentFilters.interests.filter(
-										(currentInterest) => currentInterest !== interest
-									);
-								} else {
-									currentFilters.interests = [...currentFilters.interests, interest];
-								}
-							}}
+		<details>
+			<summary>
+				Filter by interest
+				{#if currentFilters.interests.length}
+					({[...currentFilters.interests].sort().join(', ')})
+				{/if}
+			</summary>
+			<div class="mt-4 flex gap-1">
+				<ul class="flex flex-wrap items-baseline gap-2">
+					{#each [...INTERESTS].sort() as interest}
+						<li
+							class={`text-2xs shrink-0 rounded-md ${currentFilters.interests.includes(interest) ? 'bg-teal-300' : 'bg-slate-300'} px-2 py-1`}
 						>
-							#{interest.toLowerCase()}
-						</button>
-					</li>
-				{/each}
-			</ul>
-		</div>
+							<button
+								onclick={() => {
+									if (currentFilters.interests.includes(interest)) {
+										currentFilters.interests = currentFilters.interests.filter(
+											(currentInterest) => currentInterest !== interest
+										);
+									} else {
+										currentFilters.interests = [...currentFilters.interests, interest];
+									}
+								}}
+							>
+								#{interest.toLowerCase()}
+							</button>
+						</li>
+					{/each}
+				</ul>
+			</div>
+		</details>
 	</ButtonSelector>
 </div>
