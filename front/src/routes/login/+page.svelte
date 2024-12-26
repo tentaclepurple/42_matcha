@@ -92,8 +92,8 @@
 					E-mail or username
 					<input
 						type="text"
-						id="email"
-						name="email"
+						id="username"
+						name="username"
 						autocomplete="email"
 						placeholder="Your e-mail or username"
 						required
