@@ -122,6 +122,7 @@ def toggle_like(user_identifier):
         current_user_id = get_jwt_identity()
         user = get_user_by_identifier(user_identifier)
         this_user = UserModel.find_by_id(current_user_id)
+        to_user_id = str(user['_id'])
         profile_photos = [photo for photo in this_user['photos'] 
                          if photo['is_profile'] and photo['url'] != 'static/default/default.svg']
 
@@ -133,8 +134,11 @@ def toggle_like(user_identifier):
         
         if current_user_id in [str(blocked_id) for blocked_id in user.get('blocked_users', [])]:
             return jsonify({'error': 'This user had blocked you'}), 400
+        
+        current_user = UserModel.find_by_id(current_user_id)
+        if ObjectId(to_user_id) in current_user.get('blocked_users', []):
+            return jsonify({'error': 'Cannot like a user you have blocked'}), 400
             
-        to_user_id = str(user['_id'])
         # Check if trying to like self
         if to_user_id == current_user_id:
             return jsonify({'error': 'Cannot like yourself'}), 400

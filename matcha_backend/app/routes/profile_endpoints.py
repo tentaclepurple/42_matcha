@@ -320,6 +320,11 @@ def get_user_profile(user_identifier):
         # Verify if user is blocked
         if ObjectId(current_user_id) in user.get('blocked_users', []):
             return jsonify({'error': 'Profile not available'}), 403
+        
+        # Verify if current user has blocked this user
+        current_user = UserModel.find_by_id(current_user_id)
+        if ObjectId(user['_id']) in current_user.get('blocked_users', []):
+            return jsonify({'error': 'You have blocked this user'}), 403
 
         user_id = str(user['_id'])
         is_own_profile = user_id == current_user_id
