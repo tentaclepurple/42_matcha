@@ -39,6 +39,7 @@
 			} catch (e) {
 				console.error(e);
 				userAuth.logout();
+				localStorage.removeItem('access_token');
 				goto('/login');
 			}
 		} else {
