@@ -29,28 +29,32 @@
 })}
 	<div>
 		<IconTitle {title} {icon} />
-		<details>
-			<summary>{summary}</summary>
-			<div class="pt-4">
-				<ul class="flex list-disc flex-col gap-2 px-10">
-					{#each items as item}
-						<li>
-							<span class="text-sm text-gray-800"
-								>{#if 'createdAt' in item}
-									{formatTimeStamp(item.createdAt)}
-								{:else if 'lastView' in item}
-									{formatTimeStamp(item.lastView)}
-								{/if}
-							</span>
-							-
-							<a href={`/search/${item.username}?origin=profile`} class="font-bold">
-								{item.username}
-							</a>
-						</li>
-					{/each}
-				</ul>
-			</div>
-		</details>
+		{#if items.length === 0}
+			<p class="text-gray-800">You currently have no history to show.</p>
+		{:else}
+			<details>
+				<summary>{summary}</summary>
+				<div class="pt-4">
+					<ul class="flex list-disc flex-col gap-2 px-10">
+						{#each items as item}
+							<li>
+								<span class="text-sm text-gray-800"
+									>{#if 'createdAt' in item}
+										{formatTimeStamp(item.createdAt)}
+									{:else if 'lastView' in item}
+										{formatTimeStamp(item.lastView)}
+									{/if}
+								</span>
+								-
+								<a href={`/search/${item.username}?origin=profile`} class="font-bold">
+									{item.username}
+								</a>
+							</li>
+						{/each}
+					</ul>
+				</div>
+			</details>
+		{/if}
 	</div>
 {/snippet}
 
