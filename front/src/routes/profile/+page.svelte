@@ -9,9 +9,12 @@
 	import Button from '$lib/components/Button.svelte';
 	import Location from './Location.svelte';
 	import LikesViewsHistory from './LikesViewsHistory.svelte';
+	import { userAuth } from '$lib/state/auth.svelte';
 
 	if (!userProfileData.value) {
-		goto('/login');
+		localStorage.removeItem('access_token');
+		userAuth.logout();
+		goto('/');
 	}
 
 	let showWelcomeModal = $state(true);

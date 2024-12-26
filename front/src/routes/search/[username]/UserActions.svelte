@@ -42,13 +42,39 @@
 				throw new Error('Failed to like user');
 			}
 
-			const data = await res.json();
-
 			await visitedProfileData.fetch(selectedUser?.username);
 		} catch (error) {
 			console.error(error);
 		} finally {
 			isLoading = false;
+		}
+	};
+
+	const handleBlock = async () => {
+		if (!selectedUser) return;
+
+		const answer = confirm('Are you sure you want to block this user?');
+
+		if (!answer) return;
+
+		const token = localStorage.getItem('access_token');
+
+		try {
+			const res = await fetch(`${SERVER_BASE_URL}/api/interactions/block/${selectedUser.username}`, {
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json'
+				}
+			});
+
+			if (!res.ok) {
+				throw new Error('Failed to like user');
+			}
+
+			await visitedProfileData.fetch(selectedUser?.username);
+		} catch (error) {
+			console.error(error);
 		}
 	};
 </script>
@@ -71,17 +97,30 @@
 				{/if}
 
 				<div class="flex flex-col items-center justify-center">
+					{$inspect(selectedUser)}
+					<button
+						class="flex aspect-square w-12 items-center justify-center rounded-xl border border-2 border-black bg-red-500 p-2"
+						aria-labelledby="block-button"
+						onclick={handleBlock}
+					>
+						<img src="/icons/block.svg" alt="" class="w-full" />
+					</button>
+					<p class="text-sm" id="block-button">Block</p>
+				</div>
+
+				<div class="flex flex-col items-center justify-center">
 					{#if isLoading}
 						<button
 							type="button"
 							class="flex aspect-square w-12 cursor-not-allowed items-center justify-center rounded-xl border border-2 border-black bg-gray-300 p-2"
+							aria-label="Loading"
 						>
 							<Lottie animationData={spinnerAnimationData} autoplay={true} loop={true} />
 						</button>
 					{:else}
 						<button
 							class={`flex aspect-square w-12 items-center justify-center rounded-xl border border-2 border-black ${isMatch ? 'bg-rose-400' : isLikedByMe ? 'bg-rose-200' : 'bg-transparent'} p-2`}
-							aria-label="Match"
+							aria-labelledby="like-button"
 							onclick={handleMatch}
 						>
 							{#if isMatch}
@@ -93,7 +132,7 @@
 							{/if}
 						</button>
 					{/if}
-					<p class="text-sm">
+					<p class="text-sm" id="like-button">
 						{#if isMatch}
 							Matched
 						{:else if isLikedByMe}
