@@ -53,6 +53,7 @@ class UserProfileDataClass {
 				gender,
 				interests,
 				location,
+				likesReceived,
 				photos,
 				sexualPreferences,
 				username
@@ -65,6 +66,7 @@ class UserProfileDataClass {
 				gender,
 				interests,
 				location,
+				likesReceived,
 				photos,
 				sexualPreferences,
 				username
