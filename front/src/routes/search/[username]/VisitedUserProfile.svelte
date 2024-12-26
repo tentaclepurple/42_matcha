@@ -25,7 +25,16 @@
 					type="button"
 					level="primary"
 					onclick={() => {
-						goto(`/search?view=${origin}`, { replaceState: true });
+						switch (origin) {
+							case 'profile':
+								goto('/profile', { replaceState: true });
+								break;
+							case 'search':
+								goto('/search', { replaceState: true });
+								break;
+							default:
+								goto(`/search?view=${origin}`, { replaceState: true });
+						}
 					}}
 				>
 					← Back

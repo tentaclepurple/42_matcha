@@ -4,6 +4,11 @@ import type Location from './location.interface';
 import type Photo from './photo.interface';
 import type { SexualPreference } from './sexual-preference.type';
 
+interface Like {
+	createdAt: string;
+	userId: string;
+	username: string;
+}
 export default interface UserProfileData {
 	age: number;
 	biography: string;
@@ -11,6 +16,7 @@ export default interface UserProfileData {
 	location: Location;
 	gender: Gender;
 	interests: Interest[];
+	likesReceived: Like[];
 	photos: Photo[];
 	sexualPreferences: SexualPreference;
 	username: string;
