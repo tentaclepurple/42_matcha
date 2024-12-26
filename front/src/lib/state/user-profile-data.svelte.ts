@@ -55,6 +55,7 @@ class UserProfileDataClass {
 				location,
 				likesReceived,
 				photos,
+				profileViews,
 				sexualPreferences,
 				username
 			} = deserialize(data);
@@ -68,6 +69,7 @@ class UserProfileDataClass {
 				location,
 				likesReceived,
 				photos,
+				profileViews,
 				sexualPreferences,
 				username
 			};
