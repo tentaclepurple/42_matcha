@@ -75,6 +75,8 @@ def get_suggestions():
                         '$and': [
                             # Exclude users who have blocked current user
                             {'blocked_users': {'$ne': ObjectId(current_user_id)}},
+                            # exclude blocked users too
+                            {'_id': {'$nin': current_user.get('blocked_users', [])}},
                             # Only verified and completed profiles
                             {'verified': True},
                             {'profile_completed': True},
@@ -223,6 +225,8 @@ def advanced_search():
                         '$and': [
                             # Exclude users who have blocked current user
                             {'blocked_users': {'$ne': ObjectId(current_user_id)}},
+                            # exclude blocked users too
+                            {'_id': {'$nin': current_user.get('blocked_users', [])}},
                             # Only verified and completed profiles
                             {'verified': True},
                             {'profile_completed': True},
