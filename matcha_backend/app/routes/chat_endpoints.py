@@ -188,6 +188,16 @@ def send_message(user_identifier):
 
            # Verify match exists
         recipient_id = str(recipient['_id'])
+
+        # Check if recipient has blocked current user
+        if ObjectId(current_user_id) in recipient.get('blocked_users', []):
+            return jsonify({'error': 'Cannot send message to this user'}), 403
+
+        # Check if current user has blocked recipient
+        current_user = UserModel.find_by_id(current_user_id)
+        if ObjectId(recipient_id) in current_user.get('blocked_users', []):
+            return jsonify({'error': 'Cannot send message to a user you have blocked'}), 403
+
         is_match = LikeModel.check_is_match(current_user_id, recipient_id)
 
         if not is_match:
