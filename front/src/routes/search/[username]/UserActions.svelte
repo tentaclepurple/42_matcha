@@ -97,7 +97,6 @@
 				{/if}
 
 				<div class="flex flex-col items-center justify-center">
-					{$inspect(selectedUser)}
 					<button
 						class="flex aspect-square w-12 items-center justify-center rounded-xl border border-2 border-black bg-red-500 p-2"
 						aria-labelledby="block-button"
