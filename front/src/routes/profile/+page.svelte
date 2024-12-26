@@ -8,7 +8,7 @@
 	import FameRating from '$lib/components/FameRating.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Location from './Location.svelte';
-	import LikesHistory from './LikesHistory.svelte';
+	import LikesViewsHistory from './LikesViewsHistory.svelte';
 
 	if (!userProfileData.value) {
 		goto('/login');
@@ -60,7 +60,7 @@
 					{/if}
 				</div>
 
-				<LikesHistory />
+				<LikesViewsHistory />
 
 				<Location />
 			</div>
