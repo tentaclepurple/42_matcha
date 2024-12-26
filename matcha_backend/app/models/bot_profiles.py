@@ -142,7 +142,7 @@ BOT_PROFILES = {
 		"age": 29,
 		"gender": "female",
 		"sexual_preferences": "male",
-		"biography": "Security guard and dominatrix from Bernago. I am looking for men who know how to obey.",
+		"biography": "Security guard and dominatrix from Berango. I am looking for men who know how to obey.",
 		"interests": ["Politics", "Sex"],
 		"location": {"type": "Point", "coordinates": [-2.8354, 43.3173]},
 		"context": "context11"

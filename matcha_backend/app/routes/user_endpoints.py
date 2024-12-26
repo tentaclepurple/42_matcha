@@ -154,11 +154,11 @@ def login():
         data = request.get_json()
         
         # Check required fields
-        if not data.get('email') or not data.get('password'):
-            return jsonify({'error': 'Email and password are required'}), 400
+        if not data.get('username') or not data.get('password'):
+            return jsonify({'error': 'username and password are required'}), 400
             
         # Find user and check credentials
-        user = UserModel.find_by_email(data['email'])
+        user = UserModel.find_by_username(data['username'])
         if not user or not check_password_hash(user['password'], data['password']):
             return jsonify({'error': 'Invalid credentials'}), 401
             
