@@ -97,7 +97,7 @@
 	<div>
 		<Form onSubmit={handleSubmit}>
 			<fieldset disabled={isLoading} class="flex flex-col gap-4">
-				<div class="flex flex-col sm:flex-row items-baseline justify-center gap-4">
+				<div class="flex flex-col items-baseline justify-center gap-4 sm:flex-row">
 					<label>
 						Username
 						<input
@@ -113,12 +113,19 @@
 					</label>
 					<label>
 						E-mail
-						<input type="email" id="email" name="email" placeholder="E-mail" autocomplete="email" />
+						<input
+							type="email"
+							id="email"
+							name="email"
+							placeholder="E-mail"
+							autocomplete="email"
+							required
+						/>
 					</label>
 				</div>
 
 				<div>
-					<div class="mb-4 flex sm:flex-row flex-col items-baseline justify-center gap-4">
+					<div class="mb-4 flex flex-col items-baseline justify-center gap-4 sm:flex-row">
 						<label>
 							First name
 							<input
