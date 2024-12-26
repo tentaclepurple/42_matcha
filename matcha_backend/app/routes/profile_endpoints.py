@@ -235,6 +235,21 @@ def my_profile_info():
       # Get likes received
        likes_received = LikeModel.get_likes_received(current_user_id, like_type="like")
 
+       blocked_users = []
+       for blocked_id in user.get('blocked_users', []):
+            blocked_user = UserModel.find_by_id(str(blocked_id))
+       if blocked_user:
+            profile_photo = next(
+                (photo['url'] for photo in blocked_user.get('photos', []) 
+                if photo.get('is_profile')), 
+                None
+            )
+            blocked_users.append({
+                'username': blocked_user['username'],
+                'user_id': str(blocked_user['_id']),
+                'profile_photo': profile_photo
+            })
+
        profile_info = {
            # Profile
            'username': user.get('username'),
@@ -248,7 +263,7 @@ def my_profile_info():
            'fame_rating': user.get('fame_rating'),
            
            # Other
-           'blocked_users': user.get('blocked_users', []),
+           'blocked_users':blocked_users,
            'reported': user.get('reported', False),
            
            # Status
@@ -279,10 +294,10 @@ def my_profile_info():
 @jwt_required()
 def get_user_profile(user_identifier):
     """
-    Obtiene el perfil público de un usuario por su ID o username
+    Get profile information of a user.
     
     Args:
-        user_identifier: Puede ser el ObjectId o el username del usuario
+        user_identifier: Can be either the user's ID or username.
     """
     try:
         current_user_id = get_jwt_identity()
