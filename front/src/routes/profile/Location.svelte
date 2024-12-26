@@ -3,6 +3,7 @@
 	import { userLocation } from '$lib/state/geolocation.svelte';
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import IconTitle from '$lib/components/IconTitle.svelte';
 
 	const handleLocationUpdate = async () => {
 		await userLocation.getUserLocation();
@@ -11,7 +12,7 @@
 
 {#if userProfileData.value}
 	<div class="mt-6 w-full">
-		<h2 class="mb-2">Your location</h2>
+		<IconTitle title="Your location" icon="/icons/location.svg" />
 		<p class="mb-6">
 			Your location is detected automatically from your device. Use the Refresh button to force an
 			update.

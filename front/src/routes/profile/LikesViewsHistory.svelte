@@ -1,4 +1,5 @@
 <script lang="ts">
+	import IconTitle from '$lib/components/IconTitle.svelte';
 	import type { Like, View } from '$lib/interfaces/user-profile-data.interface';
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
 
@@ -16,20 +17,22 @@
 </script>
 
 {#snippet HistorySection({
+	icon,
 	items,
 	summary,
 	title
 }: {
+	icon: string;
 	summary: string;
 	title: string;
 	items: View[] | Like[];
 })}
 	<div>
-		<h2 class="mb-2">{title}</h2>
+		<IconTitle {title} {icon} />
 		<details>
 			<summary>{summary}</summary>
 			<div class="pt-4">
-				<ul class="list-disc px-10 flex flex-col gap-2">
+				<ul class="flex list-disc flex-col gap-2 px-10">
 					{#each items as item}
 						<li>
 							<span class="text-sm text-gray-800"
@@ -53,14 +56,16 @@
 
 {#if userProfileData.value}
 	{@render HistorySection({
+		icon: '/icons/like.svg',
 		items: userProfileData.value.likesReceived,
 		title: 'Likes received',
-		summary: 'Click here to see the users who liked your profile 🌶️'
+		summary: 'Click here to see the users who liked your profile.'
 	})}
 
 	{@render HistorySection({
+		icon: '/icons/view.svg',
 		items: userProfileData.value.profileViews,
 		title: 'Views received',
-		summary: 'Click here to see the users who viewed your profile 👀'
+		summary: 'Click here to see the users who viewed your profile.'
 	})}
 {/if}
