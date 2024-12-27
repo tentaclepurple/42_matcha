@@ -87,15 +87,15 @@
 	<div>
 		<p class="mb-6">This is where you can log in.</p>
 		<Form onSubmit={handleSubmit}>
-			<fieldset disabled={isLoading} class="flex w-full flex-col items-start gap-3 mb-6">
+			<fieldset disabled={isLoading} class="mb-6 flex w-full flex-col items-start gap-3">
 				<label>
-					E-mail or username
+					Username
 					<input
 						type="text"
 						id="username"
 						name="username"
-						autocomplete="email"
-						placeholder="Your e-mail or username"
+						autocomplete="username"
+						placeholder="Your username"
 						required
 						class="min-w-[300px]"
 					/>
