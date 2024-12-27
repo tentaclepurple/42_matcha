@@ -238,17 +238,17 @@ def my_profile_info():
        blocked_users = []
        for blocked_id in user.get('blocked_users', []):
             blocked_user = UserModel.find_by_id(str(blocked_id))
-       if blocked_user:
-            profile_photo = next(
-                (photo['url'] for photo in blocked_user.get('photos', []) 
-                if photo.get('is_profile')), 
-                None
-            )
-            blocked_users.append({
-                'username': blocked_user['username'],
-                'user_id': str(blocked_user['_id']),
-                'profile_photo': profile_photo
-            })
+            if blocked_user:
+                    profile_photo = next(
+                        (photo['url'] for photo in blocked_user.get('photos', []) 
+                        if photo.get('is_profile')), 
+                        None
+                    )
+                    blocked_users.append({
+                        'username': blocked_user['username'],
+                        'user_id': str(blocked_user['_id']),
+                        'profile_photo': profile_photo
+                    })
 
        profile_info = {
            # Profile
@@ -301,6 +301,7 @@ def get_user_profile(user_identifier):
     """
     try:
         current_user_id = get_jwt_identity()
+        current_user = UserModel.find_by_id(current_user_id)
         
         # first try to find by ID (for ObjectId)
         user = None
@@ -322,7 +323,6 @@ def get_user_profile(user_identifier):
             return jsonify({'error': 'Profile not available'}), 403
         
         # Verify if current user has blocked this user
-        current_user = UserModel.find_by_id(current_user_id)
         if ObjectId(user['_id']) in current_user.get('blocked_users', []):
             return jsonify({'error': 'You have blocked this user'}), 403
 
