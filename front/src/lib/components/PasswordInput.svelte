@@ -29,7 +29,7 @@
 	};
 </script>
 
-<div class="flex items-baseline justify-center gap-4">
+<div class={`flex items-baseline justify-center gap-4 ${CLASS}`}>
 	<input
 		type={showPassword ? 'text' : 'password'}
 		{id}
