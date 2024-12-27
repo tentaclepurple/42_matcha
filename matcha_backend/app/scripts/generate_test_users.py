@@ -41,15 +41,16 @@ def generate_test_users(mongo, num_users=50):
     """Generate test users with complete profiles"""
 
     # Sample data pools
-    interests = ["Animals", "Anime", "Art", "Astrology", "Beauty", "Blogging", "Board Games", 
-    "Camping", "Cars", "Collecting", "Comedy", "Cooking", "Crafts", "Cycling", 
-    "Dancing", "DIY", "Drinks", "Fashion", "Fishing", "Fitness", "Foodie", 
-    "Gaming", "Gardening", "Health", "Hiking", "History", "Investing", 
-    "Karaoke", "Languages", "Magic", "Meditation", "Movies", "Music", 
-    "Nature", "Nightlife", "Partying", "Photography", "Podcasts", "Politics", 
-    "Puzzles", "Reading", "Religion", "Running", "Science", "Sex", "Skating", 
-    "Skiing", "Sports", "Surfing", "Swimming", "Technology", "Theater", 
-    "Traditions", "Traveling", "Volunteering", "Writing", "Yoga"]
+    interests = ["animals", "anime", "art", "astrology", "beauty", "blogging", "board games", 
+        "camping", "cars", "collecting", "comedy", "cooking", "crafts", "cycling", 
+        "dancing", "diy", "drinks", "fashion", "fishing", "fitness", "foodie", 
+        "gaming", "gardening", "health", "hiking", "history", "investing", 
+        "karaoke", "languages", "magic", "meditation", "movies", "music", 
+        "nature", "nightlife", "partying", "photography", "podcasts", "politics", 
+        "puzzles", "reading", "religion", "running", "science", "sex", "skating", 
+        "skiing", "sports", "surfing", "swimming", "technology", "theater", 
+        "traditions", "traveling", "volunteering", "writing", "yoga"]
+
 
     print("Creating test users...")
 

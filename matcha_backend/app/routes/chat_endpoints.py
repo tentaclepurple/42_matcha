@@ -154,9 +154,9 @@ def send_message(user_identifier):
     """Send a message to a user"""
     try:
         current_user_id = get_jwt_identity()
+        current_user = UserModel.find_by_id(current_user_id)
         
-        user = UserModel.find_by_id(current_user_id)
-        if not user:
+        if not current_user:
             return jsonify({'error': 'Current user not found'}), 404
 
         # Validate request
@@ -186,7 +186,7 @@ def send_message(user_identifier):
         if not recipient:
             return jsonify({'error': 'Recipient not found'}), 404
 
-           # Verify match exists
+        # Verify match exists
         recipient_id = str(recipient['_id'])
 
         # Check if recipient has blocked current user
@@ -194,7 +194,6 @@ def send_message(user_identifier):
             return jsonify({'error': 'Cannot send message to this user'}), 403
 
         # Check if current user has blocked recipient
-        current_user = UserModel.find_by_id(current_user_id)
         if ObjectId(recipient_id) in current_user.get('blocked_users', []):
             return jsonify({'error': 'Cannot send message to a user you have blocked'}), 403
 
