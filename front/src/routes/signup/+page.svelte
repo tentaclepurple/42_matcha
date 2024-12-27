@@ -93,12 +93,12 @@
 </script>
 
 <PageWrapper>
-	<h1>Create a new account</h1>
+	<h1 class="mb-4">Create a new account</h1>
 	<div>
 		<Form onSubmit={handleSubmit}>
-			<fieldset disabled={isLoading} class="flex flex-col gap-4">
+			<fieldset disabled={isLoading} class="flex w-full flex-col gap-4 sm:w-auto">
 				<div class="flex flex-col items-baseline justify-center gap-4 sm:flex-row">
-					<label>
+					<label class="w-full">
 						Username
 						<input
 							type="text"
@@ -109,9 +109,10 @@
 							minlength="5"
 							maxlength="12"
 							autocomplete="username"
+							class="w-full"
 						/>
 					</label>
-					<label>
+					<label class="w-full">
 						E-mail
 						<input
 							type="email"
@@ -120,13 +121,14 @@
 							placeholder="E-mail"
 							autocomplete="email"
 							required
+							class="w-full"
 						/>
 					</label>
 				</div>
 
 				<div>
 					<div class="mb-4 flex flex-col items-baseline justify-center gap-4 sm:flex-row">
-						<label>
+						<label class="w-full">
 							First name
 							<input
 								type="text"
@@ -136,9 +138,10 @@
 								required
 								maxlength="30"
 								autocomplete="given-name"
+								class="w-full"
 							/>
 						</label>
-						<label>
+						<label class="w-full">
 							Last name
 							<input
 								type="text"
@@ -148,6 +151,7 @@
 								required
 								maxlength="30"
 								autocomplete="family-name"
+								class="w-full"
 							/>
 						</label>
 					</div>
@@ -162,12 +166,13 @@
 							max={calcEighteenthBirthday()}
 							required
 							autocomplete="bday"
+							class="w-full sm:w-auto"
 						/>
 					</label>
 				</div>
 
 				<div class="mb-4 flex flex-col gap-4">
-					<label class="flex flex-col items-start justify-center">
+					<label class="flex flex-col items-start justify-center w-full sm:w-auto">
 						Password
 						<PasswordInput
 							id="password"
@@ -175,9 +180,10 @@
 							required
 							placeholder="Password"
 							autocomplete="current-password"
+							class="w-full sm:w-auto"
 						/>
 					</label>
-					<label class="flex flex-col items-start justify-center">
+					<label class="flex flex-col items-start justify-center w-full sm:w-auto">
 						Confirm password
 						<PasswordInput
 							id="confirm"
@@ -185,6 +191,7 @@
 							required
 							placeholder="Confirm password"
 							autocomplete="current-password"
+							class="w-full sm:w-auto"
 						/>
 					</label>
 				</div>

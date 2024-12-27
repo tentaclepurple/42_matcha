@@ -87,7 +87,7 @@
 	<div>
 		<p class="mb-6">This is where you can log in.</p>
 		<Form onSubmit={handleSubmit}>
-			<fieldset disabled={isLoading} class="mb-6 flex w-full flex-col items-start gap-3">
+			<fieldset disabled={isLoading} class="flex w-full flex-col items-start gap-3">
 				<label>
 					Username
 					<input
@@ -114,7 +114,7 @@
 				</label>
 			</fieldset>
 
-			<a href="/forget-password">Forgot your password?</a>
+			<a href="/forget-password" class="mb-6">Forgot your password?</a>
 
 			<div class="flex items-baseline justify-center gap-2">
 				<Button type="button" level="secondary" onclick={handleCancel}>Cancel</Button>
