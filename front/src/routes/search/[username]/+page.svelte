@@ -11,12 +11,6 @@
 	const username = $page.params.username;
 	const origin = $page.url.searchParams.get('origin');
 
-	onMount(() => {
-		if (!visitedProfileData.value) {
-			goto('/search', { replaceState: true });
-		}
-	});
-
 	$effect(() => {
 		if (notificationsData.value) {
 			visitedProfileData.fetch(username);
