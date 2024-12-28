@@ -9,6 +9,7 @@
 	import UserActions from './UserActions.svelte';
 	import { visitedProfileData } from '$lib/state/visited-profile-data.svelte';
 	import InterestsList from '$lib/components/InterestsList.svelte';
+	import { DEFAULT_AVATAR_NAME } from '$lib/constants/avatar';
 
 	const { origin } = $props();
 
@@ -46,24 +47,38 @@
 
 		<div class="w-full">
 			<div class="mb-6 flex items-center justify-between">
-				<div class="relative">
-					<img
-						class="h-40 w-40 rounded-lg bg-white object-cover shadow-md"
-						src={getServerAsset(
-							selectedUser.photos.filter((photo) => photo.isProfile)[0].url || 'icons/avatar.svg'
-						)}
-						alt=""
-					/>
-					<p
-						class={`absolute bottom-0 right-0 h-7 w-7 rounded-full border border-2 border-teal-200 ${selectedUser.online ? 'bg-green-500' : 'bg-slate-400'}`}
-						style="right: -8px; bottom: -8px;"
-					>
-						<span class="sr-only">{selectedUser.online ? 'Online' : 'Offline'}</span>
-					</p>
+				<div class="flex items-center gap-5">
+					<div class="relative">
+						<img
+							class="h-44 w-44 rounded-lg bg-white object-cover shadow-md"
+							src={getServerAsset(
+								selectedUser.photos.filter((photo) => photo.isProfile)[0].url || 'icons/avatar.svg'
+							)}
+							alt=""
+						/>
+						<p
+							class={`absolute bottom-0 right-0 h-7 w-7 rounded-full border border-2 border-teal-200 ${selectedUser.online ? 'bg-green-500' : 'bg-slate-400'}`}
+							style="right: -8px; bottom: -8px;"
+						>
+							<span class="sr-only">{selectedUser.online ? 'Online' : 'Offline'}</span>
+						</p>
+					</div>
+					<ul class="grid grid-flow-col grid-rows-2 gap-3">
+						{#each selectedUser.photos.filter((photo) => !photo.isProfile && !photo.url.includes(DEFAULT_AVATAR_NAME)) as photo}
+							<li>
+								<img
+									class="h-20 w-20 rounded-lg bg-white object-cover shadow-md"
+									src={getServerAsset(photo.url)}
+									alt=""
+								/>
+							</li>
+						{/each}
+					</ul>
 				</div>
 
 				<FameRating fameRating={selectedUser.fameRating} />
 			</div>
+
 			<h2 class="mb-4">{selectedUser.username}, {selectedUser.age}</h2>
 
 			<div class="description-list mb-6 flex flex-col gap-3">
