@@ -16,9 +16,17 @@ export interface View {
 	username: string;
 	viewCount: number;
 }
+
+export interface BlockedUser {
+	profilePhoto: string;
+	userId: string;
+	username: string;
+}
+
 export default interface UserProfileData {
 	age: number;
 	biography: string;
+	blockedUsers: BlockedUser[];
 	fameRating: number;
 	location: Location;
 	gender: Gender;

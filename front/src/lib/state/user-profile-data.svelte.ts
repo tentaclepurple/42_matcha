@@ -49,6 +49,7 @@ class UserProfileDataClass {
 			const {
 				age,
 				biography,
+				blockedUsers,
 				fameRating,
 				gender,
 				interests,
@@ -63,6 +64,7 @@ class UserProfileDataClass {
 			this.#value = {
 				age,
 				biography,
+				blockedUsers,
 				fameRating,
 				gender,
 				interests,
