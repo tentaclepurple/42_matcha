@@ -12,6 +12,13 @@
 
 	const MAX_INTERESTS = 10;
 
+	const userGender = userProfileData.value ? userProfileData.value.gender : null;
+	const userSexualPreferences = userProfileData.value
+		? userProfileData.value.sexualPreferences
+		: null;
+	const userInterests = userProfileData.value ? userProfileData.value.interests : [];
+	const userBio = userProfileData.value ? userProfileData.value.biography : '';
+
 	const {
 		onSuccess = undefined,
 		onCancel = undefined
@@ -56,7 +63,7 @@
 		textAreaLength = textArea.value.length;
 	};
 
-	let interestsList = $state<string[]>([]);
+	let interestsList = $state<string[]>(userInterests.length ? userInterests : []);
 
 	const handleInterestsUpdate = (event: Event) => {
 		const select = event.target as HTMLSelectElement;
@@ -134,7 +141,7 @@
 	<fieldset class="mb-6 flex min-w-[500px] flex-col gap-6">
 		<label class="flex justify-between gap-2">
 			<span class="font-bold">Gender:</span>
-			<select name="gender" id="gender">
+			<select name="gender" id="gender" value={userGender}>
 				<option value={null} disabled selected>Choose an option</option>
 				<option value={GENDER_OPTIONS.MALE}>
 					{GENDER_OPTIONS.MALE}
@@ -153,7 +160,7 @@
 
 		<label class="flex justify-between gap-2">
 			<span class="font-bold">Preference:</span>
-			<select name="sexualPreferences" id="sexualPreferences">
+			<select name="sexualPreferences" id="sexualPreferences" value={userSexualPreferences}>
 				<option value={PREFERENCES_OPTIONS.MALE}>
 					{PREFERENCES_OPTIONS.MALE}
 					<PreferenceSymbol preference={PREFERENCES_OPTIONS.MALE} />
@@ -204,6 +211,7 @@
 					minlength="1"
 					maxlength="500"
 					oninput={handleTextareaUpdate}
+					value={userBio}
 				></textarea>
 				<p class="flex w-full items-baseline justify-between gap-6 text-xs text-gray-500">
 					Describe yourself in less than 500 characters
