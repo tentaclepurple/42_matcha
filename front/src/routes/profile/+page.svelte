@@ -66,9 +66,9 @@
 
 				<LikesViewsHistory />
 
-				<Location />
-
 				<BlockedUsersList />
+
+				<Location />
 			</div>
 		</div>
 	{/if}
