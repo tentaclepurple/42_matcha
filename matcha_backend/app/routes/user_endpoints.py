@@ -40,7 +40,6 @@ def register():
 
         existing_email = UserModel.find_by_email(data['email'])
         if existing_email:
-            print("Email already exists")
             return jsonify({'error': 'Email already exists'}), 409 # Comment this line for DEVELOPMENT
         
         # Verify required fields
@@ -244,7 +243,6 @@ def forgot_password():
            return jsonify({'error': 'Email is required'}), 400
            
        user = UserModel.find_by_email(email)
-       print("User: ", user)
        if not user:
            # for security reasons, we don't want to reveal if the email is registered
            return jsonify({
