@@ -7,7 +7,7 @@ import { userSearchData } from '$lib/state/user-search.svelte';
 
 export const ssr = false;
 
-export const load: PageLoad = async () => {
+export const load: PageLoad = async ({ fetch }) => {
 	try {
 		await userSearchData.fetch({});
 	} catch (error) {
