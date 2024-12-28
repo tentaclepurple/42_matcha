@@ -73,7 +73,7 @@
 									<img
 										src={getServerAsset(blockedUser.profilePhoto)}
 										alt=""
-										class="w-28 rounded-md shadow-md"
+										class="h-28 w-28 rounded-md object-cover shadow-md"
 									/>
 									<span class="text-xs">{blockedUser.username}</span>
 								</div>
