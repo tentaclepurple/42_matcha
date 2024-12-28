@@ -82,7 +82,7 @@ def register():
             
             # Profile
             "gender": None,
-            "sexual_preferences": None,
+            "sexual_preferences": "bisexual",
             "biography": "",
             "interests": [],
             "photos": [
