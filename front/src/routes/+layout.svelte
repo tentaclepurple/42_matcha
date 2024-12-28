@@ -14,16 +14,27 @@
 	import NotificationsWidget from './NotificationsWidget.svelte';
 	import { goto } from '$app/navigation';
 
-	const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-		userAuth.logout();
+	let isTabHidden = $state(false);
+
+	const handleVisibilityChange = () => {
+		isTabHidden = document.hidden;
+	};
+
+	const handleBeforeUnload = () => {
+		// logout user if tab is closed
+		if (isTabHidden) {
+			userAuth.logout();
+		}
 	};
 
 	onMount(async (): Promise<unknown> => {
 		window.addEventListener('beforeunload', handleBeforeUnload);
+		window.addEventListener('visibilitychange', handleVisibilityChange);
 
 		//cleanup
 		onDestroy(() => {
 			window.removeEventListener('beforeunload', handleBeforeUnload);
+			window.removeEventListener('visibilitychange', handleVisibilityChange);
 		});
 
 		let interval: number;
