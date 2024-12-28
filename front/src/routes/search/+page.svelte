@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { beforeNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
 	import * as Tabs from '$lib/components/ui/tabs';
