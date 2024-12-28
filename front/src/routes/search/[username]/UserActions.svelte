@@ -5,16 +5,9 @@
 	import spinnerAnimationData from '$lib/lotties/spinner.json';
 	import Lottie from '$lib/components/Lottie.svelte';
 	import { visitedProfileData } from '$lib/state/visited-profile-data.svelte';
-	import { onMount } from 'svelte';
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
 
 	const selectedUser = $derived(visitedProfileData.value);
-
-	onMount(() => {
-		if (!selectedUser) {
-			goto('/search');
-		}
-	});
 
 	let isLikedByMe = $derived(Boolean(selectedUser?.likeInfo?.likedByMe));
 	let isMatch = $derived(Boolean(selectedUser?.likeInfo?.isMatch));
@@ -53,26 +46,31 @@
 	const handleBlock = async () => {
 		if (!selectedUser) return;
 
-		const answer = confirm('Are you sure you want to block this user?');
+		const answer = confirm(
+			'Are you sure you want to block this user? You will no longer see their profile and you will not be able to interact with them.'
+		);
 
 		if (!answer) return;
 
 		const token = localStorage.getItem('access_token');
 
 		try {
-			const res = await fetch(`${SERVER_BASE_URL}/api/interactions/block/${selectedUser.username}`, {
-				method: 'POST',
-				headers: {
-					Authorization: `Bearer ${token}`,
-					'Content-Type': 'application/json'
+			const res = await fetch(
+				`${SERVER_BASE_URL}/api/interactions/block/${selectedUser.username}`,
+				{
+					method: 'POST',
+					headers: {
+						Authorization: `Bearer ${token}`,
+						'Content-Type': 'application/json'
+					}
 				}
-			});
+			);
 
 			if (!res.ok) {
 				throw new Error('Failed to like user');
 			}
 
-			await visitedProfileData.fetch(selectedUser?.username);
+			goto('/search');
 		} catch (error) {
 			console.error(error);
 		}
