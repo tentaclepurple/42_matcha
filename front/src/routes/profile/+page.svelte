@@ -10,6 +10,7 @@
 	import Location from './Location.svelte';
 	import LikesViewsHistory from './LikesViewsHistory.svelte';
 	import { userAuth } from '$lib/state/auth.svelte';
+	import BlockedUsersList from './BlockedUsersList.svelte';
 
 	if (!userProfileData.value) {
 		localStorage.removeItem('access_token');
@@ -66,6 +67,8 @@
 				<LikesViewsHistory />
 
 				<Location />
+
+				<BlockedUsersList />
 			</div>
 		</div>
 	{/if}
