@@ -130,31 +130,31 @@ def update_photo(index):
             
         photo = request.files['photo']
         
-        # Validar archivo
+        # Validate file
         if not photo or not allowed_file(photo.filename):
             return jsonify({'error': 'Invalid file type'}), 400
             
-        # Validar tamaño
+        # Validate file size
         if request.content_length > MAX_FILE_SIZE:
             return jsonify({'error': 'File too large. Maximum size is 5MB'}), 400
             
-        # Obtener usuario y su foto actual
+        # Get user and current photo
         user = UserModel.find_by_id(current_user_id)
         current_photo = user['photos'][index]['url']
         
-        # Si la foto actual no es la default, borrarla
+        # If photo is not the default one, delete it
         if 'default' not in current_photo:
             try:
                 os.remove(os.path.join(UPLOAD_FOLDER, current_photo))
             except:
-                pass  # Si falla el borrado, continuamos igual
+                pass  # If file doesn't exist, ignore
         
-        # Guardar nueva foto
+        # Save new photo
         filename = secure_filename(f"{current_user_id}_{index}_{photo.filename}")
         path = os.path.join(UPLOAD_FOLDER, filename)
         photo.save(path)
         
-        # Actualizar en base de datos
+        # Update in database
         photo_data = {
             'url': path,
             'is_profile': user['photos'][index]['is_profile'],
@@ -317,7 +317,7 @@ def get_user_profile(user_identifier):
             
         if not user:
             return jsonify({'error': 'User not found'}), 404
-            
+        
         # Verify if user is blocked
         if ObjectId(current_user_id) in user.get('blocked_users', []):
             return jsonify({'error': 'Profile not available'}), 403
@@ -361,7 +361,7 @@ def get_user_profile(user_identifier):
             'online': user.get('online'),
             'last_connection': user.get('last_connection'),
             'profile_completed': user.get('profile_completed', False),
-            'blocked_users': user.get('blocked_users', []),
+            'blocked_users': [str(blocked_id) for blocked_id in user.get('blocked_users', [])],
             'reported': user.get('reported', False),
             'verified': user.get('verified', False),
             'created_at': user.get('created_at'),

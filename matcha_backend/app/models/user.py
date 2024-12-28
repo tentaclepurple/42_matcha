@@ -3,6 +3,7 @@ from bson import ObjectId
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
 from .iamatcha import BotModel
+from .notification import NotificationModel 
 
 
 class UserModel:
@@ -61,13 +62,12 @@ class UserModel:
         Returns: True if successful
         """
         user = UserModel.find_by_id(user_id)
-        print(f"---->PROFILE COMPLETED: {user['profile_completed']}")
         
         try:
             if not user['profile_completed'] and not is_location:
                 # Select bot for user if not already selected
                 if BotModel.handle_profile_completion(user_id):
-                    pass
+                    pass 
         except Exception as e:
             print(e)
             pass
@@ -140,21 +140,60 @@ class UserModel:
 
     @staticmethod
     def block_user(user_id: str, blocked_user_id: str) -> bool:
-        """Add user to blocked list"""
-        result = mongo.db.users.update_one(
-            {"_id": ObjectId(user_id)},
-            {"$addToSet": {"blocked_users": ObjectId(blocked_user_id)}}
-        )
-        return result.modified_count > 0
+        """Add user to blocked list and remove all interactions"""
+        try:
+            # Add to blocked list
+            mongo.db.users.update_one(
+                {"_id": ObjectId(user_id)},
+                {"$addToSet": {"blocked_users": ObjectId(blocked_user_id)}}
+            )
 
-    @staticmethod
-    def is_verified(user_id: str) -> bool:
-        """Check if user is verified"""
-        user = mongo.db.users.find_one(
-            {"_id": ObjectId(user_id)},
-            {"verified": 1}
-        )
-        return user and user.get("verified", False)
+            # Remove all likes between both users in both directions
+            mongo.db.likes.delete_many({
+                "$or": [
+                    {
+                        "from_user_id": ObjectId(user_id),
+                        "to_user_id": ObjectId(blocked_user_id)
+                    },
+                    {
+                        "from_user_id": ObjectId(blocked_user_id),
+                        "to_user_id": ObjectId(user_id)
+                    }
+                ]
+            })
+
+            # Remove all profile views between both users in both directions
+            mongo.db.profile_views.delete_many({
+                "$or": [
+                    {
+                        "viewer_id": ObjectId(user_id),
+                        "viewed_id": ObjectId(blocked_user_id)
+                    },
+                    {
+                        "viewer_id": ObjectId(blocked_user_id),
+                        "viewed_id": ObjectId(user_id)
+                    }
+                ]
+            })
+
+            # Remove all notifications between both users in both directions
+            mongo.db.notifications.delete_many({
+                "$or": [
+                    {
+                        "user_id": ObjectId(user_id),
+                        "from_user_id": ObjectId(blocked_user_id)
+                    },
+                    {
+                        "user_id": ObjectId(blocked_user_id),
+                        "from_user_id": ObjectId(user_id)
+                    }
+                ]
+            })
+
+            return True
+
+        except Exception as e:
+            return False
 
     @staticmethod
     def update_interests(user_id: str, new_interests: list) -> bool:
@@ -199,15 +238,6 @@ class UserModel:
         result = mongo.db.users.update_one(
             {"_id": ObjectId(user_id)},
             {"$set": {"password": new_password}}
-        )
-        return result.modified_count > 0
-    
-    @staticmethod
-    def block_user(user_id: str, blocked_user_id: str) -> bool:
-        """Add user to blocked list"""
-        result = mongo.db.users.update_one(
-            {"_id": ObjectId(user_id)},
-            {"$addToSet": {"blocked_users": ObjectId(blocked_user_id)}}
         )
         return result.modified_count > 0
 
