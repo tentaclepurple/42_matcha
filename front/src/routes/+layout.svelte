@@ -1,7 +1,7 @@
 <script lang="ts">
 	const { children } = $props();
 
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	import '../app.css';
 	import MenuWidget from './MenuWidget.svelte';
@@ -14,7 +14,18 @@
 	import NotificationsWidget from './NotificationsWidget.svelte';
 	import { goto } from '$app/navigation';
 
+	const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+		userAuth.logout();
+	};
+
 	onMount(async (): Promise<unknown> => {
+		window.addEventListener('beforeunload', handleBeforeUnload);
+
+		//cleanup
+		onDestroy(() => {
+			window.removeEventListener('beforeunload', handleBeforeUnload);
+		});
+
 		let interval: number;
 
 		const accessToken = localStorage.getItem('access_token');
@@ -39,7 +50,6 @@
 			} catch (e) {
 				console.error(e);
 				userAuth.logout();
-				localStorage.removeItem('access_token');
 				goto('/login');
 			}
 		} else {

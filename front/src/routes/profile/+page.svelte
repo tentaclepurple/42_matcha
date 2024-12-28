@@ -13,7 +13,6 @@
 	import BlockedUsersList from './BlockedUsersList.svelte';
 
 	if (!userProfileData.value) {
-		localStorage.removeItem('access_token');
 		userAuth.logout();
 		goto('/');
 	}

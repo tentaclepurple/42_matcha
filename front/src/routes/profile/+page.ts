@@ -13,7 +13,6 @@ export const load: PageLoad = async () => {
 			throw new Error('Failed to fetch user profile data');
 		}
 	} catch (error) {
-		localStorage.removeItem('access_token');
 		userAuth.logout();
 		redirect(302, '/login');
 	}
