@@ -66,7 +66,13 @@
 									Likes: {user.sexualPreferences}
 									<PreferenceSymbol preference={user.sexualPreferences} />
 								</span>
-								<span>{user.distance} km away</span>
+								<span>
+									{#if user.distance < 1}
+										{user.distance * 1000} m
+									{:else}
+										{user.distance} km
+									{/if} away</span
+								>
 								<span class="mb-4">{user.fameRating}% popularity</span>
 								<InterestsList
 									interests={user.interests}
@@ -76,7 +82,9 @@
 						</li>
 					{/each}
 				</ul>
-				<nav class="mt-auto flex flex-wrap items-center justify-center gap-4 px-12 pb-6 w-4/6 mx-auto">
+				<nav
+					class="mx-auto mt-auto flex w-4/6 flex-wrap items-center justify-center gap-4 px-12 pb-6"
+				>
 					{#each Array.from({ length: totalPages }, (_, i) => i) as _, index}
 						<button
 							type="button"
