@@ -160,7 +160,11 @@
 
 		<label class="flex justify-between gap-2">
 			<span class="font-bold">Preference:</span>
-			<select name="sexualPreferences" id="sexualPreferences" value={userSexualPreferences}>
+			<select
+				name="sexualPreferences"
+				id="sexualPreferences"
+				value={userSexualPreferences ?? PREFERENCES_OPTIONS.BISEXUAL}
+			>
 				<option value={PREFERENCES_OPTIONS.MALE}>
 					{PREFERENCES_OPTIONS.MALE}
 					<PreferenceSymbol preference={PREFERENCES_OPTIONS.MALE} />
@@ -169,7 +173,7 @@
 					{PREFERENCES_OPTIONS.FEMALE}
 					<PreferenceSymbol preference={PREFERENCES_OPTIONS.FEMALE} />
 				</option>
-				<option value={PREFERENCES_OPTIONS.BISEXUAL} selected>
+				<option value={PREFERENCES_OPTIONS.BISEXUAL}>
 					{PREFERENCES_OPTIONS.BISEXUAL}
 					<PreferenceSymbol preference={PREFERENCES_OPTIONS.BISEXUAL} />
 				</option>

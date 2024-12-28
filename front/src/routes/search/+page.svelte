@@ -4,7 +4,8 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
 	import { userSearchData } from '$lib/state/user-search.svelte';
-	import FiltersAndSorting from './FiltersAndSorting.svelte';
+	import SearchFiltersAndSorting from './SearchFiltersAndSorting.svelte';
+	import SuggestionsFiltersAndSorting from './SuggestionsFiltersAndSorting.svelte';
 	import UsersList from './UsersList.svelte';
 	import UsersMap from './UsersMap.svelte';
 
@@ -45,13 +46,14 @@
 					</div>
 				</Tabs.Content>
 				<Tabs.Content value="list">
-					<FiltersAndSorting />
+					<SearchFiltersAndSorting />
 					<div class="flex min-h-[750px] flex-col">
 						<UsersList results={userSearchData.value ? userSearchData.value : []} />
 					</div>
 				</Tabs.Content>
 				<Tabs.Content value="recommended">
 					<div class="flex min-h-[750px] flex-col">
+						<SuggestionsFiltersAndSorting />
 						<UsersList results={data.suggestionsResults} />
 					</div>
 				</Tabs.Content>
