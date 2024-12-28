@@ -137,7 +137,11 @@
 		</label>
 	</fieldset>
 
-	<div class="mt-6">
+	<div class="mt-6 flex items-center gap-2">
+		{#if isEditing}
+			<Button level="secondary" onclick={() => (isEditing = false)}>Cancel</Button>
+		{/if}
+
 		{#if isEditing}
 			<Button type="submit" level="primary">Save</Button>
 		{:else}
