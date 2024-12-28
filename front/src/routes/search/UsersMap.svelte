@@ -34,7 +34,7 @@
 				<img
 					src={profilePicture ? getServerAsset(profilePicture) : '/icons/avatar.svg'}
 					alt=""
-					class="aspect-square w-24"
+					class="aspect-square w-24 object-cover"
 				/>
 				<span class="font-xs font-bold">{user.username}</span>
 				<span>{user.age}, {user.gender} <GenderSymbol gender={user.gender} /></span>
