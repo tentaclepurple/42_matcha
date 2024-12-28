@@ -3,6 +3,7 @@
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
 	import getServerAsset from '$lib/utils/get-server-asset';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
+	import IconTitle from '$lib/components/IconTitle.svelte';
 
 	let userIdMenu: string | null = $state(null);
 	let unblockedUsername: string | null = $state(null);
@@ -44,7 +45,7 @@
 
 {#if userProfileData.value}
 	<div>
-		<h2 class="mb-2">Blocked users</h2>
+		<IconTitle title="Blocked users" icon="/icons/block.svg" />
 		{#if userProfileData.value.blockedUsers.length === 0}
 			<p>You haven't blocked any users yet.</p>
 		{:else}
