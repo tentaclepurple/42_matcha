@@ -283,7 +283,12 @@ def advanced_search():
             'fame_rating': 'fame_rating'
         }.get(sort_by, 'distance')
 
-        pipeline.append({'$sort': {sort_field: sort_direction}})
+        pipeline.append({
+            '$sort': {
+                sort_field: sort_direction,
+                'username': 1
+            }
+        })
 
         # Get results
         results = list(mongo.db.users.aggregate(pipeline))
