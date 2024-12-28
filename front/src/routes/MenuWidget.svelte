@@ -14,20 +14,6 @@
 	);
 
 	const handleLogOut = () => {
-		const accessToken = localStorage.getItem('access_token');
-
-		if (accessToken) {
-			fetch(`${SERVER_BASE_URL}/api/users/logout`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${localStorage.getItem('access_token')}`
-				}
-			});
-
-			localStorage.removeItem('access_token');
-		}
-
 		userAuth.logout();
 		goto('/');
 	};
