@@ -12,6 +12,7 @@
 	import { calcQueryParams } from './calc-query-params.util';
 	import { userSearchSuggestionsData } from '$lib/state/user-search-suggestions.svelte';
 	import { onMount } from 'svelte';
+	import Tooltip from '$lib/components/Tooltip.svelte';
 
 	let currentSorting = $state(
 		`${DEFAULT_ALL_RESULTS_SORTING_PROP};${DEFAULT_ALL_RESULTS_SORTING_ORDER}`
@@ -59,28 +60,38 @@
 			</label>
 		</ButtonSelector>
 
-		<ButtonSelector class="cursor-not-allowed opacity-75">
-			<label>
-				Gender:
-				<select disabled class="cursor-not-allowed">
-					<option selected>
-						{userProfileData.value.gender}
-						<GenderSymbol gender={userProfileData.value.gender} />
-					</option>
-				</select>
-			</label>
-		</ButtonSelector>
+		<Tooltip
+			message="Recommended results cannot be filtered. If you need the filters, go to the All users tab."
+			class="left-0 top-9"
+		>
+			<ButtonSelector class="cursor-not-allowed opacity-75">
+				<label>
+					Gender:
+					<select disabled class="cursor-not-allowed">
+						<option selected>
+							{userProfileData.value.gender}
+							<GenderSymbol gender={userProfileData.value.gender} />
+						</option>
+					</select>
+				</label>
+			</ButtonSelector>
+		</Tooltip>
 
-		<ButtonSelector class="cursor-not-allowed opacity-75">
-			<label>
-				Likes:
-				<select disabled class="cursor-not-allowed">
-					<option selected>
-						{userProfileData.value.sexualPreferences}
-						<PreferenceSymbol preference={userProfileData.value.sexualPreferences} />
-					</option>
-				</select>
-			</label>
-		</ButtonSelector>
+		<Tooltip
+			message="Recommended results cannot be filtered. If you need the filters, go to the All users tab."
+			class="left-0 top-9"
+		>
+			<ButtonSelector class="cursor-not-allowed opacity-75">
+				<label>
+					Likes:
+					<select disabled class="cursor-not-allowed">
+						<option selected>
+							{userProfileData.value.sexualPreferences}
+							<PreferenceSymbol preference={userProfileData.value.sexualPreferences} />
+						</option>
+					</select>
+				</label>
+			</ButtonSelector>
+		</Tooltip>
 	</div>
 {/if}
