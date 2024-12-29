@@ -191,7 +191,7 @@
 				value={interestsList}
 			>
 				{#each INTERESTS.sort() as interest}
-					<option value={interest} class="text-right text-sm">{interest}</option>
+					<option value={interest} class="text-right text-sm">#{interest}</option>
 				{/each}
 			</select>
 		</label>
