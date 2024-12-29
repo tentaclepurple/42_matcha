@@ -81,7 +81,7 @@
 {#if selectedUser}
 	<div class="ml-auto">
 		{#if userProfileData.hasProfilePicture}
-			<div class="flex items-start justify-center gap-3">
+			<div class="flex items-center justify-center gap-3">
 				{#if isMatch}
 					<Button
 						type="button"
@@ -95,18 +95,7 @@
 					</Button>
 				{/if}
 
-				<div class="flex flex-col items-center justify-center">
-					<button
-						class="flex aspect-square w-12 items-center justify-center rounded-xl border border-2 border-black bg-red-500 p-2"
-						aria-labelledby="block-button"
-						onclick={handleBlock}
-					>
-						<img src="/icons/block.svg" alt="" class="w-full" />
-					</button>
-					<p class="text-sm" id="block-button">Block</p>
-				</div>
-
-				<div class="flex flex-col items-center justify-center">
+				<div class="relative flex flex-col items-center justify-center">
 					{#if isLoading}
 						<button
 							type="button"
@@ -117,7 +106,7 @@
 						</button>
 					{:else}
 						<button
-							class={`flex aspect-square w-12 items-center justify-center rounded-xl border border-2 border-black ${isMatch ? 'bg-rose-400' : isLikedByMe ? 'bg-rose-200' : 'bg-transparent'} p-2`}
+							class={`flex aspect-square w-12 items-center justify-center rounded-xl border border-2 border-black ${isMatch ? 'bg-rose-300' : isLikedByMe ? 'bg-rose-200' : 'bg-transparent'} p-2`}
 							aria-labelledby="like-button"
 							onclick={handleMatch}
 						>
@@ -130,7 +119,7 @@
 							{/if}
 						</button>
 					{/if}
-					<p class="text-sm" id="like-button">
+					<p class="absolute -bottom-5 text-xs" id="like-button">
 						{#if isMatch}
 							Matched
 						{:else if isLikedByMe}
@@ -140,9 +129,23 @@
 						{/if}
 					</p>
 				</div>
+
+				<div class="relative flex flex-col items-center justify-center">
+					<button
+						class="flex aspect-square w-12 items-center justify-center rounded-xl border border-2 border-black bg-red-500 p-2"
+						aria-labelledby="block-button"
+						onclick={handleBlock}
+					>
+						<img src="/icons/block.svg" alt="" class="w-full" />
+					</button>
+					<p class="absolute -bottom-5 text-xs" id="block-button">Block</p>
+				</div>
 			</div>
 		{:else}
-			<Tooltip message="Add a profile picture to interact with other users." class="-bottom-30 right-0">
+			<Tooltip
+				message="Add a profile picture to interact with other users."
+				class="-bottom-30 right-0"
+			>
 				<button
 					class="flex cursor-not-allowed flex-col items-center justify-center opacity-60"
 					disabled
