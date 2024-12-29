@@ -13,6 +13,7 @@
 	import RangeFilter from './RangeFilter.svelte';
 	import { INTERESTS } from '$lib/constants/interests';
 	import { userSearchData } from '$lib/state/user-search.svelte';
+	import { calcQueryParams } from './calc-query-params.util';
 	import type { Gender } from '$lib/interfaces/gender.type';
 
 	interface Age {
@@ -23,23 +24,25 @@
 		distance: number;
 	}
 
+	interface SearchCurrentFilters {
+		gender: Gender | null;
+		interests: string[];
+		maxAge: number;
+		maxDistance: number;
+		maxFameRating: number;
+		minAge: number;
+		minDistance: number;
+		minFameRating: number;
+		sexualPreferences: string | null;
+	}
+
 	const results = userSearchData.value ?? [];
 
 	let currentSorting = $state(
 		`${DEFAULT_ALL_RESULTS_SORTING_PROP};${DEFAULT_ALL_RESULTS_SORTING_ORDER}`
 	);
 
-	let currentFilters = $state<{
-		gender: Gender | null;
-		interests: string[];
-		minAge: number;
-		maxAge: number;
-		minDistance: number;
-		maxDistance: number;
-		minFameRating: number;
-		maxFameRating: number;
-		sexualPreferences: string | null;
-	}>({
+	let currentFilters = $state<SearchCurrentFilters>({
 		gender: null,
 		interests: [],
 		minAge:
@@ -79,7 +82,7 @@
 			currentFilters.sexualPreferences ||
 			currentFilters
 		) {
-			const queryParams = _calcQueryParams();
+			const queryParams = calcQueryParams({ currentSorting, currentFilters });
 			userSearchData.fetch({ params: queryParams });
 		}
 	});
@@ -96,61 +99,9 @@
 			currentFilters = JSON.parse(storedFiltersCriteria);
 		}
 
-		const queryParams = _calcQueryParams();
+		const queryParams = calcQueryParams({ currentSorting, currentFilters });
 		await userSearchData.fetch({ params: queryParams });
 	});
-
-	const _calcQueryParams = (): URLSearchParams => {
-		const queryParams = new URLSearchParams();
-
-		const sortingProp = currentSorting.split(';')[0];
-		const sortingOrder = currentSorting.split(';')[1];
-		queryParams.set('sort_by', sortingProp);
-		queryParams.set('sort_order', sortingOrder);
-
-		// FILTERS
-		// Gender
-		if (currentFilters.gender) {
-			queryParams.set('gender', currentFilters.gender);
-		}
-
-		// Interests
-		if (currentFilters.interests.length) {
-			currentFilters.interests.forEach((interest) => queryParams.append('interests', interest.toLowerCase()));
-		}
-
-		// Sexual preference
-		if (currentFilters.sexualPreferences) {
-			queryParams.set('sexual_preference', currentFilters.sexualPreferences);
-		}
-
-		// Min age
-		if (currentFilters.minAge) {
-			queryParams.set('min_age', currentFilters.minAge.toString());
-		}
-
-		// Max age
-		if (currentFilters.maxAge) {
-			queryParams.set('max_age', currentFilters.maxAge.toString());
-		}
-
-		// Max distance
-		if (currentFilters.maxDistance) {
-			queryParams.set('max_distance', currentFilters.maxDistance.toString());
-		}
-
-		// Min popularity
-		if (currentFilters.minFameRating) {
-			queryParams.set('min_fame', currentFilters.minFameRating.toString());
-		}
-
-		// Max popularity
-		if (currentFilters.maxFameRating) {
-			queryParams.set('max_fame', currentFilters.maxFameRating.toString());
-		}
-
-		return queryParams;
-	};
 
 	const handleSortingChange = (event: Event) => {
 		const target = event.target as HTMLSelectElement;
@@ -278,7 +229,7 @@
 						>
 							<button
 								onclick={() => {
-									if (currentFilters.interests.includes(interest)) {
+									if (currentFilters.interests?.includes(interest)) {
 										currentFilters.interests = currentFilters.interests.filter(
 											(currentInterest) => currentInterest !== interest
 										);
