@@ -79,7 +79,17 @@
 </script>
 
 {#if selectedUser}
-	<div class="ml-auto">
+	<div class="ml-auto flex items-center gap-3">
+		<div class="relative flex flex-col items-center justify-center">
+			<button
+				class="flex aspect-square w-12 items-center justify-center rounded-xl border border-2 border-black bg-red-500 p-2"
+				aria-labelledby="block-button"
+				onclick={handleBlock}
+			>
+				<img src="/icons/block.svg" alt="" class="w-full" />
+			</button>
+			<p class="absolute -bottom-5 text-xs" id="block-button">Block</p>
+		</div>
 		{#if userProfileData.hasProfilePicture}
 			<div class="flex items-center justify-center gap-3">
 				{#if isMatch}
@@ -129,17 +139,6 @@
 						{/if}
 					</p>
 				</div>
-
-				<div class="relative flex flex-col items-center justify-center">
-					<button
-						class="flex aspect-square w-12 items-center justify-center rounded-xl border border-2 border-black bg-red-500 p-2"
-						aria-labelledby="block-button"
-						onclick={handleBlock}
-					>
-						<img src="/icons/block.svg" alt="" class="w-full" />
-					</button>
-					<p class="absolute -bottom-5 text-xs" id="block-button">Block</p>
-				</div>
 			</div>
 		{:else}
 			<Tooltip
@@ -156,7 +155,6 @@
 					>
 						<img src="/icons/like/heart-lock.svg" alt="" class="w-full" />
 					</div>
-					<p class="text-gray-700">Like</p>
 				</button>
 			</Tooltip>
 		{/if}
