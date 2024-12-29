@@ -18,7 +18,7 @@
 
 {#if selectedUser}
 	<div
-		class="items-between m-8 flex w-3/5 flex-col items-start justify-between rounded-lg bg-teal-200 p-6"
+		class="items-between m-8 flex w-3/5 flex-col items-start justify-between rounded-lg bg-teal-100 p-6"
 	>
 		<nav class="mb-12 flex w-full items-center justify-between">
 			{#if origin}
@@ -82,6 +82,11 @@
 			<h2 class="mb-4">{selectedUser.username}, {selectedUser.age}</h2>
 
 			<div class="description-list mb-6 flex flex-col gap-3">
+				<dl>
+					<dt>Name:</dt>
+					<dd>{selectedUser.firstName} {selectedUser.lastName}</dd>
+				</dl>
+
 				<dl>
 					<dt>Bio:</dt>
 					<dd>{selectedUser.biography}</dd>
