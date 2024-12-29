@@ -3,6 +3,7 @@
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
+	import { userSearchSuggestionsData } from '$lib/state/user-search-suggestions.svelte';
 	import { userSearchData } from '$lib/state/user-search.svelte';
 	import SearchFiltersAndSorting from './SearchFiltersAndSorting.svelte';
 	import SuggestionsFiltersAndSorting from './SuggestionsFiltersAndSorting.svelte';
@@ -10,8 +11,6 @@
 	import UsersMap from './UsersMap.svelte';
 
 	const viewParam = $page.url.searchParams.get('view') ?? 'map';
-
-	const { data } = $props();
 </script>
 
 <PageWrapper>
@@ -54,7 +53,9 @@
 				<Tabs.Content value="recommended">
 					<div class="flex min-h-[750px] flex-col">
 						<SuggestionsFiltersAndSorting />
-						<UsersList results={data.suggestionsResults} />
+						<UsersList
+							results={userSearchSuggestionsData.value ? userSearchSuggestionsData.value : []}
+						/>
 					</div>
 				</Tabs.Content>
 			</Tabs.Root>
