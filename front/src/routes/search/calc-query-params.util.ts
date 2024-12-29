@@ -17,7 +17,7 @@ export const calcQueryParams = ({
 	currentFilters
 }: {
 	currentSorting: string;
-	currentFilters: CurrentFilters;
+	currentFilters?: CurrentFilters;
 }): URLSearchParams => {
 	const queryParams = new URLSearchParams();
 
@@ -25,6 +25,10 @@ export const calcQueryParams = ({
 	const sortingOrder = currentSorting.split(';')[1];
 	queryParams.set('sort_by', sortingProp);
 	queryParams.set('sort_order', sortingOrder);
+
+	if (!currentFilters) {
+		return queryParams;
+	}
 
 	// FILTERS
 	// Gender
