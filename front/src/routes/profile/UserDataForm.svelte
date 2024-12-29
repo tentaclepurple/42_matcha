@@ -192,8 +192,8 @@
 				value={interestsList}
 			>
 				{#if popularTagsData.value && popularTagsData.value.length > 0}
-					<optgroup label="Popular interests" class="text-left font-bold mb-3">
-						{#each popularTagsData.value as interest}
+					<optgroup label="Popular interests" class="mb-3 text-left font-bold">
+						{#each popularTagsData.value.sort() as interest}
 							<option value={interest} class="text-right text-sm">#{interest}</option>
 						{/each}
 					</optgroup>
