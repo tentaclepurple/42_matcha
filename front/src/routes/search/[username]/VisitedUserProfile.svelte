@@ -57,7 +57,7 @@
 							alt=""
 						/>
 						<p
-							class={`absolute bottom-0 right-0 h-7 w-7 rounded-full border border-2 border-teal-200 ${selectedUser.online ? 'bg-green-500' : 'bg-slate-400'}`}
+							class={`absolute bottom-0 right-0 h-7 w-7 rounded-full border border-2 border-teal-100 ${selectedUser.online ? 'bg-green-500' : 'bg-slate-400'}`}
 							style="right: -8px; bottom: -8px;"
 						>
 							<span class="sr-only">{selectedUser.online ? 'Online' : 'Offline'}</span>
@@ -94,13 +94,17 @@
 
 				<dl>
 					<dt>Gender:</dt>
-					<dd>{selectedUser.gender} <GenderSymbol gender={selectedUser.gender} /></dd>
+					<dd>
+						{selectedUser.gender[0].toUpperCase() + selectedUser.gender.slice(1)}
+						<GenderSymbol gender={selectedUser.gender} />
+					</dd>
 				</dl>
 
 				<dl>
 					<dt>Preference:</dt>
 					<dd>
-						{selectedUser.sexualPreferences}
+						{selectedUser.sexualPreferences[0].toUpperCase() +
+							selectedUser.sexualPreferences.slice(1)}
 						<PreferenceSymbol preference={selectedUser.sexualPreferences} />
 					</dd>
 				</dl>
@@ -111,6 +115,22 @@
 						<InterestsList interests={selectedUser.interests} />
 					</dd>
 				</dl>
+
+				{#if !selectedUser.online}
+					<dl>
+						<dt>Last connected:</dt>
+						<dd>
+							{new Date(selectedUser.lastConnection).toLocaleDateString('en-US', {
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric',
+								hour: 'numeric',
+								minute: 'numeric',
+								second: 'numeric'
+							})}
+						</dd>
+					</dl>
+				{/if}
 			</div>
 		</div>
 
