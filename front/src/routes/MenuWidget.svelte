@@ -2,7 +2,6 @@
 	import { goto } from '$app/navigation';
 	import RoundAvatar from '$lib/components/RoundAvatar.svelte';
 	import getServerAsset from '$lib/utils/get-server-asset';
-	import { SERVER_BASE_URL } from '$lib/constants/api';
 	import { onDestroy, onMount } from 'svelte';
 	import { userAuth } from '$lib/state/auth.svelte';
 	import { userData } from '$lib/state/user-data.svelte';
@@ -40,9 +39,25 @@
 </script>
 
 <div class="relative" id="wrapper">
-	<button type="button" onclick={handleShowMenu} class="cursor-pointer rounded-full shadow-md">
-		<RoundAvatar src={avatarUrl} alt="" size="s" />
-	</button>
+	<div class="flex items-center gap-2">
+		<button
+			type="button"
+			onclick={handleShowMenu}
+			class="cursor-pointer rounded-full shadow-md hover:shadow-lg"
+		>
+			<RoundAvatar src={avatarUrl} alt="" size="s" />
+		</button>
+
+		<button
+			type="button"
+			onclick={handleLogOut}
+			class="flex items-center justify-center"
+			aria-label="Log out"
+			title="Log out"
+		>
+			<img src="/icons/exit.svg" alt="" class="w-7" />
+		</button>
+	</div>
 	{#if showMenu}
 		<div
 			class="absolute right-0 top-full z-50 mt-2 flex min-h-32 min-w-48 justify-end rounded-md bg-teal-100 p-6 shadow-xl"
@@ -65,10 +80,6 @@
 					<img src="/icons/avatar.svg" alt="" class="w-5" />
 					Profile
 				</a>
-				<button type="button" onclick={handleLogOut} class="flex items-center gap-1">
-					<img src="/icons/exit.svg" alt="" class="w-6" />
-					Log out
-				</button>
 			</nav>
 		</div>
 	{/if}
