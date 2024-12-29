@@ -187,14 +187,16 @@
 				name="interests"
 				id="interests"
 				multiple
-				class="min-h-[150px] min-w-[150px] text-right text-sm"
+				class="min-h-[150px] min-w-[250px] text-right text-sm"
 				onchange={handleInterestsUpdate}
 				value={interestsList}
 			>
 				{#if popularTagsData.value && popularTagsData.value.length > 0}
-					<optgroup label="Popular interests" class="mb-3 text-left font-bold">
-						{#each popularTagsData.value.sort() as interest}
-							<option value={interest} class="text-right text-sm">#{interest}</option>
+					<optgroup label="Trending interests" class="mb-3 text-left font-bold">
+						{#each [...popularTagsData.value].sort() as interest}
+							<option value={interest.name} class="text-right text-sm">
+								#{interest.name} ({interest.count})
+							</option>
 						{/each}
 					</optgroup>
 				{/if}

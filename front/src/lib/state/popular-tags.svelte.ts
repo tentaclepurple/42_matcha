@@ -1,9 +1,14 @@
 import { SERVER_BASE_URL } from '$lib/constants/api';
 
-class PopularTagsClass {
-	#value = $state<null | string[]>(null);
+export interface PopularTag {
+	count: number;
+	name: string;
+}
 
-	get value(): null | string[] {
+class PopularTagsClass {
+	#value = $state<null | PopularTag[]>(null);
+
+	get value(): null | PopularTag[] {
 		return this.#value;
 	}
 
@@ -24,7 +29,15 @@ class PopularTagsClass {
 
 			const { tags } = await res.json();
 
-			this.#value = tags;
+			const sortedTags = tags.sort((a: PopularTag, b: PopularTag) => {
+				if (a.count === b.count) {
+					return a.name.localeCompare(b.name);
+				}
+
+				return b.count - a.count;
+			});
+
+			this.#value = sortedTags;
 		} catch (error: unknown) {
 			console.error(error);
 			throw new Error('Failed to fetch user data');
