@@ -6,6 +6,7 @@
 	import { notificationsData } from '$lib/state/notifications.svelte';
 	import { visitedProfileData } from '$lib/state/visited-profile-data.svelte';
 	import { onDestroy, onMount } from 'svelte';
+	import CoreWidget from './CoreWidget.svelte';
 
 	let showMenu: boolean = $state(false);
 
@@ -59,21 +60,16 @@
 </script>
 
 <div>
-	{#if notificationsData.value?.count && notificationsData.value.count > 0 && notificationsData.value?.notifications}
+	{#if notificationsData.value?.count !== null && notificationsData.value?.notifications}
 		<div class="relative" id="notifications-wrapper">
-			<button
-				class="relative flex h-9 w-9 items-center justify-center rounded-full border border-2 border-teal-500 bg-teal-100"
-				onclick={handleShowMenu}
-			>
-				<p class="sr-only">{notificationsData.value?.count} new notifications</p>
-				<img src="/icons/notifications/active.svg" alt="" class="w-5" />
-				<p
-					class="absolute flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white"
-					style="bottom: -8px; left: -8px;"
-				>
-					{notificationsData.value?.count}
-				</p>
-			</button>
+			<CoreWidget
+				count={notificationsData.value.count}
+				disabled={notificationsData.value.count === 0}
+				icon={notificationsData.value.count > 0
+					? '/icons/notifications/active.svg'
+					: '/icons/notifications/off.svg'}
+				onClick={handleShowMenu}
+			/>
 			{#if showMenu}
 				<div
 					class="absolute right-0 top-full z-50 mt-2 flex min-h-32 w-max min-w-52 justify-end rounded-md bg-teal-100 p-6 shadow-xl"
@@ -126,13 +122,6 @@
 					</ul>
 				</div>
 			{/if}
-		</div>
-	{:else}
-		<div
-			class="flex h-9 w-9 items-center justify-center rounded-full border border-2 border-gray-400 bg-gray-200"
-		>
-			<p class="sr-only">No new notifications</p>
-			<img src="/icons/notifications/off.svg" alt="" class="w-5" />
 		</div>
 	{/if}
 </div>

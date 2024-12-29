@@ -13,6 +13,7 @@
 	import { NOTIFICATIONS_POLLING_INTERVAL } from '$lib/constants/notifications';
 	import NotificationsWidget from './NotificationsWidget.svelte';
 	import { goto } from '$app/navigation';
+	import MessagesWidget from './MessagesWidget.svelte';
 
 	let isTabHidden = $state(false);
 
@@ -78,8 +79,9 @@
 				</a>
 			</nav>
 
-			<div class="flex items-center justify-center gap-3">
+			<div class="flex items-center justify-center gap-5">
 				{#if userAuth.isAuthenticated}
+					<MessagesWidget />
 					<NotificationsWidget />
 					<MenuWidget />
 				{:else}
