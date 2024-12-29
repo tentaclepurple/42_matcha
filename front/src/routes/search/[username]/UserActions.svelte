@@ -6,6 +6,7 @@
 	import Lottie from '$lib/components/Lottie.svelte';
 	import { visitedProfileData } from '$lib/state/visited-profile-data.svelte';
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
+	import Tooltip from '$lib/components/Tooltip.svelte';
 
 	const selectedUser = $derived(visitedProfileData.value);
 
@@ -141,13 +142,11 @@
 				</div>
 			</div>
 		{:else}
-			<div class="relative">
+			<Tooltip message="Add a profile picture to interact with other users." class="-bottom-30 right-0">
 				<button
 					class="flex cursor-not-allowed flex-col items-center justify-center opacity-60"
 					disabled
 					aria-disabled="true"
-					onmouseenter={() => (showTooltip = true)}
-					onmouseleave={() => (showTooltip = false)}
 				>
 					<div
 						class={`flex aspect-square w-12 items-center justify-center rounded-xl border border-2 border-gray-700 bg-gray-100 p-2`}
@@ -156,15 +155,7 @@
 					</div>
 					<p class="text-gray-700">Like</p>
 				</button>
-				{#if showTooltip}
-					<div
-						role="alert"
-						class="-bottom-30 absolute right-0 mt-2 w-56 rounded-lg bg-gray-100 px-4 py-2 shadow-md"
-					>
-						<p>Add a profile picture to interact with other users.</p>
-					</div>
-				{/if}
-			</div>
+			</Tooltip>
 		{/if}
 	</div>
 {/if}
