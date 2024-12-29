@@ -9,6 +9,7 @@
 	import { INTERESTS } from '$lib/constants/interests';
 	import serialize from '$lib/utils/serialize';
 	import InterestsList from '$lib/components/InterestsList.svelte';
+	import { popularTagsData } from '$lib/state/popular-tags.svelte';
 
 	const MAX_INTERESTS = 10;
 
@@ -186,13 +187,22 @@
 				name="interests"
 				id="interests"
 				multiple
-				class="min-h-[150px] min-w-[150px]"
+				class="min-h-[150px] min-w-[150px] text-right text-sm"
 				onchange={handleInterestsUpdate}
 				value={interestsList}
 			>
-				{#each INTERESTS.sort() as interest}
-					<option value={interest} class="text-right text-sm">#{interest}</option>
-				{/each}
+				{#if popularTagsData.value && popularTagsData.value.length > 0}
+					<optgroup label="Popular interests" class="text-left font-bold mb-3">
+						{#each popularTagsData.value as interest}
+							<option value={interest} class="text-right text-sm">#{interest}</option>
+						{/each}
+					</optgroup>
+				{/if}
+				<optgroup label="All interests" class="text-left font-bold">
+					{#each INTERESTS.sort() as interest}
+						<option value={interest} class="text-right text-sm">#{interest}</option>
+					{/each}
+				</optgroup>
 			</select>
 		</label>
 		{#if interestsList.length > 0}
