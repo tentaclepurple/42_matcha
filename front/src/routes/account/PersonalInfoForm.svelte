@@ -76,7 +76,7 @@
 
 <form onsubmit={handleSave}>
 	<fieldset class="grid grid-cols-1 grid-rows-4 gap-x-3 gap-y-5 sm:grid-cols-2 sm:grid-rows-3">
-		<label class="col-span-2 sm:col-span-1">
+		<label class="col-span-2">
 			Username:
 			<input
 				type="text"
