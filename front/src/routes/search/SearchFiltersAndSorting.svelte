@@ -15,6 +15,7 @@
 	import { userSearchData } from '$lib/state/user-search.svelte';
 	import { calcQueryParams } from './calc-query-params.util';
 	import type { Gender } from '$lib/interfaces/gender.type';
+	import { popularTagsData, type PopularTag } from '$lib/state/popular-tags.svelte';
 
 	interface Age {
 		age: number;
@@ -221,28 +222,57 @@
 					({[...currentFilters.interests].sort().join(', ')})
 				{/if}
 			</summary>
-			<div class="mt-4 flex gap-1">
-				<ul class="flex flex-wrap items-baseline gap-2">
-					{#each [...INTERESTS].sort() as interest}
-						<li
-							class={`text-2xs shrink-0 rounded-md ${currentFilters.interests.includes(interest) ? 'bg-teal-300' : 'bg-slate-300'} px-2 py-1`}
-						>
-							<button
-								onclick={() => {
-									if (currentFilters.interests?.includes(interest)) {
-										currentFilters.interests = currentFilters.interests.filter(
-											(currentInterest) => currentInterest !== interest
-										);
-									} else {
-										currentFilters.interests = [...currentFilters.interests, interest];
-									}
-								}}
+
+			{#snippet InterestsList({
+				counts = [],
+				interests,
+				label
+			}: {
+				counts?: number[];
+				interests: string[];
+				label: string;
+			})}
+				<div>
+					<p class="mb-2 text-sm font-bold">{label}</p>
+					<ul class="flex flex-wrap items-baseline gap-2">
+						{#each interests.sort() as interest, index}
+							<li
+								class={`shrink-0 rounded-md ${currentFilters.interests.includes(interest) ? 'bg-teal-300' : 'bg-slate-300'} px-2 py-1`}
 							>
-								#{interest.toLowerCase()}
-							</button>
-						</li>
-					{/each}
-				</ul>
+								<button
+									onclick={() => {
+										if (currentFilters.interests?.includes(interest)) {
+											currentFilters.interests = currentFilters.interests.filter(
+												(currentInterest) => currentInterest !== interest
+											);
+										} else {
+											currentFilters.interests = [...currentFilters.interests, interest];
+										}
+									}}
+									class="text-xs"
+								>
+									#{interest.toLowerCase()}
+									{#if counts.length}
+										<span>({counts[index]})</span>
+									{/if}
+								</button>
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{/snippet}
+
+			<div class="mt-4 flex flex-col gap-4">
+				{$inspect(popularTagsData.value)}
+				{#if popularTagsData.value && popularTagsData.value.length > 0}
+					{@render InterestsList({
+						counts: popularTagsData.value.map((interest: PopularTag) => interest.count),
+						interests: popularTagsData.value.map((interest: PopularTag) => interest.name),
+						label: 'Trending interests'
+					})}
+				{/if}
+
+				{@render InterestsList({ interests: [...INTERESTS], label: 'All interests' })}
 			</div>
 		</details>
 	</ButtonSelector>
