@@ -32,7 +32,7 @@
 			});
 
 			if (!res.ok) {
-				throw new Error('Failed to like user');
+				throw new Error('Failed to unblock user');
 			}
 
 			unblockedUsername = username;
