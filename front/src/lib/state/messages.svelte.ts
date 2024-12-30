@@ -37,7 +37,10 @@ class MessagesClass {
 				return aDate.getTime() - bDate.getTime();
 			});
 
-			if (JSON.stringify(this.#value) === JSON.stringify(sortedMessages)) {
+			if (
+				this.#value?.messages.length === sortedMessages.length &&
+				this.#value?.otherUser.userId === otherUser.userId
+			) {
 				return;
 			}
 
