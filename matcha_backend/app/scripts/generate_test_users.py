@@ -98,6 +98,12 @@ def generate_test_users(mongo, num_users=50):
             'reported': False
         }
         try:
+            for interest in user['interests']:
+                mongo.db.tags.update_one(
+                    {"name": interest},
+                    {"$inc": {"count": 1}},
+                    upsert=True
+                )
             mongo.db.users.insert_one(user)
             print(f"Created user: {user['username']}")
         except Exception as e:
