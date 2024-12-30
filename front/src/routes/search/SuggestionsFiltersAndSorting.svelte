@@ -6,13 +6,15 @@
 	import {
 		DEFAULT_ALL_RESULTS_SORTING_ORDER,
 		DEFAULT_ALL_RESULTS_SORTING_PROP,
-		SORTING_LS_KEY,
+		SUGGESTIONS_COMMON_INTERESTS,
+		SUGGESTIONS_MAX_DISTANCE,
 		SUGGESTIONS_SORTING_LS_KEY
 	} from '$lib/constants/sorting';
 	import { calcQueryParams } from './calc-query-params.util';
 	import { userSearchSuggestionsData } from '$lib/state/user-search-suggestions.svelte';
 	import { onMount } from 'svelte';
-	import Tooltip from '$lib/components/Tooltip.svelte';
+	import TooltipButtonSelector from './SuggestionsFiltersAndSorting/TooltipButtonSelector.svelte';
+	import RangeFilter from './RangeFilter.svelte';
 
 	let currentSorting = $state(
 		`${DEFAULT_ALL_RESULTS_SORTING_PROP};${DEFAULT_ALL_RESULTS_SORTING_ORDER}`
@@ -60,38 +62,47 @@
 			</label>
 		</ButtonSelector>
 
-		<Tooltip
-			message="Recommended results cannot be filtered. If you need the filters, go to the All users tab."
-			class="left-0 top-9"
-		>
-			<ButtonSelector class="cursor-not-allowed opacity-75">
-				<label>
-					Gender:
-					<select disabled class="cursor-not-allowed">
-						<option selected>
-							{userProfileData.value.gender}
-							<GenderSymbol gender={userProfileData.value.gender} />
-						</option>
-					</select>
-				</label>
-			</ButtonSelector>
-		</Tooltip>
+		<TooltipButtonSelector>
+			<label>
+				Gender:
+				<select disabled class="cursor-not-allowed">
+					<option selected>
+						{userProfileData.value.gender}
+						<GenderSymbol gender={userProfileData.value.gender} />
+					</option>
+				</select>
+			</label>
+		</TooltipButtonSelector>
 
-		<Tooltip
-			message="Recommended results cannot be filtered. If you need the filters, go to the All users tab."
-			class="left-0 top-9"
-		>
-			<ButtonSelector class="cursor-not-allowed opacity-75">
-				<label>
-					Likes:
-					<select disabled class="cursor-not-allowed">
-						<option selected>
-							{userProfileData.value.sexualPreferences}
-							<PreferenceSymbol preference={userProfileData.value.sexualPreferences} />
-						</option>
-					</select>
-				</label>
-			</ButtonSelector>
-		</Tooltip>
+		<TooltipButtonSelector>
+			<label>
+				Likes:
+				<select disabled class="cursor-not-allowed">
+					<option selected>
+						{userProfileData.value.sexualPreferences}
+						<PreferenceSymbol preference={userProfileData.value.sexualPreferences} />
+					</option>
+				</select>
+			</label>
+		</TooltipButtonSelector>
+
+		<TooltipButtonSelector>
+			<label>
+				Common interests:
+				<input type="text" disabled value={SUGGESTIONS_COMMON_INTERESTS} class="w-[10px]" />
+			</label>
+		</TooltipButtonSelector>
+
+		<TooltipButtonSelector>
+			<RangeFilter
+				label="Distance (km)"
+				minValue="0"
+				maxValue="5"
+				min="0"
+				max={SUGGESTIONS_MAX_DISTANCE}
+				step="1"
+				onChangeMax={() => {}}
+			/>
+		</TooltipButtonSelector>
 	</div>
 {/if}
