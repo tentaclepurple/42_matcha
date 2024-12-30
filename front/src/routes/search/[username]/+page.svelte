@@ -23,7 +23,7 @@
 
 <PageWrapper>
 	<div class="flex flex-col items-center justify-center">
-		<h1>Profile of {username}</h1>
+		<h1 class="sr-only">Profile of {username}</h1>
 		<VisitedUserProfile {origin} />
 	</div>
 </PageWrapper>
