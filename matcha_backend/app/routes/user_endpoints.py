@@ -151,16 +151,17 @@ def verify_email(token):
 def login():
     try:
         data = request.get_json()
-        
+        print("--- LOGIN", flush=True)
         # Check required fields
         if not data.get('username') or not data.get('password'):
             return jsonify({'error': 'username and password are required'}), 400
             
         # Find user and check credentials
         user = UserModel.find_by_username(data['username'])
-        if not user or not check_password_hash(user['password'], data['password']):
-            return jsonify({'error': 'Invalid credentials'}), 401
-            
+
+        if not user:
+            return jsonify({'error': 'invalid credentials'}), 401
+        
         # Check account lock
         lock_expires = UserModel.check_account_lock(user['_id'])
         if lock_expires:
