@@ -7,13 +7,21 @@ a {
 	text-decoration: underline;
 }
 
-h1 {
+h1,
+.title-1 {
 	font-size: 2rem;
 	font-weight: bold;
 }
 
-h2 {
+h2,
+.title-2 {
 	font-size: 1.5rem;
+	font-weight: bold;
+}
+
+h3,
+.title-3 {
+	font-size: 1.25rem;
 	font-weight: bold;
 }
 
