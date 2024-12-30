@@ -15,8 +15,6 @@
 
 	let isLoading = $state(false);
 
-	let showTooltip = $state(false);
-
 	const handleMatch = async () => {
 		if (!selectedUser) return;
 
@@ -33,7 +31,7 @@
 			});
 
 			if (!res.ok) {
-				throw new Error('Failed to like user');
+				throw new Error('Failed to match user');
 			}
 
 			await visitedProfileData.fetch(selectedUser?.username);
@@ -43,53 +41,10 @@
 			isLoading = false;
 		}
 	};
-
-	const handleBlock = async () => {
-		if (!selectedUser) return;
-
-		const answer = confirm(
-			'Are you sure you want to block this user? You will no longer see their profile and you will not be able to interact with them.'
-		);
-
-		if (!answer) return;
-
-		const token = localStorage.getItem('access_token');
-
-		try {
-			const res = await fetch(
-				`${SERVER_BASE_URL}/api/interactions/block/${selectedUser.username}`,
-				{
-					method: 'POST',
-					headers: {
-						Authorization: `Bearer ${token}`,
-						'Content-Type': 'application/json'
-					}
-				}
-			);
-
-			if (!res.ok) {
-				throw new Error('Failed to like user');
-			}
-
-			goto('/search');
-		} catch (error) {
-			console.error(error);
-		}
-	};
 </script>
 
 {#if selectedUser}
 	<div class="ml-auto flex items-center gap-3">
-		<div class="relative flex flex-col items-center justify-center">
-			<button
-				class="flex aspect-square w-12 items-center justify-center rounded-xl border border-2 border-black bg-red-500 p-2"
-				aria-labelledby="block-button"
-				onclick={handleBlock}
-			>
-				<img src="/icons/block.svg" alt="" class="w-full" />
-			</button>
-			<p class="absolute -bottom-5 text-xs" id="block-button">Block</p>
-		</div>
 		{#if userProfileData.hasProfilePicture}
 			<div class="flex items-center justify-center gap-3">
 				{#if isMatch}

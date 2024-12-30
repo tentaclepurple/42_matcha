@@ -10,6 +10,7 @@
 	import { visitedProfileData } from '$lib/state/visited-profile-data.svelte';
 	import InterestsList from '$lib/components/InterestsList.svelte';
 	import { DEFAULT_AVATAR_NAME } from '$lib/constants/avatar';
+	import IssuesWithUser from './VisitedUserProfile/IssuesWithUser.svelte';
 
 	const { origin } = $props();
 
@@ -82,6 +83,7 @@
 			<h2 class="mb-4">{selectedUser.username}, {selectedUser.age}</h2>
 
 			<div class="description-list mb-6 flex flex-col gap-3">
+				<h2 class="sr-only">User information</h2>
 				<dl>
 					<dt>Name:</dt>
 					<dd>{selectedUser.firstName} {selectedUser.lastName}</dd>
@@ -117,6 +119,7 @@
 				</dl>
 
 				{#if !selectedUser.online}
+					<h2 class="sr-only">User location</h2>
 					<dl>
 						<dt>Last connected:</dt>
 						<dd>
@@ -134,18 +137,22 @@
 			</div>
 		</div>
 
-		<MapLibre
-			center={selectedUser.location.coordinates}
-			class="h-[250px] w-full rounded-md"
-			interactive={false}
-			maxZoom={18}
-			minZoom={11}
-			standardControls
-			style="https://tiles.basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
-			zoom={15}
-		>
-			<DefaultMarker lngLat={selectedUser.location.coordinates} />
-		</MapLibre>
+		<div class="mb-8 w-full">
+			<MapLibre
+				center={selectedUser.location.coordinates}
+				class="h-[250px] w-full rounded-md"
+				interactive={false}
+				maxZoom={18}
+				minZoom={11}
+				standardControls
+				style="https://tiles.basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
+				zoom={15}
+			>
+				<DefaultMarker lngLat={selectedUser.location.coordinates} />
+			</MapLibre>
+		</div>
+
+		<IssuesWithUser {selectedUser} />
 	</div>
 {/if}
 
