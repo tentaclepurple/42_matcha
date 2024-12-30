@@ -52,7 +52,7 @@
 	</Marker>
 {/snippet}
 
-<div class="flex h-[65vh] w-full items-center justify-center">
+<div class="flex h-[80vh] w-full items-center justify-center sm:h-[70vh]">
 	<MapLibre
 		center={userLocation.value ?? DEFAULT_LOCATION}
 		class="h-full w-full rounded-md"

@@ -14,7 +14,7 @@
 </script>
 
 <PageWrapper>
-	<header class="mb-6 flex flex-col items-center">
+	<header class="mb-6 hidden flex-col items-center sm:flex">
 		<h1>Find true love</h1>
 		<p>Use the Map or List below to search for your next soulmate.</p>
 	</header>
@@ -30,17 +30,19 @@
 			</div>
 		{/if}
 		<div
-			class={`w-5xl mx-auto w-full px-12 ${userProfileData.isProfileComplete ? '' : 'pointer-events-none cursor-not-allowed opacity-50'}`}
+			class={`w-5xl mx-auto h-full w-full sm:h-auto sm:px-12 ${userProfileData.isProfileComplete ? '' : 'pointer-events-none cursor-not-allowed opacity-50'}`}
 			aria-hidden={!userProfileData.isProfileComplete}
 		>
-			<Tabs.Root value={viewParam} class="w-full bg-teal-100 shadow-lg">
+			<Tabs.Root value={viewParam} class="h-full w-full bg-teal-100 shadow-lg">
 				<Tabs.List class="grid w-full grid-cols-3">
 					<Tabs.Trigger value="map">Map</Tabs.Trigger>
 					<Tabs.Trigger value="list">All users</Tabs.Trigger>
-					<Tabs.Trigger value="recommended">Recommended for you</Tabs.Trigger>
+					<Tabs.Trigger value="recommended"
+						>Recommended<span class="sr-only sm:not-sr-only"> for you</span></Tabs.Trigger
+					>
 				</Tabs.List>
 				<Tabs.Content value="map">
-					<div class="flex min-h-[750px] flex-col">
+					<div class="flex h-full flex-col">
 						<UsersMap />
 					</div>
 				</Tabs.Content>
