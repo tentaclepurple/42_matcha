@@ -10,6 +10,7 @@
 	import serialize from '$lib/utils/serialize';
 	import InterestsList from '$lib/components/InterestsList.svelte';
 	import { popularTagsData } from '$lib/state/popular-tags.svelte';
+	import { SUGGESTIONS_COMMON_INTERESTS } from '$lib/constants/sorting';
 
 	const MAX_INTERESTS = 10;
 
@@ -75,6 +76,11 @@
 		if (newInterests.length > MAX_INTERESTS) {
 			interestsList = newInterests.slice(0, MAX_INTERESTS);
 			error = 'You can only select up to 10 interests';
+			return;
+		}
+
+		if (newInterests.length <= Number(SUGGESTIONS_COMMON_INTERESTS)) {
+			error = `Please select at least ${SUGGESTIONS_COMMON_INTERESTS} interest`;
 			return;
 		}
 
