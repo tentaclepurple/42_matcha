@@ -8,9 +8,9 @@
 </script>
 
 <PageWrapper>
-	<h1>Messages</h1>
-	<div class="flex flex-1 items-stretch gap-8">
-		<div class="w-full max-w-[225px] rounded-md bg-teal-100 p-3">
+	<h1 class="sr-only mb-4 sm:not-sr-only">Messages</h1>
+	<div class="flex flex-1 flex-col items-stretch gap-2 sm:gap-8 sm:flex-row">
+		<div class="w-full rounded-md bg-teal-100 p-3 sm:max-w-[225px]">
 			<h2 class="sr-only mb-4">List of chats</h2>
 			<ConversationsList {conversations} />
 		</div>
