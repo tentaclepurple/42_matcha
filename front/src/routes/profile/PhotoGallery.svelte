@@ -200,11 +200,11 @@
 					/>
 					{#if showPicturePreviewIndex !== null}
 						<div
-							class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-80 p-12"
+							class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-80 p-2 sm:p-12"
 						>
 							<button
 								aria-label="Close"
-								class="absolute right-0 top-0 mr-3 mt-3 rounded-lg bg-teal-500 p-4 shadow-xl"
+								class="absolute right-0 top-0 mr-3 mt-3 rounded-lg bg-teal-500 p-3 sm:p-4 shadow-xl"
 								onclick={() => (showPicturePreviewIndex = null)}
 							>
 								<img src="/icons/close.svg" class="h-8 w-8" alt="" />
