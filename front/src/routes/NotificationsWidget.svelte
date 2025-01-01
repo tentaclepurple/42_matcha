@@ -72,9 +72,9 @@
 			/>
 			{#if showMenu}
 				<div
-					class="absolute right-0 top-full z-50 mt-2 flex min-h-32 w-max min-w-52 justify-end rounded-md bg-teal-100 p-6 shadow-xl"
+					class="fixed right-1/2 top-14 z-50 mt-2 flex w-max max-w-[96vw] translate-x-1/2 justify-end rounded-md bg-teal-100 p-3 shadow-xl sm:absolute sm:right-0 sm:top-full sm:min-h-32 sm:min-w-52 sm:translate-x-0 sm:p-6"
 				>
-					<ul class="flex w-max flex-col gap-2 text-sm">
+					<ul class="flex w-max flex-col gap-2 text-xs sm:text-sm">
 						{#each notificationsData.value?.notifications as notification}
 							<li>
 								<button
