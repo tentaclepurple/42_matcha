@@ -83,7 +83,7 @@
 					{/each}
 				</ul>
 				<nav
-					class="mx-auto mt-auto flex w-4/6 flex-wrap items-center justify-center gap-4 px-12 pb-6"
+					class="mx-auto mt-auto flex sm:w-4/6 flex-wrap items-center justify-center gap-4 px-12 pb-6"
 				>
 					{#each Array.from({ length: totalPages }, (_, i) => i) as _, index}
 						<button
