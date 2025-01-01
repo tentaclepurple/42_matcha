@@ -87,13 +87,6 @@
 		</TooltipButtonSelector>
 
 		<TooltipButtonSelector>
-			<label>
-				Common interests:
-				<input type="text" disabled value={SUGGESTIONS_COMMON_INTERESTS} class="w-[10px]" />
-			</label>
-		</TooltipButtonSelector>
-
-		<TooltipButtonSelector>
 			<RangeFilter
 				label="Distance (km)"
 				minValue="0"
@@ -103,6 +96,13 @@
 				step="1"
 				onChangeMax={() => {}}
 			/>
+		</TooltipButtonSelector>
+
+		<TooltipButtonSelector>
+			<label>
+				Common interests:
+				<input type="text" disabled value={SUGGESTIONS_COMMON_INTERESTS} class="w-[10px]" />
+			</label>
 		</TooltipButtonSelector>
 	</div>
 {/if}
