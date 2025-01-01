@@ -25,9 +25,9 @@
 		{#if !userProfileData.isProfileComplete && showWelcomeModal}
 			<div class="absolute left-0 top-0 z-50 h-full w-full bg-gray-900 opacity-80"></div>
 			<div
-				class="fixed left-1/2 top-40 z-50 flex max-w-xl -translate-x-1/2 transform flex-col items-center justify-center rounded-md bg-white px-12 py-6 text-center shadow-xl"
+				class="fixed left-1/2 top-40 z-50 flex w-[90vw] -translate-x-1/2 transform flex-col items-center justify-center rounded-md bg-white p-4 text-center shadow-xl sm:w-full sm:max-w-xl sm:px-12 sm:py-6"
 			>
-				<h1 class="mb-4">Welcome to your new profile!</h1>
+				<h1 class="title-1 mb-4">Welcome to your new profile!</h1>
 				<p class="mb-6">
 					Please complete your info and upload some nice pictures before starting your quest for
 					love ❤️‍🔥
@@ -37,7 +37,7 @@
 		{/if}
 		<div>
 			<div class="mb-12">
-				<h1>Profile</h1>
+				<h1 class="mb-2">Profile</h1>
 				<p class="max-w-lg">This is where you can update your public profile.</p>
 				<p>If you're looking for your account info, click <a href="/account">here</a>.</p>
 			</div>
