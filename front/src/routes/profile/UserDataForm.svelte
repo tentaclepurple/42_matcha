@@ -145,7 +145,7 @@
 </script>
 
 <form onsubmit={handleFormSubmit}>
-	<fieldset class="mb-6 flex sm:min-w-[500px] flex-col gap-6">
+	<fieldset class="mb-6 flex flex-col gap-6 sm:min-w-[500px]">
 		<label class="flex justify-between gap-2">
 			<span class="font-bold">Gender:</span>
 			<select name="gender" id="gender" value={userGender}>
@@ -193,22 +193,22 @@
 				name="interests"
 				id="interests"
 				multiple
-				class="min-h-[150px] sm:min-w-[250px] text-right text-sm"
+				class="min-h-[150px] text-right text-sm sm:min-w-[250px]"
 				onchange={handleInterestsUpdate}
 				value={interestsList}
 			>
 				{#if popularTagsData.value && popularTagsData.value.length > 0}
 					<optgroup label="Trending interests" class="mb-3 text-left font-bold">
-						{#each [...popularTagsData.value].sort() as interest}
+						{#each [...popularTagsData.value].sort( (a, b) => a.name.localeCompare(b.name) ) as interest}
 							<option value={interest.name} class="text-right text-sm">
-								#{interest.name} ({interest.count})
+								{interest.name} ({interest.count})
 							</option>
 						{/each}
 					</optgroup>
 				{/if}
-				<optgroup label="All interests" class="text-left font-bold">
-					{#each INTERESTS.sort() as interest}
-						<option value={interest} class="text-right text-sm">#{interest}</option>
+				<optgroup label="Other interests" class="text-left font-bold">
+					{#each INTERESTS.filter((interest) => !popularTagsData.value?.some((popularTag) => popularTag.name === interest)).sort() as interest}
+						<option value={interest} class="text-right text-sm">{interest}</option>
 					{/each}
 				</optgroup>
 			</select>
@@ -222,7 +222,7 @@
 
 		<label class="flex justify-between gap-2">
 			<span class="font-bold">Bio:</span>
-			<div class="flex sm:w-2/3 flex-col items-end">
+			<div class="flex flex-col items-end sm:w-2/3">
 				<textarea
 					id="biography"
 					name="biography"
@@ -247,9 +247,9 @@
 
 	<div class="flex w-full items-baseline justify-between gap-6">
 		{#if success}
-			<p class="text-green-500 text-xs sm:text-base">{success}</p>
+			<p class="text-xs text-green-500 sm:text-base">{success}</p>
 		{:else if error}
-			<p class="mt-4 text-red-500 text-xs sm:-text-base">{error}</p>
+			<p class="sm:-text-base mt-4 text-xs text-red-500">{error}</p>
 		{/if}
 
 		<div class="ml-auto flex w-fit items-baseline justify-between gap-2">

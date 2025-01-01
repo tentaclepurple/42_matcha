@@ -263,16 +263,23 @@
 			{/snippet}
 
 			<div class="mt-4 flex flex-col gap-4">
-				{$inspect(popularTagsData.value)}
 				{#if popularTagsData.value && popularTagsData.value.length > 0}
 					{@render InterestsList({
 						counts: popularTagsData.value.map((interest: PopularTag) => interest.count),
-						interests: popularTagsData.value.map((interest: PopularTag) => interest.name),
+						interests: popularTagsData.value.map((interest: PopularTag) => interest.name).sort(),
 						label: 'Trending interests'
 					})}
 				{/if}
 
-				{@render InterestsList({ interests: [...INTERESTS], label: 'All interests' })}
+				{@render InterestsList({
+					interests: [...INTERESTS]
+						.filter(
+							(interest) =>
+								!popularTagsData.value?.some((popularTag) => popularTag.name === interest)
+						)
+						.sort(),
+					label: 'All interests'
+				})}
 			</div>
 		</details>
 	</ButtonSelector>
