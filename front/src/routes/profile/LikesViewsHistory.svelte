@@ -38,7 +38,7 @@
 					<ul class="flex list-disc flex-col gap-2 px-10">
 						{#each items as item}
 							<li>
-								<span class="text-sm text-gray-800"
+								<span class="text-xs sm:text-sm text-gray-800"
 									>{#if 'createdAt' in item}
 										{formatTimeStamp(item.createdAt)}
 									{:else if 'lastView' in item}

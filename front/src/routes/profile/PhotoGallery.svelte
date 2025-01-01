@@ -135,9 +135,9 @@
 	};
 </script>
 
-<div class="mb-2 grid grid-cols-[200px_170px_170px] grid-rows-2 gap-2">
+<div class="mb-2 flex justify-center items-center sm:grid-cols-[200px_170px_170px] grid-rows-2 flex-wrap gap-2 sm:grid">
 	{#each photos as photo, index}
-		<div class={`${index === 0 ? 'row-span-2' : ''} h-full min-h-40`}>
+		<div class={`${index === 0 ? 'sm:row-span-2' : ''} h-full`}>
 			{#if photo.url.endsWith(DEFAULT_AVATAR_NAME)}
 				<label class="h-full cursor-pointer hover:shadow-lg">
 					<span class="sr-only">Upload new picture</span>
@@ -148,7 +148,9 @@
 						onchange={handlePhotoUpload}
 						data-id={index}
 					/>
-					<div class="flex h-full items-center justify-center bg-gray-300 shadow-md">
+					<div
+						class="flex h-full min-h-40 min-w-40 w-full items-center justify-center bg-gray-300 shadow-md"
+					>
 						<img src="/icons/plus.svg" alt="" class="h-8 w-8" />
 					</div>
 				</label>
