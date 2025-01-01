@@ -145,7 +145,7 @@
 </script>
 
 <form onsubmit={handleFormSubmit}>
-	<fieldset class="mb-6 flex min-w-[500px] flex-col gap-6">
+	<fieldset class="mb-6 flex sm:min-w-[500px] flex-col gap-6">
 		<label class="flex justify-between gap-2">
 			<span class="font-bold">Gender:</span>
 			<select name="gender" id="gender" value={userGender}>
@@ -193,7 +193,7 @@
 				name="interests"
 				id="interests"
 				multiple
-				class="min-h-[150px] min-w-[250px] text-right text-sm"
+				class="min-h-[150px] sm:min-w-[250px] text-right text-sm"
 				onchange={handleInterestsUpdate}
 				value={interestsList}
 			>
@@ -222,7 +222,7 @@
 
 		<label class="flex justify-between gap-2">
 			<span class="font-bold">Bio:</span>
-			<div class="flex w-2/3 flex-col items-end">
+			<div class="flex sm:w-2/3 flex-col items-end">
 				<textarea
 					id="biography"
 					name="biography"
@@ -247,9 +247,9 @@
 
 	<div class="flex w-full items-baseline justify-between gap-6">
 		{#if success}
-			<p class="text-green-500">{success}</p>
+			<p class="text-green-500 text-xs sm:text-base">{success}</p>
 		{:else if error}
-			<p class="mt-4 text-red-500">{error}</p>
+			<p class="mt-4 text-red-500 text-xs sm:-text-base">{error}</p>
 		{/if}
 
 		<div class="ml-auto flex w-fit items-baseline justify-between gap-2">
