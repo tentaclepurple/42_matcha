@@ -219,7 +219,7 @@ def send_message(user_identifier):
             if BotModel.handle_user_message(current_user_id, content, str(bot["_id"])):
                 return jsonify({'message': 'Message sent and processed'}), 200
             else:
-                return jsonify({'error': 'Failed to process message'}), 500
+                return jsonify({'error': 'Failed to process message'}), 400
             
         
             

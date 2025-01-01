@@ -198,30 +198,37 @@ class UserModel:
     @staticmethod
     def update_interests(user_id: str, new_interests: list) -> bool:
         try:
-            # get current interests
+            # Remove any duplicates from the new interests list while maintaining order
+            new_interests = list(dict.fromkeys(new_interests))
+
+            # Get user's current interests
             user = mongo.db.users.find_one(
                 {"_id": ObjectId(user_id)},
                 {"interests": 1}
             )
             current_interests = user.get('interests', [])
 
-            # decrement count of tags no longer in interests
-            for tag in current_interests:
-                if tag not in new_interests:
-                    mongo.db.tags.update_one(
-                        {"name": tag},
-                        {"$inc": {"count": -1}}
-                    )
+            # Calculate which interests need to be added or removed
+            # Using sets for efficient difference operations
+            interests_to_remove = set(current_interests) - set(new_interests)  # Interests being removed
+            interests_to_add = set(new_interests) - set(current_interests)     # Actually new interests
 
-            # increment	count of new interests
-            for tag in new_interests:
+            # Decrement popularity count for interests being removed
+            for tag in interests_to_remove:
+                mongo.db.tags.update_one(
+                    {"name": tag},
+                    {"$inc": {"count": -1}}
+                )
+
+            # Increment popularity count only for interests that weren't already present
+            for tag in interests_to_add:
                 mongo.db.tags.update_one(
                     {"name": tag},
                     {"$inc": {"count": 1}},
-                    upsert=True  # create if not exists
+                    upsert=True  # Create tag document if it doesn't exist
                 )
 
-            # update user interests
+            # Update user's interest list with deduplicated interests
             result = mongo.db.users.update_one(
                 {"_id": ObjectId(user_id)},
                 {"$set": {"interests": new_interests}}
@@ -232,14 +239,14 @@ class UserModel:
         except Exception as e:
             raise Exception(f"Error updating interests: {str(e)}")
 
-    @staticmethod
-    def update_password(user_id: str, new_password: str) -> bool:
-        """Update user password"""
-        result = mongo.db.users.update_one(
-            {"_id": ObjectId(user_id)},
-            {"$set": {"password": new_password}}
-        )
-        return result.modified_count > 0
+        @staticmethod
+        def update_password(user_id: str, new_password: str) -> bool:
+            """Update user password"""
+            result = mongo.db.users.update_one(
+                {"_id": ObjectId(user_id)},
+                {"$set": {"password": new_password}}
+            )
+            return result.modified_count > 0
 
     @staticmethod
     def unblock_user(user_id: str, blocked_user_id: str) -> bool:
