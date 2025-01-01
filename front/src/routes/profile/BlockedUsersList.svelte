@@ -57,7 +57,9 @@
 							<li
 								class="relative"
 								onmouseenter={() => (userIdMenu = blockedUser.userId)}
+								ontouchstart={() => (userIdMenu = blockedUser.userId)}
 								onmouseleave={() => (userIdMenu = null)}
+								ontouchend={() => (userIdMenu = null)}
 							>
 								{$inspect(userIdMenu, blockedUser.userId)}
 								{#if userIdMenu === blockedUser.userId}

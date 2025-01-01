@@ -7,7 +7,9 @@
 <button
 	class="relative"
 	onmouseenter={() => (showTooltip = true)}
+	ontouchstart={() => (showTooltip = true)}
 	onmouseleave={() => (showTooltip = false)}
+	ontouchend={() => (showTooltip = false)}
 	onclick={() => (showTooltip = !showTooltip)}
 	aria-label="Press to show a tooltip"
 >
