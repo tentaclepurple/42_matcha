@@ -135,7 +135,9 @@
 	};
 </script>
 
-<div class="mb-2 flex justify-center items-center sm:grid-cols-[200px_170px_170px] grid-rows-2 flex-wrap gap-2 sm:grid">
+<div
+	class="mb-2 flex grid-rows-2 flex-wrap items-center justify-start gap-2 sm:grid sm:grid-cols-[200px_170px_170px]"
+>
 	{#each photos as photo, index}
 		<div class={`${index === 0 ? 'sm:row-span-2' : ''} h-full`}>
 			{#if photo.url.endsWith(DEFAULT_AVATAR_NAME)}
@@ -149,7 +151,7 @@
 						data-id={index}
 					/>
 					<div
-						class="flex h-full min-h-40 min-w-40 w-full items-center justify-center bg-gray-300 shadow-md"
+						class="flex h-full min-h-40 w-full min-w-40 items-center justify-center bg-gray-300 shadow-md"
 					>
 						<img src="/icons/plus.svg" alt="" class="h-8 w-8" />
 					</div>
@@ -162,29 +164,27 @@
 					role="dialog"
 					class={`relative ${photoActionsIndex === index ? 'shadow-lg' : ''} h-full`}
 				>
-					{#if photoActionsIndex === index}
-						<div
-							class="absolute inset-0 m-auto flex h-full w-full flex-col items-center justify-center gap-3 bg-gray-900 bg-opacity-50"
-						>
-							<button onclick={() => handlePhotoDelete(index)} title="Delete">
-								<img src="/icons/delete.svg" alt="" class="h-10 w-10 rounded-full bg-red-500 p-2" />
-							</button>
+					<div
+						class={`${photoActionsIndex === index ? '' : 'sm:hidden'} absolute inset-0 m-auto flex h-full w-full flex-col items-center justify-center gap-2 sm:gap-3 bg-gray-900 bg-opacity-50`}
+					>
+						<button onclick={() => handlePhotoDelete(index)} title="Delete">
+							<img src="/icons/delete.svg" alt="" class="h-10 w-10 rounded-full bg-red-500 p-2" />
+						</button>
 
-							<button title="Show" onclick={() => (showPicturePreviewIndex = index)}>
-								<img src="/icons/show.svg" alt="" class="h-10 w-10 rounded-full bg-teal-500 p-2" />
-							</button>
+						<button title="Show" onclick={() => (showPicturePreviewIndex = index)}>
+							<img src="/icons/show.svg" alt="" class="h-10 w-10 rounded-full bg-teal-500 p-2" />
+						</button>
 
-							{#if !photo.isProfile}
-								<button title="Choose as avatar" onclick={() => handleNewAvatar(index)}>
-									<img
-										src="/icons/avatar.svg"
-										alt=""
-										class="h-10 w-10 rounded-full bg-slate-200 p-2"
-									/>
-								</button>
-							{/if}
-						</div>
-					{/if}
+						{#if !photo.isProfile}
+							<button title="Choose as avatar" onclick={() => handleNewAvatar(index)}>
+								<img
+									src="/icons/avatar.svg"
+									alt=""
+									class="h-10 w-10 rounded-full bg-slate-200 p-2"
+								/>
+							</button>
+						{/if}
+					</div>
 					{#if photo.isProfile}
 						<div
 							class="absolute left-0 top-0 ml-1 mt-1 flex items-center gap-1 rounded-lg bg-teal-100 bg-opacity-80 px-2 py-1 shadow-xl"
@@ -196,7 +196,7 @@
 					<img
 						src={getServerAsset(photo.url)}
 						alt=""
-						class={`h-full border-2 border-gray-500 object-cover shadow-md`}
+						class={`h-full min-h-40 min-w-40 sm:min-w-full max-w-40 max-h-40 sm:min-h-full border-2 border-gray-500 object-cover shadow-md`}
 					/>
 					{#if showPicturePreviewIndex !== null}
 						<div
