@@ -30,9 +30,9 @@ def get_suggestions():
         sort_order = request.args.get('sort_order', 'asc')
 
         if max_distance is None:
-            max_distance = 5
+            max_distance = 15
         if min_common_tags is None:
-            min_common_tags = 2
+            min_common_tags = 1
 
         user_gender = current_user.get('gender')
         user_preferences = current_user.get('sexual_preferences')
