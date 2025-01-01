@@ -43,9 +43,11 @@
 			</div>
 		{:else}
 			<div class="items-between flex h-full w-full flex-1 flex-col">
-				<ul class="grid w-full grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-3 p-8">
+				<ul
+					class="grid w-full grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-2 sm:gap-3 p-2 sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] sm:p-8"
+				>
 					{#each currentResults as user}
-						<li class="flex items-center justify-center rounded-md bg-teal-50 p-3 shadow-md">
+						<li class="flex items-center justify-center rounded-md bg-teal-50 p-2 sm:p-3 shadow-md">
 							<button
 								type="button"
 								data-username={user.username}
@@ -83,7 +85,7 @@
 					{/each}
 				</ul>
 				<nav
-					class="mx-auto mt-auto flex sm:w-4/6 flex-wrap items-center justify-center gap-4 px-12 pb-6"
+					class="mx-auto mt-auto flex flex-wrap items-center justify-center gap-4 px-12 pb-6 sm:w-4/6"
 				>
 					{#each Array.from({ length: totalPages }, (_, i) => i) as _, index}
 						<button
