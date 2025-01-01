@@ -43,10 +43,8 @@ def create_app():
 
     mongo.init_app(app)
 
-    num_users = mongo.db.users.count_documents({})
-    num_test_users = 500
-    if (num_users < num_test_users):
-        generate_test_users(mongo, num_test_users - num_users)
+    with app.app_context():
+        init_db()
 
     jwt = JWTManager(app)
 
@@ -59,8 +57,10 @@ def create_app():
     app.register_blueprint(notification_bp, url_prefix='/api/notifications')
     app.register_blueprint(chat_bp, url_prefix='/api/chat')
 
-    with app.app_context():
-        init_db()
+    num_users = mongo.db.users.count_documents({})
+    num_test_users = 500
+    if (num_users < num_test_users):
+        generate_test_users(mongo, num_test_users - num_users)
 
     BotModel.check_and_create_bot()
 

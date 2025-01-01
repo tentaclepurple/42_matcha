@@ -20,31 +20,30 @@ def get_suggestions():
         if not current_user:
             return jsonify({'error': 'User not found'}), 404
 
-        # Get filtering and sorting parameters
         min_age = request.args.get('min_age', type=int)
         max_age = request.args.get('max_age', type=int)
         min_fame = request.args.get('min_fame', type=float)
         max_fame = request.args.get('max_fame', type=float)
-        max_distance = request.args.get('max_distance', type=float)  # in km
+        max_distance = request.args.get('max_distance', type=float)
         min_common_tags = request.args.get('min_common_tags', type=int)
         sort_by = request.args.get('sort_by', 'distance')  # distance, age, fame_rating, common_tags
-        sort_order = request.args.get('sort_order', 'asc')  
+        sort_order = request.args.get('sort_order', 'asc')
 
-        # Get user gender preferences
+        if max_distance is None:
+            max_distance = 5
+        if min_common_tags is None:
+            min_common_tags = 2
+
         user_gender = current_user.get('gender')
         user_preferences = current_user.get('sexual_preferences')
 
-        # Build gender query
         gender_query = {
             '$or': [
-                # If bisexual, accepts male and female
                 {
                     'sexual_preferences': 'bisexual',
                     'gender': {'$in': ['male', 'female']}
                 },
-                # Or if has preference for my specific gender
                 {'sexual_preferences': user_gender},
-                # Or if has 'other' preference and I'm 'other'
                 {
                     'sexual_preferences': 'other',
                     'gender': 'other'
@@ -52,7 +51,6 @@ def get_suggestions():
             ]
         }
 
-        # Adjust based on current user preferences
         if user_preferences == 'male':
             gender_query['gender'] = 'male'
         elif user_preferences == 'female':
@@ -61,10 +59,9 @@ def get_suggestions():
             gender_query['gender'] = 'other'
         elif user_preferences == 'bisexual':
             gender_query['gender'] = {'$in': ['male', 'female']}
-        else:  # If None, consider as bisexual
+        else:
             gender_query['gender'] = {'$in': ['male', 'female']}
 
-        # Pipeline with $geoNear first
         pipeline = [
             {
                 '$geoNear': {
@@ -73,22 +70,16 @@ def get_suggestions():
                     'spherical': True,
                     'query': {
                         '$and': [
-                            # Exclude users who have blocked current user
                             {'blocked_users': {'$ne': ObjectId(current_user_id)}},
-                            # exclude blocked users too
                             {'_id': {'$nin': current_user.get('blocked_users', [])}},
-                            # Only verified and completed profiles
                             {'verified': True},
                             {'profile_completed': True},
-                            # Different user than current
                             {'_id': {'$ne': ObjectId(current_user_id)}},
-                            # Apply gender filters
                             gender_query
                         ]
                     }
                 }
             },
-            # Calculate common tags
             {
                 '$addFields': {
                     'common_tags': {
@@ -100,10 +91,11 @@ def get_suggestions():
             }
         ]
 
-        # Apply filters
-        match_conditions = {}
+        match_conditions = {
+            'distance': {'$lte': max_distance * 1000},
+            'common_tags': {'$gte': min_common_tags}
+        }
 
-        # Age filter
         if min_age is not None or max_age is not None:
             match_conditions['age'] = {}
             if min_age is not None:
@@ -111,7 +103,6 @@ def get_suggestions():
             if max_age is not None:
                 match_conditions['age']['$lte'] = max_age
 
-        # Fame rating filters
         if min_fame is not None or max_fame is not None:
             match_conditions['fame_rating'] = {}
             if min_fame is not None:
@@ -119,21 +110,8 @@ def get_suggestions():
             if max_fame is not None:
                 match_conditions['fame_rating']['$lte'] = max_fame
 
-        # Distance filter
-        if max_distance is not None:
-            if max_distance == 0:
-                match_conditions['distance'] = 0  # Exact same location
-            else:
-                match_conditions['distance'] = {'$lte': max_distance * 1000}  # Convert to meters
+        pipeline.append({'$match': match_conditions})
 
-        # Other filters
-        if min_common_tags:
-            match_conditions['common_tags'] = {'$gte': min_common_tags}
-
-        if match_conditions:
-            pipeline.append({'$match': match_conditions})
-
-        # Sorting
         sort_direction = 1 if sort_order == 'asc' else -1
         sort_field = {
             'distance': 'distance',
@@ -144,10 +122,8 @@ def get_suggestions():
 
         pipeline.append({'$sort': {sort_field: sort_direction}})
 
-        # Get results
         matches = list(mongo.db.users.aggregate(pipeline))
 
-        # Format response
         return jsonify({
             'current_user_info': {
                 'gender': current_user.get('gender'),
@@ -171,7 +147,7 @@ def get_suggestions():
                 'gender': match.get('gender'),
                 'sexual_preferences': match.get('sexual_preferences'),
                 'age': match['age'],
-                'distance': round(match['distance'] / 1000, 2),  # km
+                'distance': round(match['distance'] / 1000, 2),
                 'location': match.get('location'),
                 'common_tags': match['common_tags'],
                 'common_tags_list': list(set(match.get('interests', [])) & 
