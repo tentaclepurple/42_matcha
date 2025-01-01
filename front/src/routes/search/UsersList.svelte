@@ -34,10 +34,10 @@
 {#if userSearchData.value}
 	<div class="flex items-center justify-center">
 		{#if results.length === 0}
-			<div class="flex flex-col items-center">
+			<div class="flex flex-col items-center p-6">
 				<h2 class="mb-2">It's lonely in here</h2>
 				<p class="mb-6">There are no users with these filters. Try again with different filters.</p>
-				<div class="w-96">
+				<div class="sm:w-96">
 					<Lottie animationData={emptyAnimationData} loop={true} autoplay={true} />
 				</div>
 			</div>
