@@ -90,7 +90,7 @@
 			<RangeFilter
 				label="Distance (km)"
 				minValue="0"
-				maxValue="5"
+				maxValue={SUGGESTIONS_MAX_DISTANCE}
 				min="0"
 				max={SUGGESTIONS_MAX_DISTANCE}
 				step="1"
