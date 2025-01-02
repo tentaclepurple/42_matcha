@@ -37,8 +37,14 @@ def generate_rand_location(index):
     return [city['coords'][0] + random.uniform(-0.025, 0.025), city['coords'][1] + random.uniform(-0.025, 0.025)]
 
 
-def generate_test_users(mongo, num_users=50):
+def generate_test_users(mongo):
     """Generate test users with complete profiles"""
+    NUM_TEST_USERS = 500
+    num_users = mongo.db.users.count_documents({})
+
+    if (num_users >= NUM_TEST_USERS):
+        print("Database already has enough users")
+        return
 
     # Sample data pools
     interests = ["animals", "anime", "art", "astrology", "beauty", "blogging", "board games", 
@@ -54,15 +60,16 @@ def generate_test_users(mongo, num_users=50):
 
     print("Creating test users...")
 
+    remaining_users = NUM_TEST_USERS - num_users
     response = requests.get(
-        f'https://randomuser.me/api/?results={num_users}')
+        f'https://randomuser.me/api/?results={remaining_users}')
     if response.status_code != 200:
         print("Failed to fetch data from URL")
         return
 
     data = response.json()
 
-    for i in range(num_users):
+    for i in range(remaining_users):
         user = data['results'][i]
 
         # Basic info
@@ -108,4 +115,4 @@ def generate_test_users(mongo, num_users=50):
             print(f"Created user: {user['username']}")
         except Exception as e:
             print(f"Error creating user {user['username']}: {str(e)}")
-    print(f"Created {num_users} test users")
+    print(f"Created {remaining_users} test users")
