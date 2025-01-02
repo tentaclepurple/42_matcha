@@ -96,7 +96,7 @@
 	<p class="mb-8 text-sm">
 		If you noticed any inappropriate or harmful behavior, please report this user to our team.
 	</p>
-	<div class="flex items-center justify-end gap-2">
+	<div class="flex items-center justify-center sm:justify-end gap-2">
 		<Button level="danger" type="button" onclick={handleOpenReportModal}>Report user</Button>
 		<Button level="secondary" type="button" onclick={handleOpenBlockModal}>Block user</Button>
 	</div>
