@@ -18,13 +18,14 @@ cities = [
     {'name': 'Bilbao', 'coords': [-2.9253, 43.2630]},
     {'name': 'Barakaldo', 'coords': [-2.9899, 43.2972]},
     {'name': 'Leioa', 'coords': [-2.9869, 43.3329]},
-    {'name': 'Portugalete', 'coords': [-3.0208, 43.3183]},
+    {'name': 'Portugalete', 'coords': [-3.00706, 43.30968]},
     {'name': 'Basauri', 'coords': [-2.8833, 43.2333]},
     {'name': 'Galdakao', 'coords': [-2.8417, 43.2333]},
     {'name': 'Sondika', 'coords': [-2.8975, 43.2833]},
     {'name': 'Mungia', 'coords': [-2.8333, 43.3500]},
     {'name': 'Basauri', 'coords': [-2.8833, 43.2333]},
-    {'name': 'Urduliz', 'coords': [-3.0167, 43.3833]},
+    {'name': 'Urduliz', 'coords': [-2.95962, 43.37970]},
+    {'name': 'Landa', 'coords': [-2.96773, 43.38131]},
     {'name': 'Zamudio', 'coords': [-2.8667, 43.2833]},
     {'name': 'Derio', 'coords': [-2.8833, 43.2833]},
     {'name': 'Erandio', 'coords': [-2.9833, 43.3000]},
@@ -34,7 +35,7 @@ cities = [
 def generate_rand_location(index):
     # given a limited number of seeds, generate a random location
     city = cities[index % len(cities)]
-    return [city['coords'][0] + random.uniform(-0.025, 0.025), city['coords'][1] + random.uniform(-0.025, 0.025)]
+    return [city['coords'][0] + random.uniform(-0.020, 0.020), city['coords'][1] + random.uniform(-0.020, 0.020)]
 
 
 def generate_test_users(mongo):
