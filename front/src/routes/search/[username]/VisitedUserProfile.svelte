@@ -19,7 +19,7 @@
 
 {#if selectedUser}
 	<div
-		class="items-between m-8 flex w-3/5 flex-col items-start justify-between rounded-lg bg-teal-100 p-6"
+		class="items-between sm:m-8 flex w-full sm:w-3/5 flex-col items-start justify-between rounded-lg bg-teal-100 px-3 py-6 sm:p-6"
 	>
 		<nav class="mb-12 flex w-full items-center justify-between">
 			{#if origin}

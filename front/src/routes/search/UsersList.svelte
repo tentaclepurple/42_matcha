@@ -19,6 +19,12 @@
 		totalPages = Math.ceil(results.length / NUM_RESULTS);
 	});
 
+	$effect(() => {
+		if (results) {
+			currentPage = 0;
+		}
+	});
+
 	const currentResults = $derived(
 		results.slice(currentPage * NUM_RESULTS, currentPage * NUM_RESULTS + NUM_RESULTS)
 	);
@@ -44,10 +50,10 @@
 		{:else}
 			<div class="items-between flex h-full w-full flex-1 flex-col">
 				<ul
-					class="grid w-full grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-2 sm:gap-3 p-2 sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] sm:p-8"
+					class="grid w-full grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-2 p-2 sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] sm:gap-3 sm:p-8"
 				>
 					{#each currentResults as user}
-						<li class="flex items-center justify-center rounded-md bg-teal-50 p-2 sm:p-3 shadow-md">
+						<li class="flex items-center justify-center rounded-md bg-teal-50 p-2 shadow-md sm:p-3">
 							<button
 								type="button"
 								data-username={user.username}
