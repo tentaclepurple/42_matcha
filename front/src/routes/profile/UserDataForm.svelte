@@ -249,7 +249,7 @@
 		{#if success}
 			<p class="text-xs text-green-500 sm:text-base">{success}</p>
 		{:else if error}
-			<p class="sm:-text-base mt-4 text-xs text-red-500">{error}</p>
+			<p class="sm:text-base mt-4 text-xs text-red-500">{error}</p>
 		{/if}
 
 		<div class="ml-auto flex w-fit items-baseline justify-between gap-2">
