@@ -85,17 +85,17 @@
 <PageWrapper>
 	<h1>Log in</h1>
 	<div>
-		<p class="mb-4">This is where you can log in</p>
+		<p class="mb-6">This is where you can log in.</p>
 		<Form onSubmit={handleSubmit}>
 			<fieldset disabled={isLoading} class="flex w-full flex-col items-start gap-3">
 				<label>
-					E-mail
+					Username
 					<input
-						type="email"
-						id="email"
-						name="email"
-						value="chiamatemi.nico@gmail.com"
-						autocomplete="email"
+						type="text"
+						id="username"
+						name="username"
+						autocomplete="username"
+						placeholder="Your username"
 						required
 						class="min-w-[300px]"
 					/>
@@ -106,15 +106,15 @@
 					<PasswordInput
 						id="password"
 						name="password"
-						value="Ciaociao1!"
 						required
 						autocomplete="current-password"
+						placeholder="Your password"
 						class="min-w-[300px]"
 					/>
 				</label>
 			</fieldset>
 
-			<a href="/matcha/forget-password">Forgot your password?</a>
+			<a href="/matcha/forget-password" class="mb-6">Forgot your password?</a>
 
 			<div class="flex items-baseline justify-center gap-2">
 				<Button type="button" level="secondary" onclick={handleCancel}>Cancel</Button>

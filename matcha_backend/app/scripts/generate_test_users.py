@@ -41,8 +41,16 @@ def generate_test_users(mongo, num_users=50):
     """Generate test users with complete profiles"""
 
     # Sample data pools
-    interests = ['music', 'movies', 'sports', 'reading', 'travel',
-                 'food', 'art', 'gaming', 'fitness', 'technology']
+    interests = ["animals", "anime", "art", "astrology", "beauty", "blogging", "board games", 
+        "camping", "cars", "collecting", "comedy", "cooking", "crafts", "cycling", 
+        "dancing", "diy", "drinks", "fashion", "fishing", "fitness", "foodie", 
+        "gaming", "gardening", "health", "hiking", "history", "investing", 
+        "karaoke", "languages", "magic", "meditation", "movies", "music", 
+        "nature", "nightlife", "partying", "photography", "podcasts", "politics", 
+        "puzzles", "reading", "religion", "running", "science", "sex", "skating", 
+        "skiing", "sports", "surfing", "swimming", "technology", "theater", 
+        "traditions", "traveling", "volunteering", "writing", "yoga"]
+
 
     print("Creating test users...")
 
@@ -90,6 +98,12 @@ def generate_test_users(mongo, num_users=50):
             'reported': False
         }
         try:
+            for interest in user['interests']:
+                mongo.db.tags.update_one(
+                    {"name": interest},
+                    {"$inc": {"count": 1}},
+                    upsert=True
+                )
             mongo.db.users.insert_one(user)
             print(f"Created user: {user['username']}")
         except Exception as e:

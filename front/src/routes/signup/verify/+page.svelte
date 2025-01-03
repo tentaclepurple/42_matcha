@@ -7,7 +7,9 @@
 
 <PageWrapper>
 	<h1 class="mb-4">You're almost there!</h1>
-	<p class="mb-2">We sent you an e-mail. Confirm your e-mail address and you'll be able to log in.</p>
+	<p class="mb-2">
+		We sent you a confirmation e-mail. Confirm your e-mail address to be able to log in.
+	</p>
 
 	<Button
 		type="button"

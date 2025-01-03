@@ -21,8 +21,8 @@
 
 	<div class="flex flex-col items-start gap-4">
 		<ProfileAvatar />
-		<div>
-			<h2 class="mb-4">Information</h2>
+		<div class="w-full sm:w-auto">
+			<h2 class="mb-4">Your personal information</h2>
 			<PersonalInfoForm />
 		</div>
 	</div>

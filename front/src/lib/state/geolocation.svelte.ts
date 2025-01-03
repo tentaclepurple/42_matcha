@@ -3,6 +3,8 @@ import type Location from '$lib/interfaces/location.interface';
 
 class UserLocation {
 	#location = $state<null | [number, number]>(null);
+	#isLoading = $state<boolean>(false);
+	#isRunning = false;
 
 	get value(): null | [number, number] {
 		return this.#location;
@@ -12,8 +14,15 @@ class UserLocation {
 		this.#location = newValue;
 	}
 
+	get isLoading(): boolean {
+		return this.#isLoading;
+	}
+
 	getUserLocation = async () => {
-		if (navigator.geolocation) {
+		if (navigator.geolocation && !this.#isRunning) {
+			this.#isLoading = true;
+			this.#isRunning = true;
+
 			console.log('Locating user…');
 			navigator.geolocation.getCurrentPosition(async (position) => {
 				this.#location = [position.coords.longitude, position.coords.latitude];
@@ -41,7 +50,12 @@ class UserLocation {
 
 				if (!res.ok) {
 					console.error('Failed to update user location');
+					this.#isLoading = false;
+					this.#isRunning = false;
 				}
+
+				this.#isLoading = false;
+				this.#isRunning = false;
 			});
 		}
 	};

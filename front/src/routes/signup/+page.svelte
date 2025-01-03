@@ -93,99 +93,105 @@
 </script>
 
 <PageWrapper>
-	<h1>Create a new account</h1>
+	<h1 class="mb-4">Create a new account</h1>
 	<div>
 		<Form onSubmit={handleSubmit}>
-			<fieldset disabled={isLoading} class="flex flex-col gap-3">
-				<div class="mb-4 flex items-baseline justify-center gap-4">
-					<label>
+			<fieldset disabled={isLoading} class="flex w-full flex-col gap-4 sm:w-auto">
+				<div class="flex flex-col items-baseline justify-center gap-4 sm:flex-row">
+					<label class="w-full">
 						Username
 						<input
 							type="text"
 							id="username"
 							name="username"
-							value="ngasco"
+							placeholder="Username"
 							required
 							minlength="5"
 							maxlength="12"
 							autocomplete="username"
+							class="w-full"
 						/>
 					</label>
-					<label>
-						Email
+					<label class="w-full">
+						E-mail
 						<input
 							type="email"
 							id="email"
 							name="email"
-							value="chiamatemi.nico@gmail.com"
-							required
+							placeholder="E-mail"
 							autocomplete="email"
+							required
+							class="w-full"
 						/>
 					</label>
 				</div>
 
-				<div class="mb-4">
-					<div class="flex items-baseline justify-center gap-4">
-						<label>
+				<div>
+					<div class="mb-4 flex flex-col items-baseline justify-center gap-4 sm:flex-row">
+						<label class="w-full">
 							First name
 							<input
 								type="text"
 								id="first_name"
 								name="first_name"
-								value="Nicolas"
+								placeholder="First name"
 								required
 								maxlength="30"
 								autocomplete="given-name"
+								class="w-full"
 							/>
 						</label>
-						<label>
+						<label class="w-full">
 							Last name
 							<input
 								type="text"
 								id="last_name"
 								name="last_name"
-								value="Gasco"
+								placeholder="Last name"
 								required
 								maxlength="30"
 								autocomplete="family-name"
+								class="w-full"
 							/>
 						</label>
 					</div>
 
 					<label>
-						Birth year
+						Birth date
 						<input
 							type="date"
 							id="age"
 							name="age"
-							value="1992-01-07"
 							min={MIN_BIRTH_DATA}
 							max={calcEighteenthBirthday()}
 							required
 							autocomplete="bday"
+							class="w-full sm:w-auto"
 						/>
 					</label>
 				</div>
 
-				<div class="mb-4">
-					<label class="flex flex-col items-start justify-center">
+				<div class="mb-4 flex flex-col gap-4">
+					<label class="flex flex-col items-start justify-center w-full sm:w-auto">
 						Password
 						<PasswordInput
 							id="password"
 							name="password"
-							value="Ciaociao1!"
 							required
+							placeholder="Password"
 							autocomplete="current-password"
+							class="w-full sm:w-auto"
 						/>
 					</label>
-					<label class="flex flex-col items-start justify-center">
+					<label class="flex flex-col items-start justify-center w-full sm:w-auto">
 						Confirm password
 						<PasswordInput
 							id="confirm"
 							name="confirm"
-							value="Ciaociao1!"
 							required
+							placeholder="Confirm password"
 							autocomplete="current-password"
+							class="w-full sm:w-auto"
 						/>
 					</label>
 				</div>

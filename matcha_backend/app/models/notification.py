@@ -12,7 +12,7 @@ class NotificationModel:
         Create a new notification
         Args:
             user_id: User who receives the notification
-            type: Type of notification (profile_view, like, unlike, match, message)
+            type: Type of notification (profile_view, like, rmlike, unlike, match, message)
             from_user_id: User who triggered the notification
         """
         try:
@@ -23,7 +23,7 @@ class NotificationModel:
                 "created_at": datetime.utcnow(),
                 "read": False
             }
-            
+
             result = mongo.db.notifications.insert_one(notification)
             return bool(result.inserted_id)
             

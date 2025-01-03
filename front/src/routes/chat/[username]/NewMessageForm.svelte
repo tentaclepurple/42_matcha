@@ -47,7 +47,7 @@
 	};
 </script>
 
-<div class="flex flex-col items-end">
+<div class="flex flex-col items-end mt-auto">
 	<div class="mb-4">
 		{#if error}
 			<p class="text-red-500">{error}</p>
@@ -58,12 +58,15 @@
 			id="message"
 			placeholder="Write a new message"
 			required
-			rows={2}
+			rows={3}
 			minlength={1}
 			maxlength={500}
 			class="w-full"
 			onkeydown={handleKeydown}
 		></textarea>
-		<Button type="submit" level="primary">Send</Button>
+		<Button type="submit" level="primary">
+			<span class="sr-only sm:not-sr-only">Send</span>
+			<img src="/matcha/icons/send.svg" alt="" class="w-5" />
+		</Button>
 	</form>
 </div>

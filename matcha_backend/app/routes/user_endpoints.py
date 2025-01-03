@@ -40,7 +40,6 @@ def register():
 
         existing_email = UserModel.find_by_email(data['email'])
         if existing_email:
-            print("Email already exists")
             return jsonify({'error': 'Email already exists'}), 409 # Comment this line for DEVELOPMENT
         
         # Verify required fields
@@ -82,7 +81,7 @@ def register():
             
             # Profile
             "gender": None,
-            "sexual_preferences": None,
+            "sexual_preferences": "bisexual",
             "biography": "",
             "interests": [],
             "photos": [
@@ -152,16 +151,17 @@ def verify_email(token):
 def login():
     try:
         data = request.get_json()
-        
+        print("--- LOGIN", flush=True)
         # Check required fields
-        if not data.get('email') or not data.get('password'):
-            return jsonify({'error': 'Email and password are required'}), 400
+        if not data.get('username') or not data.get('password'):
+            return jsonify({'error': 'username and password are required'}), 400
             
         # Find user and check credentials
-        user = UserModel.find_by_email(data['email'])
-        if not user or not check_password_hash(user['password'], data['password']):
-            return jsonify({'error': 'Invalid credentials'}), 401
-            
+        user = UserModel.find_by_username(data['username'])
+
+        if not user:
+            return jsonify({'error': 'invalid credentials'}), 401
+        
         # Check account lock
         lock_expires = UserModel.check_account_lock(user['_id'])
         if lock_expires:
@@ -244,7 +244,6 @@ def forgot_password():
            return jsonify({'error': 'Email is required'}), 400
            
        user = UserModel.find_by_email(email)
-       print("User: ", user)
        if not user:
            # for security reasons, we don't want to reveal if the email is registered
            return jsonify({

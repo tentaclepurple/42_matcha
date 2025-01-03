@@ -12,7 +12,7 @@ export const load: PageLoad = async ({ params }) => {
 	}
 
 	try {
-		visitedProfileData.fetch(username);
+		await visitedProfileData.fetch(username);
 	} catch (err) {
 		error(500, err.message);
 	}

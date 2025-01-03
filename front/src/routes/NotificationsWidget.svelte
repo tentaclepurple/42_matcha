@@ -7,6 +7,7 @@
 	import { visitedProfileData } from '$lib/state/visited-profile-data.svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import { base } from '$app/paths';
+	import CoreWidget from './CoreWidget.svelte';
 
 	let showMenu: boolean = $state(false);
 
@@ -60,26 +61,21 @@
 </script>
 
 <div>
-	{#if notificationsData.value?.count && notificationsData.value.count > 0 && notificationsData.value?.notifications}
+	{#if notificationsData.value?.count !== null && notificationsData.value?.notifications}
 		<div class="relative" id="notifications-wrapper">
-			<button
-				class="relative flex h-9 w-9 items-center justify-center rounded-full border border-2 border-teal-500 bg-teal-100"
-				onclick={handleShowMenu}
-			>
-				<p class="sr-only">{notificationsData.value?.count} new notifications</p>
-				<img src="{base}/icons/notifications/active.svg" alt="" class="w-5" />
-				<p
-					class="absolute flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white"
-					style="bottom: -8px; left: -8px;"
-				>
-					{notificationsData.value?.count}
-				</p>
-			</button>
+			<CoreWidget
+				count={notificationsData.value.count}
+				disabled={notificationsData.value.count === 0}
+				icon={notificationsData.value.count > 0
+					? '/matcha/icons/notifications/active.svg'
+					: '/matcha/icons/notifications/off.svg'}
+				onClick={handleShowMenu}
+			/>
 			{#if showMenu}
 				<div
-					class="absolute right-0 top-full z-50 mt-2 flex min-h-32 w-max min-w-52 justify-end rounded-md bg-teal-100 p-6 shadow-xl"
+					class="fixed right-1/2 top-14 z-50 mt-2 flex w-max max-w-[96vw] translate-x-1/2 justify-end rounded-md bg-teal-100 p-3 shadow-xl sm:absolute sm:right-0 sm:top-full sm:min-h-32 sm:min-w-52 sm:translate-x-0 sm:p-6"
 				>
-					<ul class="flex w-max flex-col gap-2 text-sm">
+					<ul class="flex w-max flex-col gap-2 text-xs sm:text-sm">
 						{#each notificationsData.value?.notifications as notification}
 							<li>
 								<button
@@ -127,13 +123,6 @@
 					</ul>
 				</div>
 			{/if}
-		</div>
-	{:else}
-		<div
-			class="flex h-9 w-9 items-center justify-center rounded-full border border-2 border-gray-400 bg-gray-200"
-		>
-			<p class="sr-only">No new notifications</p>
-			<img src="{base}/icons/notifications/off.svg" alt="" class="w-5" />
 		</div>
 	{/if}
 </div>

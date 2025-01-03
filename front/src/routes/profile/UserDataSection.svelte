@@ -9,7 +9,7 @@
 </script>
 
 {#if userProfileData?.value}
-	<div class="relative flex min-w-full flex-col justify-center rounded-lg bg-teal-100 px-12 py-6">
+	<div class="relative flex min-w-full flex-col justify-center rounded-lg bg-teal-100 px-4 sm:px-12 py-6 sm:py-6">
 		{#if !isEditing}
 			<button
 				type="button"

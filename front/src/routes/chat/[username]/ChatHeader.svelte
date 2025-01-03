@@ -5,7 +5,7 @@
 	const { profilePhoto, username } = $props();
 </script>
 
-<div class="mb-4 flex items-center justify-between">
+<div class="mb-4 max-h-[96px] sm:max-h-full flex items-center justify-between hidden sm:block">
 	<h2 class="sr-only">{username}</h2>
 	<button
 		class="flex items-center gap-2"

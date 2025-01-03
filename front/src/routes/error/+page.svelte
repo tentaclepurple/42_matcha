@@ -19,6 +19,6 @@
 </script>
 
 <PageWrapper>
-	<h1>{title}</h1>
+	<h1 class="mb-4">{title}</h1>
 	<p>{message}</p>
 </PageWrapper>

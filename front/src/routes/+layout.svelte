@@ -1,7 +1,7 @@
 <script lang="ts">
 	const { children } = $props();
 
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	import '../app.css';
 	import MenuWidget from './MenuWidget.svelte';
@@ -13,28 +13,57 @@
 	import { NOTIFICATIONS_POLLING_INTERVAL } from '$lib/constants/notifications';
 	import NotificationsWidget from './NotificationsWidget.svelte';
 	import { base } from '$app/paths';
+	import { goto } from '$app/navigation';
+	import MessagesWidget from './MessagesWidget.svelte';
 
+	let isTabHidden = $state(false);
+
+	const handleVisibilityChange = () => {
+		isTabHidden = document.hidden;
+	};
+
+	const handleBeforeUnload = () => {
+		// logout user if tab is closed
+		if (isTabHidden) {
+			userAuth.logout();
+		}
+	};
 
 	onMount(async (): Promise<unknown> => {
+		window.addEventListener('beforeunload', handleBeforeUnload);
+		window.addEventListener('visibilitychange', handleVisibilityChange);
+
+		//cleanup
+		onDestroy(() => {
+			window.removeEventListener('beforeunload', handleBeforeUnload);
+			window.removeEventListener('visibilitychange', handleVisibilityChange);
+		});
+
 		let interval: number;
 
 		const accessToken = localStorage.getItem('access_token');
 
 		if (accessToken) {
-			userAuth.login();
-			await userData.fetch();
-			await userProfileData.fetch();
-			await userLocation.getUserLocation();
+			try {
+				userAuth.login();
+				await userData.fetch();
+				await userProfileData.fetch();
+				await userLocation.getUserLocation();
 
-			if (userAuth.isAuthenticated) {
-				notificationsData.fetch();
-				interval = setInterval(() => {
+				if (userAuth.isAuthenticated) {
 					notificationsData.fetch();
-				}, NOTIFICATIONS_POLLING_INTERVAL);
+					interval = setInterval(() => {
+						notificationsData.fetch();
+					}, NOTIFICATIONS_POLLING_INTERVAL);
 
-				return () => {
-					clearInterval(interval);
-				};
+					return () => {
+						clearInterval(interval);
+					};
+				}
+			} catch (e) {
+				console.error(e);
+				userAuth.logout();
+				goto('/matcha/login');
 			}
 		} else {
 			userAuth.logout();
@@ -43,7 +72,7 @@
 </script>
 
 <div class="flex min-h-screen flex-col justify-between">
-	<div class="flex items-center justify-center bg-teal-300 py-0 px-4">
+	<div class="flex items-center justify-center bg-teal-300 px-4 py-0">
 		<header class="flex min-h-[68px] w-full max-w-screen-2xl items-center justify-between">
 			<nav class="flex items-baseline justify-center gap-2">
 				<a href="{base}/" aria-label="Home">
@@ -51,8 +80,9 @@
 				</a>
 			</nav>
 
-			<div class="flex items-center justify-center gap-3">
+			<div class="flex items-center justify-center gap-5">
 				{#if userAuth.isAuthenticated}
+					<MessagesWidget />
 					<NotificationsWidget />
 					<MenuWidget />
 				{:else}

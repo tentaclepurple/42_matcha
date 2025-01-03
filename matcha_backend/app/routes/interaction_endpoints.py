@@ -79,12 +79,12 @@ def block_user(user_identifier):
         # Check if trying to block self
         if user_to_block_id == current_user_id:
             return jsonify({'error': 'Cannot block yourself'}), 400
-        
+        print("************ blocking user in endpoint", user_to_block_id, flush=True)
         # Block user
         result = UserModel.block_user(current_user_id, user_to_block_id)
         
         return jsonify({
-            'message': f'User {user_to_block["username"]} blocked successfully'
+            'message': f'User {user_to_block["username"]} blocked successfully. {result}'
         }), 200
         
     except Exception as e:
@@ -120,14 +120,26 @@ def unblock_user(user_identifier):
 def toggle_like(user_identifier):
     try:
         current_user_id = get_jwt_identity()
+        this_user = UserModel.find_by_id(current_user_id)
         user = get_user_by_identifier(user_identifier)
+        
         if not user:
             return jsonify({'error': 'User not found'}), 404
         
+        to_user_id = str(user['_id'])
+        profile_photos = [photo for photo in this_user['photos'] 
+                         if photo['is_profile'] and photo['url'] != 'static/default/default.svg']
+
+        if not profile_photos:
+            return jsonify({'error': 'You must set a valid profile photo before liking other users'}), 400
+
+        
         if current_user_id in [str(blocked_id) for blocked_id in user.get('blocked_users', [])]:
             return jsonify({'error': 'This user had blocked you'}), 400
+        
+        if ObjectId(to_user_id) in this_user.get('blocked_users', []):
+            return jsonify({'error': 'Cannot like a user you have blocked'}), 400
             
-        to_user_id = str(user['_id'])
         # Check if trying to like self
         if to_user_id == current_user_id:
             return jsonify({'error': 'Cannot like yourself'}), 400
@@ -144,9 +156,6 @@ def toggle_like(user_identifier):
             "type": "like"
         })
 
-        if bot and not existing_like:
-            # Inicia conversación con el bot específico
-            BotModel.handle_user_like(current_user_id, to_user_id)
         
         existing_unlike = mongo.db.likes.find_one({
             "from_user_id": ObjectId(current_user_id),
@@ -158,6 +167,11 @@ def toggle_like(user_identifier):
             # If like exists, remove it
             mongo.db.likes.delete_one({"_id": existing_like["_id"]})
             UserModel.update_fame_rating(to_user_id, -13)
+            NotificationModel.create(
+                user_id=to_user_id,
+                type="rmlike",
+                from_user_id=current_user_id
+            )
             return jsonify({'message': 'Like removed', 'like_removed': True}), 200
             
         # Remove unlike if exists and add like
@@ -182,6 +196,10 @@ def toggle_like(user_identifier):
             "to_user_id": ObjectId(current_user_id),
             "type": "like"
         })
+
+        if bot and not existing_like and other_user_like:
+            # Inicia conversación con el bot específico
+            BotModel.handle_user_like(current_user_id, to_user_id)
         
         is_match = bool(other_user_like)
         if is_match:

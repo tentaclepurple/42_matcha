@@ -14,7 +14,6 @@ def get_unread_notifications():
     """Get all unread notifications for the current user"""
     try:
         current_user_id = get_jwt_identity()
-        print("current_user_id", current_user_id)
         notifications = NotificationModel.get_unread(current_user_id)
         
         return jsonify({

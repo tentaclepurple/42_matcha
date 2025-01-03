@@ -75,7 +75,7 @@
 </script>
 
 <form onsubmit={handleSave}>
-	<fieldset class="grid grid-cols-2 grid-rows-3 gap-x-3 gap-y-5">
+	<fieldset class="grid grid-cols-1 grid-rows-4 gap-x-3 gap-y-5 sm:grid-cols-2 sm:grid-rows-3">
 		<label class="col-span-2">
 			Username:
 			<input
@@ -88,10 +88,11 @@
 				minlength="5"
 				maxlength="12"
 				autocomplete="username"
+				class="w-full sm:w-auto"
 			/>
 		</label>
 
-		<label>
+		<label class="col-span-2 sm:col-span-1">
 			First name:
 			<input
 				type="text"
@@ -102,10 +103,11 @@
 				maxlength="30"
 				required
 				autocomplete="given-name"
+				class="w-full sm:w-auto"
 			/>
 		</label>
 
-		<label>
+		<label class="col-span-2 sm:col-span-1">
 			Last name:
 			<input
 				type="text"
@@ -116,6 +118,7 @@
 				maxlength="30"
 				required
 				autocomplete="family-name"
+				class="w-full sm:w-auto"
 			/>
 		</label>
 
@@ -134,7 +137,11 @@
 		</label>
 	</fieldset>
 
-	<div class="mt-6">
+	<div class="mt-6 flex items-center gap-2">
+		{#if isEditing}
+			<Button level="secondary" onclick={() => (isEditing = false)}>Cancel</Button>
+		{/if}
+
 		{#if isEditing}
 			<Button type="submit" level="primary">Save</Button>
 		{:else}

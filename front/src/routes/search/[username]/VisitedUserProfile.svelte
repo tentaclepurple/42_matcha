@@ -9,6 +9,8 @@
 	import UserActions from './UserActions.svelte';
 	import { visitedProfileData } from '$lib/state/visited-profile-data.svelte';
 	import InterestsList from '$lib/components/InterestsList.svelte';
+	import { DEFAULT_AVATAR_NAME } from '$lib/constants/avatar';
+	import IssuesWithUser from './VisitedUserProfile/IssuesWithUser.svelte';
 
 	const { origin } = $props();
 
@@ -17,7 +19,7 @@
 
 {#if selectedUser}
 	<div
-		class="items-between m-8 flex w-3/5 flex-col items-start justify-between rounded-lg bg-teal-200 p-6"
+		class="items-between m-8 flex w-3/5 flex-col items-start justify-between rounded-lg bg-teal-100 p-6"
 	>
 		<nav class="mb-12 flex w-full items-center justify-between">
 			{#if origin}
@@ -25,7 +27,16 @@
 					type="button"
 					level="primary"
 					onclick={() => {
-						goto(`/matcha/search?view=${origin}`, { replaceState: true });
+						switch (origin) {
+							case 'profile':
+								goto('/matcha/profile', { replaceState: true });
+								break;
+							case 'search':
+								goto('/matcha/search', { replaceState: true });
+								break;
+							default:
+								goto(`/matcha/search?view=${origin}`, { replaceState: true });
+						}
 					}}
 				>
 					← Back
@@ -37,27 +48,47 @@
 
 		<div class="w-full">
 			<div class="mb-6 flex items-center justify-between">
-				<div class="relative">
-					<img
-						class="h-40 w-40 rounded-lg bg-white object-cover shadow-md"
-						src={getServerAsset(
-							selectedUser.photos.filter((photo) => photo.isProfile)[0].url || 'icons/avatar.svg'
-						)}
-						alt=""
-					/>
-					<p
-						class={`absolute bottom-0 right-0 h-7 w-7 rounded-full border border-2 border-teal-200 ${selectedUser.online ? 'bg-green-500' : 'bg-slate-400'}`}
-						style="right: -8px; bottom: -8px;"
-					>
-						<span class="sr-only">{selectedUser.online ? 'Online' : 'Offline'}</span>
-					</p>
+				<div class="flex items-center gap-5">
+					<div class="relative">
+						<img
+							class="h-44 w-44 rounded-lg bg-white object-cover shadow-md"
+							src={getServerAsset(
+								selectedUser.photos.filter((photo) => photo.isProfile)[0].url || 'icons/avatar.svg'
+							)}
+							alt=""
+						/>
+						<p
+							class={`absolute bottom-0 right-0 h-7 w-7 rounded-full border border-2 border-teal-100 ${selectedUser.online ? 'bg-green-500' : 'bg-slate-400'}`}
+							style="right: -8px; bottom: -8px;"
+						>
+							<span class="sr-only">{selectedUser.online ? 'Online' : 'Offline'}</span>
+						</p>
+					</div>
+					<ul class="grid grid-flow-col grid-rows-2 gap-3">
+						{#each selectedUser.photos.filter((photo) => !photo.isProfile && !photo.url.includes(DEFAULT_AVATAR_NAME)) as photo}
+							<li>
+								<img
+									class="h-20 w-20 rounded-lg bg-white object-cover shadow-md"
+									src={getServerAsset(photo.url)}
+									alt=""
+								/>
+							</li>
+						{/each}
+					</ul>
 				</div>
 
 				<FameRating fameRating={selectedUser.fameRating} />
 			</div>
+
 			<h2 class="mb-4">{selectedUser.username}, {selectedUser.age}</h2>
 
 			<div class="description-list mb-6 flex flex-col gap-3">
+				<h2 class="sr-only">User information</h2>
+				<dl>
+					<dt>Name:</dt>
+					<dd>{selectedUser.firstName} {selectedUser.lastName}</dd>
+				</dl>
+
 				<dl>
 					<dt>Bio:</dt>
 					<dd>{selectedUser.biography}</dd>
@@ -65,13 +96,17 @@
 
 				<dl>
 					<dt>Gender:</dt>
-					<dd>{selectedUser.gender} <GenderSymbol gender={selectedUser.gender} /></dd>
+					<dd>
+						{selectedUser.gender[0].toUpperCase() + selectedUser.gender.slice(1)}
+						<GenderSymbol gender={selectedUser.gender} />
+					</dd>
 				</dl>
 
 				<dl>
 					<dt>Preference:</dt>
 					<dd>
-						{selectedUser.sexualPreferences}
+						{selectedUser.sexualPreferences[0].toUpperCase() +
+							selectedUser.sexualPreferences.slice(1)}
 						<PreferenceSymbol preference={selectedUser.sexualPreferences} />
 					</dd>
 				</dl>
@@ -82,21 +117,42 @@
 						<InterestsList interests={selectedUser.interests} />
 					</dd>
 				</dl>
+
+				{#if !selectedUser.online}
+					<h2 class="sr-only">User location</h2>
+					<dl>
+						<dt>Last connected:</dt>
+						<dd>
+							{new Date(selectedUser.lastConnection).toLocaleDateString('en-US', {
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric',
+								hour: 'numeric',
+								minute: 'numeric',
+								second: 'numeric'
+							})}
+						</dd>
+					</dl>
+				{/if}
 			</div>
 		</div>
 
-		<MapLibre
-			center={selectedUser.location.coordinates}
-			class="h-[250px] w-full rounded-md"
-			interactive={false}
-			maxZoom={18}
-			minZoom={11}
-			standardControls
-			style="https://tiles.basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
-			zoom={14}
-		>
-			<DefaultMarker lngLat={selectedUser.location.coordinates} />
-		</MapLibre>
+		<div class="mb-8 w-full">
+			<MapLibre
+				center={selectedUser.location.coordinates}
+				class="h-[250px] w-full rounded-md"
+				interactive={false}
+				maxZoom={18}
+				minZoom={11}
+				standardControls
+				style="https://tiles.basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
+				zoom={15}
+			>
+				<DefaultMarker lngLat={selectedUser.location.coordinates} />
+			</MapLibre>
+		</div>
+
+		<IssuesWithUser {selectedUser} />
 	</div>
 {/if}
 

@@ -6,12 +6,16 @@
 		DEFAULT_ALL_RESULTS_SORTING_ORDER,
 		DEFAULT_ALL_RESULTS_SORTING_PROP,
 		FILTERS_LS_KEY,
-		SORTING_LS_KEY,
-		SORTING_ORDER
+		SORTING_LS_KEY
 	} from '$lib/constants/sorting';
 	import { GENDER_OPTIONS, PREFERENCES_OPTIONS } from '$lib/constants/user-profile-data';
 	import { onMount } from 'svelte';
 	import RangeFilter from './RangeFilter.svelte';
+	import { INTERESTS } from '$lib/constants/interests';
+	import { userSearchData } from '$lib/state/user-search.svelte';
+	import { calcQueryParams } from './calc-query-params.util';
+	import type { Gender } from '$lib/interfaces/gender.type';
+	import { popularTagsData, type PopularTag } from '$lib/state/popular-tags.svelte';
 
 	interface Age {
 		age: number;
@@ -21,23 +25,27 @@
 		distance: number;
 	}
 
-	const { results, setResults, unfilteredResults } = $props();
+	interface SearchCurrentFilters {
+		gender: Gender | null;
+		interests: string[];
+		maxAge: number;
+		maxDistance: number;
+		maxFameRating: number;
+		minAge: number;
+		minDistance: number;
+		minFameRating: number;
+		sexualPreferences: string | null;
+	}
+
+	const results = userSearchData.value ?? [];
 
 	let currentSorting = $state(
 		`${DEFAULT_ALL_RESULTS_SORTING_PROP};${DEFAULT_ALL_RESULTS_SORTING_ORDER}`
 	);
 
-	let currentFilters = $state<{
-		gender: string | null;
-		minAge: number;
-		maxAge: number;
-		minDistance: number;
-		maxDistance: number;
-		minFameRating: number;
-		maxFameRating: number;
-		sexualPreferences: string | null;
-	}>({
+	let currentFilters = $state<SearchCurrentFilters>({
 		gender: null,
+		interests: [],
 		minAge:
 			results.reduce(
 				(acc: number, { age: curr }: Age) => (curr < acc ? curr : acc),
@@ -67,6 +75,7 @@
 		if (
 			currentSorting ||
 			currentFilters.gender ||
+			currentFilters.interests ||
 			currentFilters.minAge ||
 			currentFilters.maxAge ||
 			currentFilters.minDistance ||
@@ -74,12 +83,12 @@
 			currentFilters.sexualPreferences ||
 			currentFilters
 		) {
-			const newResults = _sortAndFilterResults(unfilteredResults);
-			setResults(newResults);
+			const queryParams = calcQueryParams({ currentSorting, currentFilters });
+			userSearchData.fetch({ params: queryParams });
 		}
 	});
 
-	onMount(() => {
+	onMount(async () => {
 		const storedSortingCriteria = localStorage?.getItem(SORTING_LS_KEY);
 
 		if (storedSortingCriteria) {
@@ -91,80 +100,9 @@
 			currentFilters = JSON.parse(storedFiltersCriteria);
 		}
 
-		const newResults = _sortAndFilterResults(unfilteredResults);
-		setResults(newResults);
+		const queryParams = calcQueryParams({ currentSorting, currentFilters });
+		await userSearchData.fetch({ params: queryParams });
 	});
-
-	const _sortAndFilterResults = (results) => {
-		// Sorting
-		let sortedResults = [...results].sort((a, b) => {
-			const [prop, order] = currentSorting.split(';');
-			if (order === SORTING_ORDER.ASC) {
-				return a[prop] - b[prop];
-			} else {
-				return b[prop] - a[prop];
-			}
-		});
-
-		let filteredResults = sortedResults;
-		// Filters - gender
-		if (currentFilters['gender']) {
-			filteredResults = filteredResults.filter(
-				(result) => result['gender'] === currentFilters['gender']
-			);
-		}
-
-		// Sexual preferences
-		if (currentFilters['sexualPreferences']) {
-			filteredResults = filteredResults.filter(
-				(result) => result['sexualPreferences'] === currentFilters['sexualPreferences']
-			);
-		}
-
-		// Min age
-		if (currentFilters['minAge']) {
-			filteredResults = filteredResults.filter(
-				(result) => result['age'] >= currentFilters['minAge']
-			);
-		}
-
-		// Max age
-		if (currentFilters['maxAge']) {
-			filteredResults = filteredResults.filter(
-				(result) => result['age'] <= currentFilters['maxAge']
-			);
-		}
-
-		// Min distance
-		if (currentFilters['minDistance']) {
-			filteredResults = filteredResults.filter(
-				(result) => result['distance'] >= currentFilters['minDistance']
-			);
-		}
-
-		// Max distance
-		if (currentFilters['maxDistance']) {
-			filteredResults = filteredResults.filter(
-				(result) => result['distance'] <= currentFilters['maxDistance']
-			);
-		}
-
-		// Min popularity
-		if (currentFilters['minFameRating']) {
-			filteredResults = filteredResults.filter(
-				(result) => result['fameRating'] >= currentFilters['minFameRating']
-			);
-		}
-
-		// Max popularity
-		if (currentFilters['maxFameRating']) {
-			filteredResults = filteredResults.filter(
-				(result) => result['fameRating'] <= currentFilters['maxFameRating']
-			);
-		}
-
-		return filteredResults;
-	};
 
 	const handleSortingChange = (event: Event) => {
 		const target = event.target as HTMLSelectElement;
@@ -175,14 +113,14 @@
 
 	const handleFilterChange = (event: Event, prop: 'gender' | 'sexualPreferences') => {
 		const target = event.target as HTMLSelectElement;
-		const filter = target.value;
+		const filter = target.value as any;
 
 		currentFilters[prop] = filter.length ? filter : null;
 		localStorage.setItem(FILTERS_LS_KEY, JSON.stringify(currentFilters));
 	};
 </script>
 
-<div class="flex flex-wrap items-center gap-2 px-4">
+<div class="mb-2 flex flex-wrap items-center gap-2 px-4">
 	<ButtonSelector>
 		<label>
 			Sort by:
@@ -191,8 +129,8 @@
 				<option value="distance;desc"> distance (farthest) </option>
 				<option value="age;asc">age (youngest)</option>
 				<option value="age;desc">age (oldest)</option>
-				<option value="fameRating;asc"> popularity (lowest) </option>
-				<option value="fameRating;desc"> popularity (highest) </option>
+				<option value="fame_rating;asc"> popularity (lowest) </option>
+				<option value="fame_rating;desc"> popularity (highest) </option>
 			</select>
 		</label>
 	</ButtonSelector>
@@ -222,6 +160,7 @@
 				onchange={(e) => handleFilterChange(e, 'sexualPreferences')}
 				value={currentFilters.sexualPreferences}
 			>
+				<option value={null}>No filter</option>
 				<option value={PREFERENCES_OPTIONS.FEMALE}>
 					female <PreferenceSymbol preference={PREFERENCES_OPTIONS.FEMALE} />
 				</option>
@@ -231,7 +170,6 @@
 				<option value={PREFERENCES_OPTIONS.BISEXUAL}>
 					both <PreferenceSymbol preference={PREFERENCES_OPTIONS.BISEXUAL} />
 				</option>
-				<option value={null}>No filter</option>
 			</select>
 		</label>
 	</ButtonSelector>
@@ -257,7 +195,6 @@
 			min="0"
 			max="2000"
 			step="10"
-			onChangeMin={(value: number) => (currentFilters.minDistance = value)}
 			onChangeMax={(value: number) => (currentFilters.maxDistance = value)}
 		/>
 	</ButtonSelector>
@@ -273,5 +210,77 @@
 			onChangeMin={(value: number) => (currentFilters.minFameRating = value)}
 			onChangeMax={(value: number) => (currentFilters.maxFameRating = value)}
 		/>
+	</ButtonSelector>
+</div>
+
+<div class="w-full px-4">
+	<ButtonSelector>
+		<details>
+			<summary>
+				Filter by interests
+				{#if currentFilters.interests.length}
+					({[...currentFilters.interests].sort().join(', ')})
+				{/if}
+			</summary>
+
+			{#snippet InterestsList({
+				counts = [],
+				interests,
+				label
+			}: {
+				counts?: number[];
+				interests: string[];
+				label: string;
+			})}
+				<div>
+					<p class="mb-2 text-sm font-bold">{label}</p>
+					<ul class="flex flex-wrap items-baseline gap-2">
+						{#each interests.sort() as interest, index}
+							<li
+								class={`shrink-0 rounded-md ${currentFilters.interests.includes(interest) ? 'bg-teal-300' : 'bg-slate-300'} px-2 py-1`}
+							>
+								<button
+									onclick={() => {
+										if (currentFilters.interests?.includes(interest)) {
+											currentFilters.interests = currentFilters.interests.filter(
+												(currentInterest) => currentInterest !== interest
+											);
+										} else {
+											currentFilters.interests = [...currentFilters.interests, interest];
+										}
+									}}
+									class="text-xs"
+								>
+									#{interest.toLowerCase()}
+									{#if counts.length}
+										<span>({counts[index]})</span>
+									{/if}
+								</button>
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{/snippet}
+
+			<div class="mt-4 flex flex-col gap-4">
+				{#if popularTagsData.value && popularTagsData.value.length > 0}
+					{@render InterestsList({
+						counts: popularTagsData.value.map((interest: PopularTag) => interest.count),
+						interests: popularTagsData.value.map((interest: PopularTag) => interest.name).sort(),
+						label: 'Trending interests'
+					})}
+				{/if}
+
+				{@render InterestsList({
+					interests: [...INTERESTS]
+						.filter(
+							(interest) =>
+								!popularTagsData.value?.some((popularTag) => popularTag.name === interest)
+						)
+						.sort(),
+					label: 'All interests'
+				})}
+			</div>
+		</details>
 	</ButtonSelector>
 </div>
