@@ -7,9 +7,20 @@
 		value?: string;
 		required?: boolean;
 		autocomplete?: FullAutoFill;
+		class?: string;
+		placeholder?: string;
 	}
 
-	let { id, name, value, required, autocomplete, ...restProps }: PasswordInputProps = $props();
+	let {
+		id,
+		name,
+		value,
+		required,
+		autocomplete,
+		class: CLASS,
+		placeholder,
+		...restProps
+	}: PasswordInputProps = $props();
 
 	let showPassword = $state(false);
 
@@ -18,7 +29,7 @@
 	};
 </script>
 
-<div class="flex items-baseline justify-center gap-4">
+<div class={`flex items-baseline justify-center gap-4 ${CLASS}`}>
 	<input
 		type={showPassword ? 'text' : 'password'}
 		{id}
@@ -26,6 +37,8 @@
 		{required}
 		{value}
 		{autocomplete}
+		{placeholder}
+		class={CLASS}
 		{...restProps}
 	/>
 	<button

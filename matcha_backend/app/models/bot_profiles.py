@@ -26,7 +26,7 @@ BOT_PROFILES = {
         "gender": "female",
         "sexual_preferences": "bisexual",
         "biography": "Hi! I'm Maria, from Urduliz. I'm a programming student",
-        "interests": ["Dancing", "Music", "Tech", "Nightlife", "Partying", "Sex"],
+        "interests": ["dancing", "music", "technology", "nightlife", "partying", "sex"],
         "location": {"type": "Point", "coordinates": [-2.9716, 43.3666]},
         "context": context1
     },
@@ -39,7 +39,7 @@ BOT_PROFILES = {
         "gender": "male",
         "sexual_preferences": "female",
         "biography": "Kaixo! I'm Jon, from Bilbao. I'm a sportsman",
-        "interests": ["Surfing", "Fitness", "Hiking", "Traveling", "Cycling", "Swimming", "Skateboarding"],	
+        "interests": ["surfing", "fitness", "hiking", "traveling", "cycling", "swimming", "skating"],	
         "location": {"type": "Point", "coordinates": [-2.9349, 43.2627]},
         "context": context2
     },
@@ -52,7 +52,7 @@ BOT_PROFILES = {
         "gender": "male",
         "sexual_preferences": "female",
         "biography": "Hi girls! I'm Cayetano, a bullfighter and businessman",
-        "interests": ["Politics", "Traditions", "Nature", "Traditions", "Religion", "Sex"],
+        "interests": ["politics", "traditions", "nature", "religion", "sex"],
         "location": {"type": "Point", "coordinates": [-2.9349, 43.2627]},
         "context": context3
     },
@@ -65,7 +65,7 @@ BOT_PROFILES = {
 		"gender": "male",
 		"sexual_preferences": "female",
 		"biography": "Hi! I'm James, a British entrepreneur living in Getxo",
-		"interests": ["Reading", "Tech", "Traveling", "Theater", "Investing"],
+		"interests": ["reading", "technology", "traveling", "theater", "investing"],
 		"location": {"type": "Point", "coordinates": [-3.0114, 43.3569]},
 		"context": context4
 	},
@@ -78,7 +78,7 @@ BOT_PROFILES = {
 		"gender": "female",
 		"sexual_preferences": "male",
 		"biography": "Cultured and elegant civil servant. I am interested in intelligence and good taste.",
-		"interests": ["Reading", "Art", "Traveling", "Theater"],
+		"interests": ["reading", "art", "traveling", "theater"],
 		"location": {"type": "Point", "coordinates": [-3.7038, 40.4168]},
 		"context": "context5"
 	},
@@ -91,7 +91,7 @@ BOT_PROFILES = {
 		"gender": "female",
 		"sexual_preferences": "bisexual",
 		"biography": "Surgeon from Barakaldo looking for a serious relationship. I love cinema and dancing.",
-		"interests": ["Movies", "Sports", "Dancing"],
+		"interests": ["movies", "sports", "dancing"],
 		"location": {"type": "Point", "coordinates": [-2.9896, 43.2956]},
 		"context": "context6"
 	},
@@ -104,7 +104,7 @@ BOT_PROFILES = {
 		"gender": "male",
 		"sexual_preferences": "bisexual",
 		"biography": "Party lover from Sestao, 24 years old, looking for action. Direct and to the point.",
-		"interests": ["Partying", "Music", "Cars", "Sex", "Nightlife"],
+		"interests": ["partying", "music", "cars", "sex", "nightlife"],
 		"location": {"type": "Point", "coordinates": [-2.9262, 43.2569]},
 		"context": "context7"
 	},
@@ -117,7 +117,7 @@ BOT_PROFILES = {
 		"gender": "female",
 		"sexual_preferences": "bisexual",
 		"biography": "Personal trainer and fitness lover. Looking for active and healthy people.",
-		"interests": ["Fitness", "Running", "Yoga", "Health"],
+		"interests": ["fitness", "running", "yoga", "health"],
 		"location": {"type": "Point", "coordinates": [-3.7072, 40.4153]},
 		"context": "context9"
 	},
@@ -130,7 +130,7 @@ BOT_PROFILES = {
 		"gender": "female",
 		"sexual_preferences": "bisexual",
 		"biography": "Queen of the party looking for someone to have fun with.",
-		"interests": ["Partying", "Music", "Dancing", "Nightlife", "Sex"],
+		"interests": ["partying", "music", "dancing", "nightlife", "sex"],
 		"location": {"type": "Point", "coordinates": [-2.9262, 43.2568]},
 		"context": "context10"
 	},
@@ -143,7 +143,7 @@ BOT_PROFILES = {
 		"gender": "female",
 		"sexual_preferences": "male",
 		"biography": "Security guard and dominatrix from Bernago. I am looking for men who know how to obey.",
-		"interests": ["Politics", "Sex"],
+		"interests": ["politics", "sex"],
 		"location": {"type": "Point", "coordinates": [-2.8354, 43.3173]},
 		"context": "context11"
 	},
@@ -156,7 +156,7 @@ BOT_PROFILES = {
 		"gender": "male",
 		"sexual_preferences": "female",
 		"biography": "Traditional copla singer and defender of old-fashioned values. Lover of singing, bullfighting, and women. I hate weak men above all else.",
-		"interests": ["Music", "Traditions", "Politics", "Sex"],
+		"interests": ["music", "traditions", "politics", "sex"],
 		"location": {"type": "Point", "coordinates": [-3.7038, 40.4168]},
 		"context": "context12"
 	}

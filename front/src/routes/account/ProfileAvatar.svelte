@@ -159,7 +159,7 @@
 					}}
 				/>
 			</label>
-			<p class="text-sm">
+			<p class="text-sm text-gray-600">
 				Double-check that the image is in PNG or JPG format and that it does not exceed 5 MB.
 			</p>
 		</fieldset>

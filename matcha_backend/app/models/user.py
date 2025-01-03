@@ -3,6 +3,7 @@ from bson import ObjectId
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
 from .iamatcha import BotModel
+from .notification import NotificationModel 
 
 
 class UserModel:
@@ -61,13 +62,12 @@ class UserModel:
         Returns: True if successful
         """
         user = UserModel.find_by_id(user_id)
-        print(f"---->PROFILE COMPLETED: {user['profile_completed']}")
         
         try:
             if not user['profile_completed'] and not is_location:
                 # Select bot for user if not already selected
                 if BotModel.handle_profile_completion(user_id):
-                    pass
+                    pass 
         except Exception as e:
             print(e)
             pass
@@ -140,49 +140,95 @@ class UserModel:
 
     @staticmethod
     def block_user(user_id: str, blocked_user_id: str) -> bool:
-        """Add user to blocked list"""
-        result = mongo.db.users.update_one(
-            {"_id": ObjectId(user_id)},
-            {"$addToSet": {"blocked_users": ObjectId(blocked_user_id)}}
-        )
-        return result.modified_count > 0
+        """Add user to blocked list and remove all interactions"""
+        try:
+            # Add to blocked list
+            mongo.db.users.update_one(
+                {"_id": ObjectId(user_id)},
+                {"$addToSet": {"blocked_users": ObjectId(blocked_user_id)}}
+            )
 
-    @staticmethod
-    def is_verified(user_id: str) -> bool:
-        """Check if user is verified"""
-        user = mongo.db.users.find_one(
-            {"_id": ObjectId(user_id)},
-            {"verified": 1}
-        )
-        return user and user.get("verified", False)
+            # Remove all likes between both users in both directions
+            mongo.db.likes.delete_many({
+                "$or": [
+                    {
+                        "from_user_id": ObjectId(user_id),
+                        "to_user_id": ObjectId(blocked_user_id)
+                    },
+                    {
+                        "from_user_id": ObjectId(blocked_user_id),
+                        "to_user_id": ObjectId(user_id)
+                    }
+                ]
+            })
+
+            # Remove all profile views between both users in both directions
+            mongo.db.profile_views.delete_many({
+                "$or": [
+                    {
+                        "viewer_id": ObjectId(user_id),
+                        "viewed_id": ObjectId(blocked_user_id)
+                    },
+                    {
+                        "viewer_id": ObjectId(blocked_user_id),
+                        "viewed_id": ObjectId(user_id)
+                    }
+                ]
+            })
+
+            # Remove all notifications between both users in both directions
+            mongo.db.notifications.delete_many({
+                "$or": [
+                    {
+                        "user_id": ObjectId(user_id),
+                        "from_user_id": ObjectId(blocked_user_id)
+                    },
+                    {
+                        "user_id": ObjectId(blocked_user_id),
+                        "from_user_id": ObjectId(user_id)
+                    }
+                ]
+            })
+
+            return True
+
+        except Exception as e:
+            return False
 
     @staticmethod
     def update_interests(user_id: str, new_interests: list) -> bool:
         try:
-            # get current interests
+            # Remove any duplicates from the new interests list while maintaining order
+            new_interests = list(dict.fromkeys(new_interests))
+
+            # Get user's current interests
             user = mongo.db.users.find_one(
                 {"_id": ObjectId(user_id)},
                 {"interests": 1}
             )
             current_interests = user.get('interests', [])
 
-            # decrement count of tags no longer in interests
-            for tag in current_interests:
-                if tag not in new_interests:
-                    mongo.db.tags.update_one(
-                        {"name": tag},
-                        {"$inc": {"count": -1}}
-                    )
+            # Calculate which interests need to be added or removed
+            # Using sets for efficient difference operations
+            interests_to_remove = set(current_interests) - set(new_interests)  # Interests being removed
+            interests_to_add = set(new_interests) - set(current_interests)     # Actually new interests
 
-            # increment	count of new interests
-            for tag in new_interests:
+            # Decrement popularity count for interests being removed
+            for tag in interests_to_remove:
+                mongo.db.tags.update_one(
+                    {"name": tag},
+                    {"$inc": {"count": -1}}
+                )
+
+            # Increment popularity count only for interests that weren't already present
+            for tag in interests_to_add:
                 mongo.db.tags.update_one(
                     {"name": tag},
                     {"$inc": {"count": 1}},
-                    upsert=True  # create if not exists
+                    upsert=True  # Create tag document if it doesn't exist
                 )
 
-            # update user interests
+            # Update user's interest list with deduplicated interests
             result = mongo.db.users.update_one(
                 {"_id": ObjectId(user_id)},
                 {"$set": {"interests": new_interests}}
@@ -193,23 +239,14 @@ class UserModel:
         except Exception as e:
             raise Exception(f"Error updating interests: {str(e)}")
 
-    @staticmethod
-    def update_password(user_id: str, new_password: str) -> bool:
-        """Update user password"""
-        result = mongo.db.users.update_one(
-            {"_id": ObjectId(user_id)},
-            {"$set": {"password": new_password}}
-        )
-        return result.modified_count > 0
-    
-    @staticmethod
-    def block_user(user_id: str, blocked_user_id: str) -> bool:
-        """Add user to blocked list"""
-        result = mongo.db.users.update_one(
-            {"_id": ObjectId(user_id)},
-            {"$addToSet": {"blocked_users": ObjectId(blocked_user_id)}}
-        )
-        return result.modified_count > 0
+        @staticmethod
+        def update_password(user_id: str, new_password: str) -> bool:
+            """Update user password"""
+            result = mongo.db.users.update_one(
+                {"_id": ObjectId(user_id)},
+                {"$set": {"password": new_password}}
+            )
+            return result.modified_count > 0
 
     @staticmethod
     def unblock_user(user_id: str, blocked_user_id: str) -> bool:

@@ -15,20 +15,19 @@ from ..models.iamatcha import BotModel
 
 
 UPLOAD_FOLDER = 'app/static/uploads'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'} # Keep in sync with FE
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
-INTERESTS = interests = [
-    "Movies", "Music", "Traveling", "Cooking", "Fitness", "Hiking", "Reading", 
-    "Gaming", "Photography", "Dancing", "Sports", "Art", "Fashion", 
-    "Volunteering", "Yoga", "Tech", "DIY", "Meditation", "Comedy", 
-    "Writing", "Cycling", "Swimming", "Gardening", "Foodie", "Board Games", 
-    "Puzzles", "Astrology", "Podcasts", "Running", "Camping", "Languages", 
-    "Skating", "Skiing", "Surfing", "Collecting", "Karaoke", 
-    "Animals", "Fishing", "Anime", "Science", "History", "Theater", 
-    "Crafts", "Investing", "Drinks", "Blogging", "Cars", "Technology", 
-    "Magic", "Politics", "Beauty", "Health", "Philosophy", "Nature"
-    "Traditions", "Religion", "Sex", "Nightlife", "Partying"
+INTERESTS = [
+    "animals", "anime", "art", "astrology", "beauty", "blogging", "board games", 
+    "camping", "cars", "collecting", "comedy", "cooking", "crafts", "cycling", 
+    "dancing", "diy", "drinks", "fashion", "fishing", "fitness", "foodie", 
+    "gaming", "gardening", "health", "hiking", "history", "investing", 
+    "karaoke", "languages", "magic", "meditation", "movies", "music", 
+    "nature", "nightlife", "partying", "photography", "podcasts", "politics", 
+    "puzzles", "reading", "religion", "running", "science", "sex", "skating", 
+    "skiing", "sports", "surfing", "swimming", "technology", "theater", 
+    "traditions", "traveling", "volunteering", "writing", "yoga"
 ] # Keep in sync with FE
 
 
@@ -131,31 +130,31 @@ def update_photo(index):
             
         photo = request.files['photo']
         
-        # Validar archivo
+        # Validate file
         if not photo or not allowed_file(photo.filename):
             return jsonify({'error': 'Invalid file type'}), 400
             
-        # Validar tamaño
+        # Validate file size
         if request.content_length > MAX_FILE_SIZE:
             return jsonify({'error': 'File too large. Maximum size is 5MB'}), 400
             
-        # Obtener usuario y su foto actual
+        # Get user and current photo
         user = UserModel.find_by_id(current_user_id)
         current_photo = user['photos'][index]['url']
         
-        # Si la foto actual no es la default, borrarla
+        # If photo is not the default one, delete it
         if 'default' not in current_photo:
             try:
                 os.remove(os.path.join(UPLOAD_FOLDER, current_photo))
             except:
-                pass  # Si falla el borrado, continuamos igual
+                pass  # If file doesn't exist, ignore
         
-        # Guardar nueva foto
+        # Save new photo
         filename = secure_filename(f"{current_user_id}_{index}_{photo.filename}")
         path = os.path.join(UPLOAD_FOLDER, filename)
         photo.save(path)
         
-        # Actualizar en base de datos
+        # Update in database
         photo_data = {
             'url': path,
             'is_profile': user['photos'][index]['is_profile'],
@@ -236,6 +235,21 @@ def my_profile_info():
       # Get likes received
        likes_received = LikeModel.get_likes_received(current_user_id, like_type="like")
 
+       blocked_users = []
+       for blocked_id in user.get('blocked_users', []):
+            blocked_user = UserModel.find_by_id(str(blocked_id))
+            if blocked_user:
+                    profile_photo = next(
+                        (photo['url'] for photo in blocked_user.get('photos', []) 
+                        if photo.get('is_profile')), 
+                        None
+                    )
+                    blocked_users.append({
+                        'username': blocked_user['username'],
+                        'user_id': str(blocked_user['_id']),
+                        'profile_photo': profile_photo
+                    })
+
        profile_info = {
            # Profile
            'username': user.get('username'),
@@ -249,7 +263,7 @@ def my_profile_info():
            'fame_rating': user.get('fame_rating'),
            
            # Other
-           'blocked_users': user.get('blocked_users', []),
+           'blocked_users':blocked_users,
            'reported': user.get('reported', False),
            
            # Status
@@ -280,13 +294,14 @@ def my_profile_info():
 @jwt_required()
 def get_user_profile(user_identifier):
     """
-    Obtiene el perfil público de un usuario por su ID o username
+    Get profile information of a user.
     
     Args:
-        user_identifier: Puede ser el ObjectId o el username del usuario
+        user_identifier: Can be either the user's ID or username.
     """
     try:
         current_user_id = get_jwt_identity()
+        current_user = UserModel.find_by_id(current_user_id)
         
         # first try to find by ID (for ObjectId)
         user = None
@@ -302,10 +317,14 @@ def get_user_profile(user_identifier):
             
         if not user:
             return jsonify({'error': 'User not found'}), 404
-            
+        
         # Verify if user is blocked
         if ObjectId(current_user_id) in user.get('blocked_users', []):
             return jsonify({'error': 'Profile not available'}), 403
+        
+        # Verify if current user has blocked this user
+        if ObjectId(user['_id']) in current_user.get('blocked_users', []):
+            return jsonify({'error': 'You have blocked this user'}), 403
 
         user_id = str(user['_id'])
         is_own_profile = user_id == current_user_id
@@ -342,7 +361,7 @@ def get_user_profile(user_identifier):
             'online': user.get('online'),
             'last_connection': user.get('last_connection'),
             'profile_completed': user.get('profile_completed', False),
-            'blocked_users': user.get('blocked_users', []),
+            'blocked_users': [str(blocked_id) for blocked_id in user.get('blocked_users', [])],
             'reported': user.get('reported', False),
             'verified': user.get('verified', False),
             'created_at': user.get('created_at'),

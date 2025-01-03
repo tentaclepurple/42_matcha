@@ -17,19 +17,19 @@
  >
 	<PageWrapper>
 		<div class="mt-32 flex h-full flex-1 flex-col items-center justify-start">
-			<h1 class="mb-4 text-9xl">
-				<div aria-hidden="true">M<span class="text-8xl">🍵</span>tcha</div>
+			<h1 class="mb-4 text-6xl sm:text-9xl">
+				<div aria-hidden="true">M<span class="text-5xl sm:text-8xl">🍵</span>tcha</div>
 				<div class="sr-only">Matcha</div>
 			</h1>
-			<p class="mb-4 text-4xl">Dating. Made easy.</p>
+			<p class="mb-4 text-3xl sm:text-4xl">Dating. Made easy.</p>
 		</div>
 	</PageWrapper>
- </div>
- 
- <div class="flex items-center justify-center bg-teal-500 p-3">
-	<footer class="flex w-full max-w-screen-2xl justify-end text-sm">
+</div>
+
+<div class="flex items-center justify-center bg-teal-500 p-3">
+	<footer class="flex w-full max-w-screen-2xl justify-center sm:justify-end text-sm">
 		<small>
-			Made with ♡ by
+			Made with <span class="animate-pulse">♡</span> by
 			<a href="https://github.com/tentaclepurple" target="_blank" rel="noopener noreferrer">
 				imontero
 			</a>

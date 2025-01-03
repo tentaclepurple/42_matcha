@@ -3,6 +3,7 @@
 
 import google.generativeai as genai
 from datetime import datetime
+import time
 from bson import ObjectId
 from ..config.database import mongo
 from .chat import ChatModel
@@ -160,7 +161,7 @@ class BotModel:
        if bot:
            bot_context = bot["context"]
        else:
-           # Manejar el caso en el que el bot_id no se encuentre en BOT_PROFILES
+           # Handle case where bot is not found
            bot_context = ""
        conversation = mongo.db.conversations.find_one({
            "$or": [
@@ -199,13 +200,13 @@ class BotModel:
 
    @classmethod
    def prepare_chat_history(cls, conversation: dict, bot_id: str, bot: dict) -> list:
-        # Extraer información crítica
+        # Extraer contexto crítico
         critical_context = {
             "user_name": conversation.get("context", "").split("- Nombre: ")[1].split("\n")[0].strip(),
             "bot_name": bot["first_name"]
         }
         
-        # Crear variaciones de recordatorios más naturales
+        # Create natural reminders
         def create_natural_reminder():
             reminders = [
                 f"[Contexto: Conversación entre {critical_context['bot_name']} y {critical_context['user_name']}]",
@@ -220,12 +221,12 @@ class BotModel:
         
         chat_history = [{"role": "user", "parts": [conversation["context"]]}]
         
-        # Obtener mensajes recientes
+        # Geq the last 15 messages
         recent_messages = conversation["messages"][-15:]
         
-        # Insertar recordatorios sutiles cada ciertos mensajes
+        # Insert reminders
         for i, msg in enumerate(recent_messages):
-            # Insertar recordatorio solo cada 7 mensajes para hacerlo menos frecuente
+            # Insert a reminder every 7 messages
             if i % 7 == 0 and i > 0:  # Evitar el primero para no ser repetitivo
                 chat_history.append(create_natural_reminder())
                 
@@ -235,7 +236,7 @@ class BotModel:
                 "parts": [msg["content"]]
             })
         
-        # Añadir un recordatorio final sutil
+        # Add a reminder at the end
         chat_history.append({
             "role": "user",
             "parts": [f"[Mantener conversación natural como {critical_context['bot_name']}]"]
@@ -343,7 +344,9 @@ class BotModel:
            bot = next((bot for bot in BOT_PROFILES.values() if str(bot["_id"]) == bot_id), None)
            if not bot:
                return False
-               
+           
+           time.sleep(message.count(" ") * 0.1)
+
            conversation = cls.get_conversation_history(user_id, bot_id)
            
            conversation["messages"].append({

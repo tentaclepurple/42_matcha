@@ -154,9 +154,9 @@ def send_message(user_identifier):
     """Send a message to a user"""
     try:
         current_user_id = get_jwt_identity()
+        current_user = UserModel.find_by_id(current_user_id)
         
-        user = UserModel.find_by_id(current_user_id)
-        if not user:
+        if not current_user:
             return jsonify({'error': 'Current user not found'}), 404
 
         # Validate request
@@ -186,8 +186,17 @@ def send_message(user_identifier):
         if not recipient:
             return jsonify({'error': 'Recipient not found'}), 404
 
-           # Verify match exists
+        # Verify match exists
         recipient_id = str(recipient['_id'])
+
+        # Check if recipient has blocked current user
+        if ObjectId(current_user_id) in recipient.get('blocked_users', []):
+            return jsonify({'error': 'Cannot send message to this user'}), 403
+
+        # Check if current user has blocked recipient
+        if ObjectId(recipient_id) in current_user.get('blocked_users', []):
+            return jsonify({'error': 'Cannot send message to a user you have blocked'}), 403
+
         is_match = LikeModel.check_is_match(current_user_id, recipient_id)
 
         if not is_match:
@@ -210,7 +219,7 @@ def send_message(user_identifier):
             if BotModel.handle_user_message(current_user_id, content, str(bot["_id"])):
                 return jsonify({'message': 'Message sent and processed'}), 200
             else:
-                return jsonify({'error': 'Failed to process message'}), 500
+                return jsonify({'error': 'Failed to process message'}), 400
             
         
             

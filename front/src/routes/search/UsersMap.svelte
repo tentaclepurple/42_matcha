@@ -7,11 +7,22 @@
 	import { userProfileData } from '$lib/state/user-profile-data.svelte';
 	import { MapLibre, Marker, Popup } from 'svelte-maplibre';
 	import getServerAsset from '$lib/utils/get-server-asset';
+	import { userSearchData } from '$lib/state/user-search.svelte';
 
-	const { results } = $props();
+	const results = $derived(userSearchData.value ?? []);
 </script>
 
-{#snippet marker({ profilePicture, user, coordinates, isCurrentUser })}
+{#snippet marker({
+	profilePicture,
+	user,
+	coordinates,
+	isCurrentUser
+}: {
+	profilePicture: string;
+	user: any;
+	coordinates: [number, number];
+	isCurrentUser: boolean;
+})}
 	<Marker lngLat={coordinates}>
 		<div
 			class={`rounded-full ${isCurrentUser ? 'h-9 w-9 bg-yellow-500' : 'h-5 w-5 bg-teal-500'} shadow-lg`}
@@ -23,7 +34,7 @@
 				<img
 					src={profilePicture ? getServerAsset(profilePicture) : '/matcha/icons/avatar.svg'}
 					alt=""
-					class="aspect-square w-24"
+					class="aspect-square w-24 object-cover"
 				/>
 				<span class="font-xs font-bold">{user.username}</span>
 				<span>{user.age}, {user.gender} <GenderSymbol gender={user.gender} /></span>
@@ -41,7 +52,7 @@
 	</Marker>
 {/snippet}
 
-<div class="flex h-[65vh] w-full items-center justify-center">
+<div class="flex h-[80vh] w-full items-center justify-center sm:h-[70vh]">
 	<MapLibre
 		center={userLocation.value ?? DEFAULT_LOCATION}
 		class="h-full w-full rounded-md"
