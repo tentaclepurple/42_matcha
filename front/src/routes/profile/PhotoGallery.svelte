@@ -108,7 +108,7 @@
 					<span class="sr-only">Upload new picture</span>
 					<input type="file" class="hidden" onchange={handlePhotoUpload} data-id={index} />
 					<div class="flex h-full items-center justify-center bg-gray-300 shadow-md">
-						<img src="/icons/plus.svg" alt="" class="h-8 w-8" />
+						<img src="/matcha/icons/plus.svg" alt="" class="h-8 w-8" />
 					</div>
 				</label>
 			{:else}
@@ -122,7 +122,7 @@
 				>
 					{#if showDeleteButton === index}
 						<img
-							src="/icons/delete.svg"
+							src="/matcha/icons/delete.svg"
 							alt=""
 							class="absolute inset-0 m-auto h-10 w-10 rounded-full bg-red-500 p-2"
 						/>

@@ -10,7 +10,7 @@
 	import FameRating from '$lib/components/FameRating.svelte';
 
 	if (!userProfileData.value) {
-		goto('/login');
+		goto('/matcha/login');
 	}
 
 	let isProfileComplete = $derived(
@@ -27,7 +27,7 @@
 		<div class="mb-12">
 			<h1>Profile</h1>
 			<p class="max-w-lg">This is where you can update your public profile.</p>
-			<p>If you're looking for your account info, click <a href="/account">here</a>.</p>
+			<p>If you're looking for your account info, click <a href="/matcha/account">here</a>.</p>
 		</div>
 
 		<div class="m-auto mb-4 flex w-fit flex-col items-start justify-center">

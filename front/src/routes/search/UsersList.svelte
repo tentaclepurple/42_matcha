@@ -26,7 +26,7 @@
 		const button = event.currentTarget as HTMLButtonElement;
 		const username = button.dataset.username;
 
-		goto(`/search/${username}?origin=list`);
+		goto(`/matcha/search/${username}?origin=list`);
 	};
 </script>
 

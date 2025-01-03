@@ -2,15 +2,19 @@
 	import { beforeNavigate, goto } from '$app/navigation';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
 	import { userAuth } from '$lib/state/auth.svelte';
-
+	import { base } from '$app/paths';
+ 
 	beforeNavigate(() => {
 		if (userAuth.isAuthenticated) {
-			goto('/search', { replaceState: true });
+			goto(`${base}/search`, { replaceState: true });
 		}
 	});
-</script>
-
-<div class="wrapper flex flex-1 flex-col items-center justify-center">
+ </script>
+ 
+ <div 
+	class="wrapper flex flex-1 flex-col items-center justify-center"
+	style="background: url('{base}/images/splash.jpg') no-repeat center bottom / cover"
+ >
 	<PageWrapper>
 		<div class="mt-32 flex h-full flex-1 flex-col items-center justify-start">
 			<h1 class="mb-4 text-9xl">
@@ -20,9 +24,9 @@
 			<p class="mb-4 text-4xl">Dating. Made easy.</p>
 		</div>
 	</PageWrapper>
-</div>
-
-<div class="flex items-center justify-center bg-teal-500 p-3">
+ </div>
+ 
+ <div class="flex items-center justify-center bg-teal-500 p-3">
 	<footer class="flex w-full max-w-screen-2xl justify-end text-sm">
 		<small>
 			Made with ♡ by
@@ -34,12 +38,4 @@
 			>.
 		</small>
 	</footer>
-</div>
-
-<style>
-	.wrapper {
-		background: url('/images/splash.jpg') no-repeat center center;
-		background-size: cover;
-		background-position: bottom;
-	}
-</style>
+ </div>
