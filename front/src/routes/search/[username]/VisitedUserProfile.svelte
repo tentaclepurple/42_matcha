@@ -25,7 +25,7 @@
 					type="button"
 					level="primary"
 					onclick={() => {
-						goto(`/search?view=${origin}`, { replaceState: true });
+						goto(`/matcha/search?view=${origin}`, { replaceState: true });
 					}}
 				>
 					← Back

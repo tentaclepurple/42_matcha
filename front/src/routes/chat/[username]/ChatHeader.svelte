@@ -10,7 +10,7 @@
 	<button
 		class="flex items-center gap-2"
 		onclick={() => {
-			goto(`/search/${username}?origin=messages`);
+			goto(`/matcha/search/${username}?origin=messages`);
 		}}
 	>
 		<img

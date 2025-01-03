@@ -14,10 +14,10 @@
 <ul class="flex flex-col gap-2">
 	{#each conversations as conversation}
 		<li class={`${username === conversation.user.username && 'bg-gray-200'} rounded-md p-1`}>
-			<a href={`/chat/${conversation.user.username}`} class="flex items-center gap-2 no-underline">
+			<a href={`/matcha/chat/${conversation.user.username}`} class="flex items-center gap-2 no-underline">
 				<div class="relative" aria-hidden="true">
 					<img
-						src={getServerAsset(conversation.user.profilePhoto) ?? '/icons/avatar.svg'}
+						src={getServerAsset(conversation.user.profilePhoto) ?? '/matcha/icons/avatar.svg'}
 						alt=""
 						class="h-6 w-6 rounded-md bg-white object-cover"
 					/>

@@ -68,7 +68,7 @@
 			await userProfileData.fetch();
 
 			const { profile_completed: profileCompleted } = user;
-			return profileCompleted ? goto('/search') : goto('/profile');
+			return profileCompleted ? goto('/matcha/search') : goto('/matcha/profile');
 		} catch (err) {
 			error = 'An error occurred. Please try again later.';
 			return;
@@ -78,7 +78,7 @@
 	};
 
 	const handleCancel = () => {
-		goto('/');
+		goto('/matcha/');
 	};
 </script>
 
@@ -114,7 +114,7 @@
 				</label>
 			</fieldset>
 
-			<a href="/forget-password">Forgot your password?</a>
+			<a href="/matcha/forget-password">Forgot your password?</a>
 
 			<div class="flex items-baseline justify-center gap-2">
 				<Button type="button" level="secondary" onclick={handleCancel}>Cancel</Button>
@@ -127,7 +127,7 @@
 		</Form>
 
 		<p class="mt-4">
-			Don't have an account yet? <a href="/signup">Sign up</a>
+			Don't have an account yet? <a href="/matcha/signup">Sign up</a>
 		</p>
 	</div>
 </PageWrapper>

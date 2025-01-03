@@ -83,7 +83,7 @@
 				return;
 			}
 
-			goto('/signup/verify');
+			goto('/matcha/signup/verify');
 		} catch (err) {
 			error = 'An error occurred. Please try again later.';
 		} finally {

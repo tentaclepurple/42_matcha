@@ -15,7 +15,7 @@
 			level="primary"
 			type="button"
 			onclick={() => {
-				goto('/', { replaceState: true });
+				goto('/matcha/', { replaceState: true });
 			}}
 		>
 			Back to home

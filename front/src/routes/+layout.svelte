@@ -12,6 +12,8 @@
 	import { notificationsData } from '$lib/state/notifications.svelte';
 	import { NOTIFICATIONS_POLLING_INTERVAL } from '$lib/constants/notifications';
 	import NotificationsWidget from './NotificationsWidget.svelte';
+	import { base } from '$app/paths';
+
 
 	onMount(async (): Promise<unknown> => {
 		let interval: number;
@@ -44,8 +46,8 @@
 	<div class="flex items-center justify-center bg-teal-300 py-0 px-4">
 		<header class="flex min-h-[68px] w-full max-w-screen-2xl items-center justify-between">
 			<nav class="flex items-baseline justify-center gap-2">
-				<a href="/" aria-label="Home">
-					<img src="/icons/home.svg" alt="" class="w-5" />
+				<a href="{base}/" aria-label="Home">
+					<img src="{base}/icons/home.svg" alt="" class="w-5" />
 				</a>
 			</nav>
 
@@ -54,9 +56,9 @@
 					<NotificationsWidget />
 					<MenuWidget />
 				{:else}
-					<a href="/login" class="flex items-center justify-center gap-1 no-underline">
+					<a href="{base}/login" class="flex items-center justify-center gap-1 no-underline">
 						Sign in
-						<img src="icons/login.svg" alt="" class="w-5" />
+						<img src="{base}/icons/login.svg" alt="" class="w-5" />
 					</a>
 				{/if}
 			</div>

@@ -7,7 +7,7 @@
 
 	$effect(() => {
 		if (!userData.value) {
-			goto('/', { replaceState: true });
+			goto('/matcha/', { replaceState: true });
 		}
 	});
 </script>
@@ -16,7 +16,7 @@
 	<header class="mb-6">
 		<h1>Account</h1>
 		<p>This is where you can handle your account information.</p>
-		<p>Looking for your profile info? Go to the <a href="/profile">Profile page</a>.</p>
+		<p>Looking for your profile info? Go to the <a href="/matcha/profile">Profile page</a>.</p>
 	</header>
 
 	<div class="flex flex-col items-start gap-4">

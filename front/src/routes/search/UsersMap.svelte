@@ -21,7 +21,7 @@
 		<Popup openOn="click" offset={[0, 0]}>
 			<div class="flex flex-col items-center justify-center gap-2 px-2">
 				<img
-					src={profilePicture ? getServerAsset(profilePicture) : '/icons/avatar.svg'}
+					src={profilePicture ? getServerAsset(profilePicture) : '/matcha/icons/avatar.svg'}
 					alt=""
 					class="aspect-square w-24"
 				/>
@@ -31,7 +31,7 @@
 					type="button"
 					level="primary"
 					onclick={() => {
-						goto(`/search/${user.username}?origin=map`);
+						goto(`/matcha/search/${user.username}?origin=map`);
 					}}
 				>
 					View profile

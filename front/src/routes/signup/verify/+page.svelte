@@ -14,7 +14,7 @@
 		level="primary"
 		class="mt-4 w-fit"
 		onclick={() => {
-			goto('/login');
+			goto('/matcha/login');
 		}}
 	>
 		Go to log in

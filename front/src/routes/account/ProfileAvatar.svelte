@@ -38,14 +38,14 @@
 	let isLoading: boolean = $state(false);
 
 	let avatarUrl: string = $derived(
-		getServerAsset(userData?.value?.profilePhoto ?? '/icons/avatar.svg')
+		getServerAsset(userData?.value?.profilePhoto ?? '/matcha/icons/avatar.svg')
 	);
 
 	const token = localStorage.getItem('access_token');
 
 	onMount(async () => {
 		if (!token) {
-			goto('/login', { replaceState: true });
+			goto('/matcha/login', { replaceState: true });
 		}
 
 		await userData.fetch();
@@ -136,7 +136,7 @@
 				aria-label="Delete"
 				onclick={handleDeleteAvatar}
 			>
-				<img src="/icons/delete.svg" alt="" class="w-6" />
+				<img src="/matcha/icons/delete.svg" alt="" class="w-6" />
 			</button>
 		{/if}
 	</div>

@@ -42,7 +42,7 @@
 			return;
 		}
 
-		goto('/forget-password/confirm', { replaceState: true });
+		goto('/matcha/forget-password/confirm', { replaceState: true });
 	};
 </script>
 

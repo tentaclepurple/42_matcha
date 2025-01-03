@@ -6,6 +6,7 @@
 	import { notificationsData } from '$lib/state/notifications.svelte';
 	import { visitedProfileData } from '$lib/state/visited-profile-data.svelte';
 	import { onDestroy, onMount } from 'svelte';
+	import { base } from '$app/paths';
 
 	let showMenu: boolean = $state(false);
 
@@ -27,7 +28,7 @@
 			case NOTIFICATIONS_TYPES.MESSAGE:
 				try {
 					await messagesData.fetchMessages({ username });
-					goto(`/chat/${username}`);
+					goto(`${base}/chat/${username}`);
 				} catch (error) {
 					console.error(error);
 				}
@@ -38,7 +39,7 @@
 			case NOTIFICATIONS_TYPES.PROFILE_VIEW:
 				try {
 					await visitedProfileData.fetch(username);
-					goto(`/search/${username}`);
+					goto(`${base}/search/${username}`);
 				} catch (error) {
 					console.error(error);
 				}
@@ -66,7 +67,7 @@
 				onclick={handleShowMenu}
 			>
 				<p class="sr-only">{notificationsData.value?.count} new notifications</p>
-				<img src="/icons/notifications/active.svg" alt="" class="w-5" />
+				<img src="{base}/icons/notifications/active.svg" alt="" class="w-5" />
 				<p
 					class="absolute flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white"
 					style="bottom: -8px; left: -8px;"
@@ -132,7 +133,7 @@
 			class="flex h-9 w-9 items-center justify-center rounded-full border border-2 border-gray-400 bg-gray-200"
 		>
 			<p class="sr-only">No new notifications</p>
-			<img src="/icons/notifications/off.svg" alt="" class="w-5" />
+			<img src="{base}/icons/notifications/off.svg" alt="" class="w-5" />
 		</div>
 	{/if}
 </div>

@@ -10,7 +10,7 @@ from flask import current_app
 
 def send_verification_email(email: str, token: str, first_name: str):
     """Enviar email de verificación"""
-    verification_url = f"http://localhost:5173/verify-email?token={token}"  # TODO use ENV variable for port
+    verification_url = f"https://imontero.me/matcha/verify-email?token={token}"
     
     msg = MIMEMultipart()
     msg['Subject'] = 'Verify your account'
@@ -47,7 +47,7 @@ def send_verification_email(email: str, token: str, first_name: str):
 
 def send_reset_password_email(email: str, token: str, first_name: str):
     """Send password reset email"""
-    reset_url = f"http://localhost:5173/forget-password/new?token={token}"
+    reset_url = f"https://imontero.me/matcha/forget-password/new?token={token}"
 
     msg = MIMEMultipart()
     msg['Subject'] = 'Reset your password'

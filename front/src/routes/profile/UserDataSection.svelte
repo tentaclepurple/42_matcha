@@ -17,7 +17,7 @@
 				onclick={() => (isEditing = !isEditing)}
 				class="absolute right-6 top-6 h-9 w-9 rounded-md bg-teal-600 p-2 hover:bg-teal-700 disabled:cursor-not-allowed disabled:bg-gray-300"
 			>
-				<img src="/icons/edit.svg" alt="" class="w-full" />
+				<img src="/matcha/icons/edit.svg" alt="" class="w-full" />
 			</button>
 		{/if}
 		{#if isEditing}

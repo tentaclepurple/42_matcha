@@ -15,7 +15,7 @@
 			type="button"
 			level="primary"
 			onclick={() => {
-				goto('/login', { replaceState: true });
+				goto('/matcha/login', { replaceState: true });
 			}}
 		>
 			Go to login

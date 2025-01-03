@@ -56,7 +56,7 @@
 		}
 
 		loading = false;
-		goto('/forget-password/success', { replaceState: true });
+		goto('/matcha/forget-password/success', { replaceState: true });
 	};
 </script>
 

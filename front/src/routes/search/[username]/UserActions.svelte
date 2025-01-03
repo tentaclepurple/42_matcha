@@ -57,11 +57,11 @@
 			type="button"
 			level="primary"
 			onclick={() => {
-				goto(`/chat/${selectedUser.username}`);
+				goto(`/matcha/chat/${selectedUser.username}`);
 			}}
 			aria-label="Send new message"
 		>
-			<img src="/icons/message.svg" alt="" class="h-7" />
+			<img src="/matcha/icons/message.svg" alt="" class="h-7" />
 		</Button>
 	{/if}
 
@@ -80,11 +80,11 @@
 				onclick={handleMatch}
 			>
 				{#if isMatch}
-					<img src="/icons/like/heart-unlock.svg" alt="" class="w-full" />
+					<img src="/matcha/icons/like/heart-unlock.svg" alt="" class="w-full" />
 				{:else if isLikedByMe}
-					<img src="/icons/like/heart-lock.svg" alt="" class="w-full" />
+					<img src="/matcha/icons/like/heart-lock.svg" alt="" class="w-full" />
 				{:else}
-					<img src="/icons/like/heart.svg" alt="" class="w-full" />
+					<img src="/matcha/icons/like/heart.svg" alt="" class="w-full" />
 				{/if}
 			</button>
 		{/if}

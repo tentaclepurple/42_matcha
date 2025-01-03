@@ -6,6 +6,8 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { userAuth } from '$lib/state/auth.svelte';
 	import { userData } from '$lib/state/user-data.svelte';
+	import { base } from '$app/paths';
+
 
 	let showMenu: boolean = $state(false);
 
@@ -29,7 +31,7 @@
 		}
 
 		userAuth.logout();
-		goto('/');
+		goto('{base}/');
 	};
 
 	const handleShowMenu = () => {
@@ -62,24 +64,24 @@
 			class="absolute right-0 top-full z-50 mt-2 flex min-h-32 min-w-48 justify-end rounded-md bg-teal-100 p-6 shadow-xl"
 		>
 			<nav class="flex flex-col items-end gap-3">
-				<a href="/search" onclick={handleShowMenu} class="flex items-center gap-1">
-					<img src="/icons/home.svg" alt="" class="w-4" />
+				<a href="{base}/search" onclick={handleShowMenu} class="flex items-center gap-1">
+					<img src="{base}/icons/home.svg" alt="" class="w-4" />
 					Search
 				</a>
-				<a href="/chat" onclick={handleShowMenu} class="flex items-center gap-1 mb-4">
-					<img src="/icons/messages.svg" alt="" class="w-5" />
+				<a href="{base}/chat" onclick={handleShowMenu} class="flex items-center gap-1 mb-4">
+					<img src="{base}/icons/messages.svg" alt="" class="w-5" />
 					Messages
 				</a>
-				<a href="/account" onclick={handleShowMenu} class="flex items-center gap-1">
-					<img src="/icons/settings.svg" alt="" class="w-5" />
+				<a href="{base}/account" onclick={handleShowMenu} class="flex items-center gap-1">
+					<img src="{base}/icons/settings.svg" alt="" class="w-5" />
 					Account
 				</a>
-				<a href="/profile" onclick={handleShowMenu} class="flex items-center gap-1 mb-6">
-					<img src="/icons/avatar.svg" alt="" class="w-5" />
+				<a href="{base}/profile" onclick={handleShowMenu} class="flex items-center gap-1 mb-6">
+					<img src="{base}/icons/avatar.svg" alt="" class="w-5" />
 					Profile
 				</a>
 				<button type="button" onclick={handleLogOut} class="flex items-center gap-1">
-					<img src="/icons/exit.svg" alt="" class="w-6" />
+					<img src="{base}/icons/exit.svg" alt="" class="w-6" />
 					Log out
 				</button>
 			</nav>
