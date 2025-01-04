@@ -51,7 +51,7 @@ class NotificationsDataClass {
 		};
 
 		// check if newValue is different from this.#value, deep compare
-		if (JSON.stringify(newValue) !== JSON.stringify(this.#value)) {
+		if (this.#value === null || JSON.stringify(newValue) !== JSON.stringify(this.#value)) {
 			this.#value = newValue;
 		}
 	};
