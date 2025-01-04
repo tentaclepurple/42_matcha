@@ -1,6 +1,10 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
-	import { GENDER_OPTIONS, PREFERENCES_OPTIONS } from '$lib/constants/user-profile-data';
+	import {
+		BIO_MAX_LENGTH,
+		GENDER_OPTIONS,
+		PREFERENCES_OPTIONS
+	} from '$lib/constants/user-profile-data';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
 	import GenderSymbol from '$lib/components/GenderSymbol.svelte';
@@ -231,14 +235,14 @@
 					required
 					rows="4"
 					minlength="1"
-					maxlength="500"
+					maxlength={BIO_MAX_LENGTH}
 					oninput={handleTextareaUpdate}
 					value={userBio}
 				></textarea>
 				<p class="flex w-full items-baseline justify-between gap-6 text-xs text-gray-500">
-					Describe yourself in less than 500 characters
+					Describe yourself in less than {BIO_MAX_LENGTH} characters
 					<span>
-						{textAreaLength}/500
+						{textAreaLength}/{BIO_MAX_LENGTH}
 					</span>
 				</p>
 			</div>
@@ -249,7 +253,7 @@
 		{#if success}
 			<p class="text-xs text-green-500 sm:text-base">{success}</p>
 		{:else if error}
-			<p class="sm:text-base mt-4 text-xs text-red-500">{error}</p>
+			<p class="mt-4 text-xs text-red-500 sm:text-base">{error}</p>
 		{/if}
 
 		<div class="ml-auto flex w-fit items-baseline justify-between gap-2">

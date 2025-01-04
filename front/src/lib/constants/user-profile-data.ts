@@ -9,3 +9,5 @@ export const PREFERENCES_OPTIONS = {
 	FEMALE: 'female',
 	BISEXUAL: 'bisexual'
 };
+
+export const BIO_MAX_LENGTH = 250;
