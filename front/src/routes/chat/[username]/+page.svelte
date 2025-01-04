@@ -24,7 +24,7 @@
 	});
 </script>
 
-<div class="flex h-full max-h-[calc(100vh-68px-96px-32px-8px)] sm:max-h-[calc(100vh-68px-48px-16px-20px)] w-full flex-col">
+<div class="flex h-full max-h-[calc(100vh-68px-96px-32px-8px)] sm:max-h-[calc(100vh-68px-36px)] w-full flex-col">
 	<ChatHeader username={otherUser.username} profilePhoto={otherUser.profilePhoto} />
 	<MessagesList />
 	<NewMessageForm {username} />
