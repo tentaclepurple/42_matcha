@@ -32,7 +32,6 @@ const validatePassword = (
 	}
 
 	if (!/[A-Z]/.test(password)) {
-		console.log('mierda');
 		return {
 			isValid: false,
 			message: 'Password must contain an uppercase letter'

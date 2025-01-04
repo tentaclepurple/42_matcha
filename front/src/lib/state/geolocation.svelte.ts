@@ -23,10 +23,8 @@ class UserLocation {
 			this.#isLoading = true;
 			this.#isRunning = true;
 
-			console.log('Locating user…');
 			navigator.geolocation.getCurrentPosition(async (position) => {
 				this.#location = [position.coords.longitude, position.coords.latitude];
-				console.log('User located', this.#location);
 
 				const token = localStorage.getItem('access_token');
 
