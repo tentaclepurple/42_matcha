@@ -27,32 +27,36 @@ class UserSearchSuggestionsClass {
 			goto('/login');
 		}
 
-		const defaultParams = new URLSearchParams({
-			sort_by: DEFAULT_ALL_RESULTS_SORTING_PROP,
-			sort_order: DEFAULT_ALL_RESULTS_SORTING_ORDER
-		});
+		try {
+			const defaultParams = new URLSearchParams({
+				sort_by: DEFAULT_ALL_RESULTS_SORTING_PROP,
+				sort_order: DEFAULT_ALL_RESULTS_SORTING_ORDER
+			});
 
-		const suggestionsRes = await fetch(
-			`${SERVER_BASE_URL}/api/match/suggestions?${params ? params : defaultParams}`,
-			{
-				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${token}`
+			const suggestionsRes = await fetch(
+				`${SERVER_BASE_URL}/api/match/suggestions?${params ? params : defaultParams}`,
+				{
+					method: 'GET',
+					headers: {
+						Authorization: `Bearer ${token}`
+					}
 				}
+			);
+
+			if (!suggestionsRes.ok) {
+				throw new Error('An error occurred while fetching search results');
 			}
-		);
 
-		if (!suggestionsRes.ok) {
-			throw new Error('An error occurred while fetching search results');
+			const { matches: searchSuggestionsResults } = await suggestionsRes.json();
+
+			const deserializedSuggestionsResults: UserFromList[] = searchSuggestionsResults.map(
+				(result: UserFromList) => deserialize(result)
+			);
+
+			this.value = deserializedSuggestionsResults;
+		} catch (error) {
+			console.error(error);
 		}
-
-		const { matches: searchSuggestionsResults } = await suggestionsRes.json();
-
-		const deserializedSuggestionsResults: UserFromList[] = searchSuggestionsResults.map(
-			(result: UserFromList) => deserialize(result)
-		);
-
-		this.value = deserializedSuggestionsResults;
 	};
 }
 
