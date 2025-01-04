@@ -27,32 +27,36 @@ class UserSearchClass {
 			goto('/login');
 		}
 
-		const defaultParams = new URLSearchParams({
-			sort_by: DEFAULT_ALL_RESULTS_SORTING_PROP,
-			sort_order: DEFAULT_ALL_RESULTS_SORTING_ORDER
-		});
+		try {
+			const defaultParams = new URLSearchParams({
+				sort_by: DEFAULT_ALL_RESULTS_SORTING_PROP,
+				sort_order: DEFAULT_ALL_RESULTS_SORTING_ORDER
+			});
 
-		const searchRes = await fetch(
-			`${SERVER_BASE_URL}/api/match/search?${params ? params : defaultParams}`,
-			{
-				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${token}`
+			const searchRes = await fetch(
+				`${SERVER_BASE_URL}/api/match/search?${params ? params : defaultParams}`,
+				{
+					method: 'GET',
+					headers: {
+						Authorization: `Bearer ${token}`
+					}
 				}
+			);
+
+			if (!searchRes.ok) {
+				throw new Error('An error occurred while fetching search results');
 			}
-		);
 
-		if (!searchRes.ok) {
-			throw new Error('An error occurred while fetching search results');
+			const { results: searchResults } = await searchRes.json();
+
+			const deserializedSearchResults: UserFromList[] = searchResults.map((result: UserFromList) =>
+				deserialize(result)
+			);
+
+			this.value = deserializedSearchResults;
+		} catch (error) {
+			console.error(error);
 		}
-
-		const { results: searchResults } = await searchRes.json();
-
-		const deserializedSearchResults: UserFromList[] = searchResults.map((result: UserFromList) =>
-			deserialize(result)
-		);
-
-		this.value = deserializedSearchResults;
 	};
 }
 
