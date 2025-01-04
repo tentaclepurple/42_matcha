@@ -49,7 +49,7 @@
 			if (!res.ok) {
 				switch (res.status) {
 					case 401:
-						error = 'Invalid e-mail or password';
+						error = 'Invalid e-username or password';
 						break;
 					default:
 						error = 'An error occurred. Please try again later.';
