@@ -213,19 +213,17 @@ def login():
 @jwt_required()
 def logout():
     try:
-        # Obtener identificador único del token
         jti = get_jwt()["jti"]
         current_user_id = get_jwt_identity()
         
-        # Añadir a lista negra en Redis
-        # Usamos el tiempo de expiración del token
+        # Add token to blacklist
         redis_client.set(
             f"token_blacklist:{jti}",
             str(datetime.utcnow()),
-            ex=3600  # 1 hora o el tiempo que configures para los tokens
+            ex=3600
         )
         
-        # Actualizar estado online
+        # Update user status
         UserModel.update_online_status(current_user_id, False)
         
         return jsonify({'message': 'Logged out successfully'}), 200
