@@ -28,7 +28,7 @@
 		}
 	};
 
-	onMount(async (): Promise<unknown> => {
+	onMount(async (): Promise<void> => {
 		window.addEventListener('beforeunload', handleBeforeUnload);
 		window.addEventListener('visibilitychange', handleVisibilityChange);
 
@@ -51,13 +51,6 @@
 
 				if (userAuth.isAuthenticated) {
 					notificationsData.fetch();
-					interval = setInterval(() => {
-						notificationsData.fetch();
-					}, NOTIFICATIONS_POLLING_INTERVAL);
-
-					return () => {
-						clearInterval(interval);
-					};
 				}
 			} catch (e) {
 				console.error(e);
@@ -66,6 +59,18 @@
 			}
 		} else {
 			userAuth.logout();
+		}
+	});
+
+	$effect(() => {
+		if (userAuth.isAuthenticated) {
+			const interval = setInterval(() => {
+				notificationsData.fetch();
+			}, NOTIFICATIONS_POLLING_INTERVAL);
+
+			return () => {
+				clearInterval(interval);
+			};
 		}
 	});
 </script>
