@@ -2,6 +2,8 @@
 
 from flask import Flask
 from flask_jwt_extended import JWTManager
+from flask_apscheduler import APScheduler
+
 from datetime import timedelta
 
 from .config.database import mongo, init_db
@@ -18,6 +20,7 @@ from .scripts.generate_test_users import generate_test_users
 from dotenv import load_dotenv
 import os
 
+from .utils.scheduler import init_scheduler
 
 load_dotenv()
 
@@ -47,6 +50,9 @@ def create_app():
         init_db()
 
     jwt = JWTManager(app)
+
+    init_scheduler(app)
+
 
     # Register blueprints
     app.register_blueprint(user_bp, url_prefix='/api/users')

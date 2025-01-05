@@ -3,7 +3,6 @@ from bson import ObjectId
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
 from .iamatcha import BotModel
-from .notification import NotificationModel 
 
 
 class UserModel:
@@ -239,14 +238,14 @@ class UserModel:
         except Exception as e:
             raise Exception(f"Error updating interests: {str(e)}")
 
-        @staticmethod
-        def update_password(user_id: str, new_password: str) -> bool:
-            """Update user password"""
-            result = mongo.db.users.update_one(
-                {"_id": ObjectId(user_id)},
-                {"$set": {"password": new_password}}
-            )
-            return result.modified_count > 0
+    @staticmethod
+    def update_password(user_id: str, new_password: str) -> bool:
+        """Update user password"""
+        result = mongo.db.users.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$set": {"password": new_password}}
+        )
+        return result.modified_count > 0
 
     @staticmethod
     def unblock_user(user_id: str, blocked_user_id: str) -> bool:

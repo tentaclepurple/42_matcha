@@ -5,6 +5,7 @@ import google.generativeai as genai
 from datetime import datetime
 import time
 from bson import ObjectId
+from werkzeug.security import generate_password_hash
 from ..config.database import mongo
 from .chat import ChatModel
 from .like import LikeModel
@@ -103,9 +104,9 @@ class BotModel:
            if not mongo.db.users.find_one({"_id": bot_data["_id"]}):
                bot_profile = {
                    **bot_data,
-                   "email": f"{bot_data['username'].lower()}@bot.com",
-                   "password": "hash_seguro",
-                   "verified": True,
+                   "email": f"{bot_data['username']}@staff.es",
+                   "password": generate_password_hash(bot_data["username"]), 
+                   "verified": False,
                    "created_at": datetime.now(),
                    "online": True,
                    "profile_completed": True,

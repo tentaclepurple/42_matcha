@@ -3,6 +3,7 @@
 from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..models.notification import NotificationModel
+from ..models.user import UserModel
 
 
 notification_bp = Blueprint('notifications', __name__)
@@ -15,7 +16,7 @@ def get_unread_notifications():
     try:
         current_user_id = get_jwt_identity()
         notifications = NotificationModel.get_unread(current_user_id)
-        
+        UserModel.update_online_status(current_user_id, True)
         return jsonify({
             'notifications': notifications,
             'count': len(notifications)
