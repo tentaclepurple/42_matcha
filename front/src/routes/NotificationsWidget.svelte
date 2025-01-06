@@ -60,7 +60,7 @@
 </script>
 
 <div>
-	{#if notificationsData.value?.count !== null && notificationsData.value?.notifications}
+	{#if notificationsData.value?.notifications}
 		<div class="relative" id="notifications-wrapper">
 			<CoreWidget
 				count={notificationsData.value.count}
