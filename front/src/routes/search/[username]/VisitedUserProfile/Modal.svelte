@@ -22,7 +22,7 @@
 <div
 	class="fixed left-0 top-0 z-50 flex h-full w-full items-start justify-center bg-black bg-opacity-50"
 >
-	<div class="mt-40 w-full max-w-lg rounded-md bg-white px-8 py-6">
+	<div class="mx-6 w-full max-w-lg rounded-md bg-white px-8 py-6 sm:mt-40 my-12">
 		<h1 class="title-2 mx-auto mb-6 w-4/6 text-center">
 			{title}
 		</h1>
