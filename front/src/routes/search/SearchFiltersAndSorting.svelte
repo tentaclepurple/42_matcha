@@ -189,10 +189,10 @@
 
 	<ButtonSelector>
 		<RangeFilter
-			label="Distance"
+			label="Distance (max)"
 			minValue={currentFilters.minDistance}
 			maxValue={currentFilters.maxDistance}
-			min="0"
+			min="1"
 			max="2000"
 			step="10"
 			onChangeMax={(value: number) => (currentFilters.maxDistance = value)}
