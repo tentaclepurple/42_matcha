@@ -7,6 +7,7 @@ cors_config = {
     "origins": [
         "http://localhost:5173",  # development frontend
         "http://127.0.0.1:5173",
+        "http://10.14.3.2:5173",
         "http://51.195.220.248:5173"
     ],
     "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],  # methods allowed
