@@ -5,5 +5,5 @@ export const NOTIFICATIONS_TYPES = {
 	MATCH: 'match',
 	MESSAGE: 'message',
 	PROFILE_VIEW: 'profile_view',
-	UNLIKE: 'unlike'
+	UNLIKE: 'rmlike'
 };

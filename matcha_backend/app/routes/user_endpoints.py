@@ -152,7 +152,6 @@ def verify_email(token):
 def login():
     try:
         data = request.get_json()
-        print("--- LOGIN", flush=True)
         # Check required fields
         if not data.get('username') or not data.get('password'):
             return jsonify({'error': 'username and password are required'}), 400

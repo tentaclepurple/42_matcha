@@ -314,7 +314,7 @@ class UserModel:
             {"_id": ObjectId(user_id)},
             {"locked_until": 1}
         )
-        
+        print(user, flush=True)
         if user and user.get('locked_until'):
             if datetime.utcnow() < user['locked_until']:
                 return user['locked_until']
