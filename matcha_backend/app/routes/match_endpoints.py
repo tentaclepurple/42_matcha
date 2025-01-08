@@ -33,6 +33,10 @@ def get_suggestions():
             max_distance = 15
         if min_common_tags is None:
             min_common_tags = 1
+        if min_fame is None:
+            min_fame = 50
+        if max_fame is None:
+            max_fame = 100
 
         user_gender = current_user.get('gender')
         user_preferences = current_user.get('sexual_preferences')

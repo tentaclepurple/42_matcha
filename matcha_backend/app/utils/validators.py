@@ -36,6 +36,6 @@ def validate_password(password: str) -> tuple[bool, str]:
     
     if results['score'] < 3:
 
-        return False, 'Password too weak'
+        return False, 'Password too weak (too common words or patterns)'
     
     return True, ""
