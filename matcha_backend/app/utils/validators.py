@@ -1,6 +1,7 @@
 # app/utils/validators.py
 
 import re
+from zxcvbn import zxcvbn
 
 
 def validate_username(username: str) -> tuple[bool, str]:
@@ -29,5 +30,12 @@ def validate_password(password: str) -> tuple[bool, str]:
     
     if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
         return False, "Password must contain at least one special character"
+
+
+    results = zxcvbn(password)
+    
+    if results['score'] < 3:
+
+        return False, 'Password too weak'
     
     return True, ""

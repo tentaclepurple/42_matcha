@@ -31,6 +31,7 @@ def register():
             
         # Validate password
         is_valid, error_msg = validate_password(data.get('password', ''))
+
         if not is_valid:
             return jsonify({'error': error_msg}), 400
 
