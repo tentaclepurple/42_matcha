@@ -15,3 +15,5 @@ ENV/
 .vscode/
 
 matcha_backend/app/static/uploads/
+
+.DS_STORE
