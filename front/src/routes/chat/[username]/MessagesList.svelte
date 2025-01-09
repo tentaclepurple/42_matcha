@@ -6,7 +6,7 @@
 			const lastMessage = document.querySelector(
 				`#message-${messagesData.value.messages.length - 1}`
 			);
-			lastMessage?.scrollIntoView();
+			lastMessage?.scrollIntoView({ behavior: 'smooth' });
 		}
 	});
 </script>
