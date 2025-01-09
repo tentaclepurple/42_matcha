@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import type { PageLoad } from '../$types';
 import { visitedProfileData } from '$lib/state/visited-profile-data.svelte';
 
@@ -14,6 +14,6 @@ export const load: PageLoad = async ({ params }) => {
 	try {
 		await visitedProfileData.fetch(username);
 	} catch (err) {
-		error(500, err.message);
+		redirect(302, '/search');
 	}
 };
