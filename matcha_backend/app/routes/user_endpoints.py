@@ -160,7 +160,10 @@ def login():
         user = UserModel.find_by_username(data['username'])
 
         if not user:
-            return jsonify({'error': 'invalid credentials'}), 401
+            return jsonify({
+                'error': 'Invalid credentials',
+                'message': 'Username and/or password are incorrect'
+            }), 401
         
         # Check account lock
         lock_expires = UserModel.check_account_lock(user['_id'])
