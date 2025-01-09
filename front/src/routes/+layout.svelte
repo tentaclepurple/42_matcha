@@ -1,7 +1,7 @@
 <script lang="ts">
 	const { children } = $props();
 
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
 	import '../app.css';
 	import MenuWidget from './MenuWidget.svelte';
@@ -15,31 +15,7 @@
 	import { goto } from '$app/navigation';
 	import MessagesWidget from './MessagesWidget.svelte';
 
-	let isTabHidden = $state(false);
-
-	const handleVisibilityChange = () => {
-		isTabHidden = document.hidden;
-	};
-
-	const handleBeforeUnload = () => {
-		// logout user if tab is closed
-		if (isTabHidden) {
-			userAuth.logout();
-		}
-	};
-
 	onMount(async (): Promise<void> => {
-		window.addEventListener('beforeunload', handleBeforeUnload);
-		window.addEventListener('visibilitychange', handleVisibilityChange);
-
-		//cleanup
-		onDestroy(() => {
-			window.removeEventListener('beforeunload', handleBeforeUnload);
-			window.removeEventListener('visibilitychange', handleVisibilityChange);
-		});
-
-		let interval: number;
-
 		const accessToken = localStorage.getItem('access_token');
 
 		if (accessToken) {
