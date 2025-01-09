@@ -3,7 +3,6 @@
 	import RoundAvatar from '$lib/components/RoundAvatar.svelte';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
 	import { DEFAULT_AVATAR_NAME } from '$lib/constants/avatar';
-	import { AVATAR_MAX_SIZE } from '$lib/constants/files';
 	import { DEFAULT_TIMEOUT } from '$lib/constants/timeout';
 	import { userData } from '$lib/state/user-data.svelte';
 	import getServerAsset from '$lib/utils/get-server-asset';
@@ -60,12 +59,7 @@
 		const file = files[0];
 
 		if (!file) {
-			error = 'Something went wrong. Please try again.';
-			return;
-		}
-
-		if (file.size > AVATAR_MAX_SIZE) {
-			error = 'File is too large. Please choose a smaller one.';
+			error = 'Please select a file.';
 			return;
 		}
 
@@ -81,12 +75,14 @@
 			});
 
 			if (!res.ok) {
-				throw new Error();
+				const { error: errorMessage } = await res.json();
+				error = errorMessage;
+				return;
 			}
 
-			await userData.fetch();
-
 			success = 'Avatar updated successfully!';
+
+			await userData.fetch();
 		} catch (err) {
 			console.error(err);
 			error = 'Something went wrong. Please try again.';
