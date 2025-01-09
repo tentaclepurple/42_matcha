@@ -14,7 +14,7 @@
 		...restProps
 	} = $props();
 
-	let styles;
+	let styles = $state('');
 
 	switch (level) {
 		case 'primary':
