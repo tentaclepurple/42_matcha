@@ -47,14 +47,8 @@
 			});
 
 			if (!res.ok) {
-				switch (res.status) {
-					case 401:
-						error = 'Invalid e-username or password';
-						break;
-					default:
-						error = 'An error occurred. Please try again later.';
-						break;
-				}
+				const { message } = await res.json();
+				error = message;
 
 				return;
 			}

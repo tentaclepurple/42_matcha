@@ -5,7 +5,6 @@
 	import { SERVER_BASE_URL } from '$lib/constants/api';
 
 	import { goto } from '$app/navigation';
-	import validatePassword from '$lib/utils/validate-password';
 	import { MIN_BIRTH_DATA } from '$lib/constants/user';
 	import calcEighteenthBirthday from '$lib/utils/calc-eighteenth-birthday';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
@@ -51,13 +50,6 @@
 			return;
 		}
 
-		const { isValid: isPasswordValid, message: passwordError } = validatePassword(password);
-		if (!isPasswordValid) {
-			error = passwordError;
-			isLoading = false;
-			return;
-		}
-
 		const birthDay = formData.get('age') as string;
 		const birthYear = new Date(birthDay).getFullYear();
 		const age = new Date().getFullYear() - birthYear;
@@ -73,13 +65,9 @@
 			});
 
 			if (!response.ok) {
-				switch (response.status) {
-					case 409:
-						error = 'Username or email already in use';
-						break;
-					default:
-						throw new Error('An error occurred. Please try again later.');
-				}
+				const { error: errorMessage } = await response.json();
+				error = errorMessage;
+
 				return;
 			}
 
@@ -172,7 +160,7 @@
 				</div>
 
 				<div class="mb-4 flex flex-col gap-4">
-					<label class="flex flex-col items-start justify-center w-full sm:w-auto">
+					<label class="flex w-full flex-col items-start justify-center sm:w-auto">
 						Password
 						<PasswordInput
 							id="password"
@@ -183,7 +171,7 @@
 							class="w-full sm:w-auto"
 						/>
 					</label>
-					<label class="flex flex-col items-start justify-center w-full sm:w-auto">
+					<label class="flex w-full flex-col items-start justify-center sm:w-auto">
 						Confirm password
 						<PasswordInput
 							id="confirm"
