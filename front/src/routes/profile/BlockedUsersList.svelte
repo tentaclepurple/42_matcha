@@ -61,7 +61,6 @@
 								onmouseleave={() => (userIdMenu = null)}
 								ontouchend={() => (userIdMenu = null)}
 							>
-								{$inspect(userIdMenu, blockedUser.userId)}
 								{#if userIdMenu === blockedUser.userId}
 									<div
 										class="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-md"
