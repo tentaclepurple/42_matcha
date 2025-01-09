@@ -32,7 +32,7 @@
 
 	{#if onChangeMax}
 		<label class="flex items-center gap-1">
-			<span class="sr-only">Distance (max): {maxValue}</span>
+			<span class="sr-only">{label} (max): {maxValue}</span>
 			<input
 				type="range"
 				{min}

@@ -189,7 +189,7 @@
 
 	<ButtonSelector>
 		<RangeFilter
-			label="Distance (max)"
+			label="Distance (km)"
 			minValue={currentFilters.minDistance}
 			maxValue={currentFilters.maxDistance}
 			min="1"
