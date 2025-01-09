@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { messagesData } from '$lib/state/messages.svelte';
-	import { userData } from '$lib/state/user-data.svelte';
 
 	$effect(() => {
-		if (userData.value) {
+		if (messagesData.value) {
 			const lastMessage = document.querySelector(
-				'#message-' + (Number(messagesData.value?.messages.length) - 1)
+				`#message-${messagesData.value.messages.length - 1}`
 			);
 			lastMessage?.scrollIntoView();
 		}

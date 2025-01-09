@@ -37,16 +37,17 @@ class MessagesClass {
 				return aDate.getTime() - bDate.getTime();
 			});
 
+			const deserializedOtherUser = deserialize(otherUser);
 			if (
 				this.#value?.messages.length === sortedMessages.length &&
-				this.#value?.otherUser.userId === otherUser.userId
+				this.#value?.otherUser.userId === deserializedOtherUser.userId
 			) {
 				return;
 			}
 
 			this.#value = {
 				messages: sortedMessages,
-				otherUser: deserialize(otherUser)
+				otherUser: deserializedOtherUser
 			};
 		} catch (e) {
 			throw new Error(e);

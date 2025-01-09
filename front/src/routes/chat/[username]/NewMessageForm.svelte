@@ -47,7 +47,7 @@
 	};
 </script>
 
-<div class="flex flex-col items-end mt-auto">
+<div class="mt-auto flex flex-col items-end">
 	<div class="mb-4">
 		{#if error}
 			<p class="text-red-500">{error}</p>
