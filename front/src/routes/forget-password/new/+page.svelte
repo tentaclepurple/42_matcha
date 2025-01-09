@@ -4,13 +4,14 @@
 	import Button from '$lib/components/Button.svelte';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
 	import { goto } from '$app/navigation';
+	import { DEFAULT_MESSAGE_TIMEOUT } from '$lib/constants/timeout';
 
 	let error: string = $state('');
 	$effect(() => {
 		if (error) {
 			const timeout = setTimeout(() => {
 				error = '';
-			}, 5000);
+			}, DEFAULT_MESSAGE_TIMEOUT);
 
 			return () => {
 				clearTimeout(timeout);
@@ -18,12 +19,12 @@
 		}
 	});
 
-	let loading = false;
+	let isLoading: boolean = $state(false);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		loading = true;
+		isLoading = true;
 		error = '';
 
 		const params = new URLSearchParams(window.location.search);
@@ -35,7 +36,7 @@
 
 		if (password !== confirm) {
 			error = 'Passwords do not match';
-			loading = false;
+			isLoading = false;
 			return;
 		}
 
@@ -51,11 +52,11 @@
 
 		if (!res) {
 			error = 'An error occurred. Please try again later.';
-			loading = false;
+			isLoading = false;
 			return;
 		}
 
-		loading = false;
+		isLoading = false;
 		goto('/forget-password/success', { replaceState: true });
 	};
 </script>
@@ -78,13 +79,7 @@
 			</label>
 			<label class="flex flex-col items-start justify-center">
 				Confirm password
-				<PasswordInput
-					id="confirm"
-					name="confirm"
-					value=""
-					required
-					autocomplete="new-password"
-				/>
+				<PasswordInput id="confirm" name="confirm" value="" required autocomplete="new-password" />
 			</label>
 		</fieldset>
 		{#if error}
