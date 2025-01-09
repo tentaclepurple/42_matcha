@@ -186,7 +186,7 @@ def login():
             remaining_attempts = 5 - attempts
             return jsonify({
                 'error': 'Invalid credentials',
-                'message': f'Invalid password. {remaining_attempts} attempts remaining'
+                'message': f'Invalid credentials. {remaining_attempts} attempts remaining'
             }), 401
             
         # Check verification
