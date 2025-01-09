@@ -5,7 +5,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..models.chat import ChatModel
 from ..models.user import UserModel
 from ..models.like import LikeModel
-from ..models.notification import NotificationModel
 from ..models.iamatcha import BotModel
 from ..models.bot_profiles import BOT_PROFILES
 from bson import ObjectId
@@ -40,23 +39,25 @@ def get_conversations():
                 None
             )
             
-            response.append({
-                'user': {
-                    'user_id': str(other_user['_id']),
-                    'username': other_user['username'],
-                    'profile_photo': profile_photo,
-                    'online': other_user.get('online', False),
-                    'last_connection': other_user.get('last_connection')
-                },
-                'last_message': {
-                    'content': last_message['content'],
-                    'type': last_message['type'],
-                    'from_me': is_from_me,
-                    'created_at': last_message['created_at'],
-                    'read': last_message['read']
-                },
-                'unread_count': conv['unread_count']
-            })
+            is_match = LikeModel.check_is_match(str(other_user['_id']), current_user_id)
+            if is_match:
+                response.append({
+                    'user': {
+                        'user_id': str(other_user['_id']),
+                        'username': other_user['username'],
+                        'profile_photo': profile_photo,
+                        'online': other_user.get('online', False),
+                        'last_connection': other_user.get('last_connection')
+                    },
+                    'last_message': {
+                        'content': last_message['content'],
+                        'type': last_message['type'],
+                        'from_me': is_from_me,
+                        'created_at': last_message['created_at'],
+                        'read': last_message['read']
+                    },
+                    'unread_count': conv['unread_count']
+                })
             
         return jsonify({
             'conversations': response

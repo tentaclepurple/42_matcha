@@ -79,7 +79,6 @@ def block_user(user_identifier):
         # Check if trying to block self
         if user_to_block_id == current_user_id:
             return jsonify({'error': 'Cannot block yourself'}), 400
-        print("************ blocking user in endpoint", user_to_block_id, flush=True)
         # Block user
         result = UserModel.block_user(current_user_id, user_to_block_id)
         
