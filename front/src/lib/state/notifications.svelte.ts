@@ -39,7 +39,7 @@ class NotificationsDataClass {
 		const data = await res.json();
 
 		const deserializedData = deserialize(data);
-		const sortedNotifications = deserializedData.notifications.sort(
+		const sortedNotifications = deserializedData.notifications.toSorted(
 			(a: Notification, b: Notification) => {
 				return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
 			}

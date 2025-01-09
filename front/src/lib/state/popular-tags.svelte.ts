@@ -29,7 +29,7 @@ class PopularTagsClass {
 
 			const { tags } = await res.json();
 
-			const sortedTags = tags.sort((a: PopularTag, b: PopularTag) => {
+			const sortedTags = tags.toSorted((a: PopularTag, b: PopularTag) => {
 				if (a.count === b.count) {
 					return a.name.localeCompare(b.name);
 				}

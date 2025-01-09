@@ -219,7 +219,7 @@
 			<summary>
 				Filter by interests
 				{#if currentFilters.interests.length}
-					({[...currentFilters.interests].sort().join(', ')})
+					{currentFilters.interests.toSorted().join(', ')}
 				{/if}
 			</summary>
 
@@ -235,7 +235,7 @@
 				<div>
 					<p class="mb-2 text-sm font-bold">{label}</p>
 					<ul class="flex flex-wrap items-baseline gap-2">
-						{#each interests.sort() as interest, index}
+						{#each interests.toSorted() as interest, index}
 							<li
 								class={`shrink-0 rounded-md ${currentFilters.interests.includes(interest) ? 'bg-teal-300' : 'bg-slate-300'} px-2 py-1`}
 							>
@@ -266,7 +266,9 @@
 				{#if popularTagsData.value && popularTagsData.value.length > 0}
 					{@render InterestsList({
 						counts: popularTagsData.value.map((interest: PopularTag) => interest.count),
-						interests: popularTagsData.value.map((interest: PopularTag) => interest.name).sort(),
+						interests: popularTagsData.value
+							.map((interest: PopularTag) => interest.name)
+							.toSorted(),
 						label: 'Trending interests'
 					})}
 				{/if}
@@ -277,7 +279,7 @@
 							(interest) =>
 								!popularTagsData.value?.some((popularTag) => popularTag.name === interest)
 						)
-						.sort(),
+						.toSorted(),
 					label: 'All interests'
 				})}
 			</div>

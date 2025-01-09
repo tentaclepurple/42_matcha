@@ -5,9 +5,9 @@
 </script>
 
 <ul class={`flex flex-wrap items-baseline gap-1 ${CLASS}`}>
-	{#each [...interests].sort() as interest, index}
+	{#each interests.toSorted() as interest, index}
 		<li
-			class="text-xs sm:text-sm shrink-0 rounded-md px-2 py-1"
+			class="shrink-0 rounded-md px-2 py-1 text-xs sm:text-sm"
 			style={`background-color: ${COLORS_PALETTE[index % COLORS_PALETTE.length]}`}
 		>
 			#{interest.toLowerCase()}

@@ -30,7 +30,7 @@ class MessagesClass {
 
 			const { messages, other_user: otherUser } = await res.json();
 
-			const sortedMessages = deserialize(messages).sort((a, b) => {
+			const sortedMessages = deserialize(messages).toSorted((a, b) => {
 				const aDate = new Date(a.createdAt);
 				const bDate = new Date(b.createdAt);
 
