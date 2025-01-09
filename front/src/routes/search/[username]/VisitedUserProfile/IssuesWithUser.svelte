@@ -38,7 +38,7 @@
 				throw new Error('Failed to block user');
 			}
 
-			goto('/search');
+			goto('/search', { replaceState: true });
 		} catch (error) {
 			console.error(error);
 		}
@@ -96,7 +96,7 @@
 	<p class="mb-8 text-sm">
 		If you noticed any inappropriate or harmful behavior, please report this user to our team.
 	</p>
-	<div class="flex items-center justify-center sm:justify-end gap-2">
+	<div class="flex items-center justify-center gap-2 sm:justify-end">
 		<Button level="danger" type="button" onclick={handleOpenReportModal}>Report user</Button>
 		<Button level="secondary" type="button" onclick={handleOpenBlockModal}>Block user</Button>
 	</div>
