@@ -8,13 +8,14 @@
 	import { MIN_BIRTH_DATA } from '$lib/constants/user';
 	import calcEighteenthBirthday from '$lib/utils/calc-eighteenth-birthday';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
+	import { DEFAULT_MESSAGE_TIMEOUT } from '$lib/constants/timeout';
 
 	let error: string = $state('');
 	$effect(() => {
 		if (error) {
 			const timeout = setTimeout(() => {
 				error = '';
-			}, 5000);
+			}, DEFAULT_MESSAGE_TIMEOUT);
 
 			return () => {
 				clearTimeout(timeout);

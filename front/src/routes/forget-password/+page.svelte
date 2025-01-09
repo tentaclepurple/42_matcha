@@ -3,13 +3,14 @@
 	import Button from '$lib/components/Button.svelte';
 	import PageWrapper from '$lib/components/PageWrapper.svelte';
 	import { SERVER_BASE_URL } from '$lib/constants/api';
+	import { DEFAULT_MESSAGE_TIMEOUT } from '$lib/constants/timeout';
 
 	let error: string = $state('');
 	$effect(() => {
 		if (error) {
 			const timeout = setTimeout(() => {
 				error = '';
-			}, 5000);
+			}, DEFAULT_MESSAGE_TIMEOUT);
 
 			return () => {
 				clearTimeout(timeout);
@@ -17,7 +18,7 @@
 		}
 	});
 
-	let isLoading = false;
+	let isLoading: boolean = $state(false);
 
 	const handleReset = async (e) => {
 		e.preventDefault();
