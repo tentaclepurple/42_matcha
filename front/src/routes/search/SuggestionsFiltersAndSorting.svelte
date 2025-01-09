@@ -8,6 +8,7 @@
 		DEFAULT_ALL_RESULTS_SORTING_PROP,
 		SUGGESTIONS_COMMON_INTERESTS,
 		SUGGESTIONS_MAX_DISTANCE,
+		SUGGESTIONS_MIN_POPULARITY,
 		SUGGESTIONS_SORTING_LS_KEY
 	} from '$lib/constants/sorting';
 	import { calcQueryParams } from './calc-query-params.util';
@@ -102,6 +103,13 @@
 			<label>
 				Common interests:
 				<input type="text" disabled value={SUGGESTIONS_COMMON_INTERESTS} class="w-[10px]" />
+			</label>
+		</TooltipButtonSelector>
+
+		<TooltipButtonSelector>
+			<label>
+				Min popularity:
+				<input type="text" disabled value={SUGGESTIONS_MIN_POPULARITY} class="w-[26px]" />
 			</label>
 		</TooltipButtonSelector>
 	</div>
