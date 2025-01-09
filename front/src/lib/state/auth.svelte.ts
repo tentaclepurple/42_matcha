@@ -1,5 +1,6 @@
 import { writable, type Writable } from 'svelte/store';
 import { SERVER_BASE_URL } from '$lib/constants/api';
+import { userLocation } from './geolocation.svelte';
 
 export const isAuthenticated: Writable<boolean> = writable(false);
 
@@ -26,7 +27,8 @@ class UserAuth {
 				}
 			});
 
-			localStorage.removeItem('access_token');
+			localStorage.clear();
+			userLocation.value = null;
 		}
 
 		this.#isAuthenticated = false;
