@@ -75,7 +75,7 @@
 		const select = event.target as HTMLSelectElement;
 		const newInterests = Array.from(select.selectedOptions)
 			.map((option) => option.value)
-			.sort();
+			.toSorted();
 
 		if (newInterests.length > MAX_INTERESTS) {
 			interestsList = newInterests.slice(0, MAX_INTERESTS);
@@ -203,7 +203,7 @@
 			>
 				{#if popularTagsData.value && popularTagsData.value.length > 0}
 					<optgroup label="Trending interests" class="mb-3 text-left font-bold">
-						{#each [...popularTagsData.value].sort( (a, b) => a.name.localeCompare(b.name) ) as interest}
+						{#each popularTagsData.value.toSorted( (a, b) => a.name.localeCompare(b.name) ) as interest}
 							<option value={interest.name} class="text-right text-sm">
 								{interest.name} ({interest.count})
 							</option>
@@ -211,7 +211,7 @@
 					</optgroup>
 				{/if}
 				<optgroup label="Other interests" class="text-left font-bold">
-					{#each INTERESTS.filter((interest) => !popularTagsData.value?.some((popularTag) => popularTag.name === interest)).sort() as interest}
+					{#each INTERESTS.filter((interest) => !popularTagsData.value?.some((popularTag) => popularTag.name === interest)).toSorted() as interest}
 						<option value={interest} class="text-right text-sm">{interest}</option>
 					{/each}
 				</optgroup>

@@ -55,6 +55,7 @@
 
 			const { access_token, user } = await res.json();
 
+			localStorage.clear();
 			localStorage.setItem('access_token', access_token);
 			userAuth.login();
 			await userLocation.getUserLocation();

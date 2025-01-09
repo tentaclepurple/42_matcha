@@ -29,7 +29,7 @@ class ConversationsClass {
 
 			const { conversations } = await res.json();
 
-			const sortedConversations = deserialize(conversations).sort((a, b) => {
+			const sortedConversations = deserialize(conversations).toSorted((a, b) => {
 				const aUsername = a.user.username.toLowerCase();
 				const bUsername = b.user.username.toLowerCase();
 
