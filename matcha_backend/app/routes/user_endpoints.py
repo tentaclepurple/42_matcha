@@ -194,7 +194,10 @@ def login():
             
         # Check verification
         if not user['verified']:
-            return jsonify({'error': 'Email not verified'}), 401
+            return jsonify({
+                'error': 'Email not verified',
+                'message': 'Please verify your email before logging in'
+            }), 401
 
         # Successful login - reset attempts and generate token
         UserModel.reset_login_attempts(user['_id'])
@@ -209,7 +212,10 @@ def login():
         }), 200
         
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({
+            'error': str(e),
+            'message': 'An error occurred while logging in'
+        }), 500
 
 
 @user_bp.route('/logout', methods=['POST'])
