@@ -37,9 +37,10 @@
 				<Tabs.List class="grid w-full grid-cols-3">
 					<Tabs.Trigger value="map">Map</Tabs.Trigger>
 					<Tabs.Trigger value="list">All users</Tabs.Trigger>
-					<Tabs.Trigger value="recommended"
-						>Recommended<span class="sr-only sm:not-sr-only"> for you</span></Tabs.Trigger
-					>
+					<Tabs.Trigger value="recommended">
+						<span class="sm:sr-only">Recommended</span>
+						<span class="sr-only sm:not-sr-only">Recommended for you</span>
+					</Tabs.Trigger>
 				</Tabs.List>
 				<Tabs.Content value="map">
 					<div class="flex h-full flex-col">
