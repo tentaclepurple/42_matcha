@@ -334,7 +334,7 @@ def get_user_profile(user_identifier):
                 viewer_id=current_user_id,
                 viewed_id=str(user['_id'])
             )
-            
+
             # Only create notification if it's not a duplicate view
             if view_result:
                 NotificationModel.create(
