@@ -107,7 +107,7 @@ class BotModel:
                    **bot_data,
                    "email": f"{bot_data['username']}@staff.es",
                    "password": generate_password_hash(bot_data["username"]), 
-                   "verified": False,
+                   "verified": True,
                    "created_at": datetime.now(),
                    "online": True,
                    "profile_completed": True,
@@ -256,9 +256,9 @@ class BotModel:
            bot_id = str(selected_bot["_id"])
            ProfileViewModel.record_view(bot_id, user_id)
            NotificationModel.create(
-                user_id=bot_id,
+                user_id=user_id,
                 type="profile_view",
-                from_user_id=user_id
+                from_user_id=bot_id
             )
            LikeModel.add_like(bot_id, user_id, "like")
            NotificationModel.create(
