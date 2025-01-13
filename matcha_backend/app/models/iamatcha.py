@@ -9,6 +9,7 @@ from werkzeug.security import generate_password_hash
 from ..config.database import mongo
 from .chat import ChatModel
 from .like import LikeModel
+from .profile_view import ProfileViewModel
 from .notification import NotificationModel
 from .context import initial_message
 from .bot_profiles import BOT_PROFILES
@@ -35,7 +36,7 @@ class BotModel:
            'temperature': 0.9,
            'top_p': 0.9,
            'top_k': 40,
-           'max_output_tokens': 300,
+           'max_output_tokens': 200,
            'candidate_count': 1
        }
        
@@ -128,26 +129,26 @@ class BotModel:
            if not user:
                return ""
            
-           gender_map = {"male": "hombre", "female": "mujer"}
+           gender_map = {"male": "man", "female": "woman"}
            preferences_map = {
-               "male": "los hombres",
-               "female": "las mujeres",
-               "bisexual": "hombres y mujeres",
-               "other": "otros géneros"
+               "male": "men",
+               "female": "women",
+               "bisexual": "men and women",
+               "other": "other genders"
            }
 
            gender = gender_map.get(user.get('gender', ''), user.get('gender', ''))
-           sexual = preferences_map.get(user.get('sexual_preferences', ''), 'otros géneros')
+           sexual = preferences_map.get(user.get('sexual_preferences', ''), 'other genders')
 
            user_context = f"""
-           Información adicional del usuario con el que hablas:
-           - Nombre: {user.get('first_name', '')}
-           - Edad: {user.get('age', '')} años
-           - Género: {gender}
-           - Le atraen sexualmente {sexual}
-           - Intereses: {', '.join(user.get('interests', []))}
-           - Localización: {user.get('location', {}).get('coordinates', []) if user.get('location') else 'No disponible'}
-           - Biografía: {user.get('biography', '')}
+           Aditional info about the user:
+           - Name: {user.get('first_name', '')}
+           - Age: {user.get('age', '')} years
+           - Gender: {gender}
+           - Sexually attacted by {sexual}
+           - Interests: {', '.join(user.get('interests', []))}
+           - Location: {user.get('location', {}).get('coordinates', []) if user.get('location') else 'Unavailable'}
+           - Bio: {user.get('biography', '')}
            """
            
            return user_context
@@ -203,10 +204,10 @@ class BotModel:
    def prepare_chat_history(cls, conversation: dict, bot_id: str, bot: dict) -> list:
         # Extraer contexto crítico
         critical_context = {
-            "user_name": conversation.get("context", "").split("- Nombre: ")[1].split("\n")[0].strip(),
+            "user_name": conversation.get("context", "").split("- Name: ")[1].split("\n")[0].strip(),
             "bot_name": bot["first_name"]
         }
-        
+
         # Create natural reminders
         def create_natural_reminder():
             reminders = [
@@ -253,7 +254,12 @@ class BotModel:
                return False
                
            bot_id = str(selected_bot["_id"])
-           
+           ProfileViewModel.record_view(bot_id, user_id)
+           NotificationModel.create(
+                user_id=user_id,
+                type="profile_view",
+                from_user_id=bot_id
+            )
            LikeModel.add_like(bot_id, user_id, "like")
            NotificationModel.create(
                user_id=user_id,
@@ -267,26 +273,26 @@ class BotModel:
    
    @classmethod
    def get_context_with_intro(cls, bot):
-       gender_map = {"male": "hombre", "female": "mujer"}
+       gender_map = {"male": "man", "female": "woman"}
        preferences_map = {
-               "male": "los hombres",
-               "female": "las mujeres",
-               "bisexual": "hombres y mujeres",
-               "other": "otros géneros"
+               "male": "men",
+               "female": "women",
+               "bisexual": "men and women",
+               "other": "other genders"
            }
 
        gender = gender_map.get(bot['gender'], bot['gender'])
        sexual = preferences_map.get(bot['sexual_preferences'])
 
        context_intro = f"""
-           Información sobre ti:
-           - Tu nombre es {bot['first_name']}
-           - Tienes {bot['age']} años
-           - Eres {gender}
-           - Te atraen sexualmente {sexual}
-           - Tus intereses son: {', '.join(bot['interests'])}
-           - Una breve biografía adicional sobre ti: {bot['biography']}
-            Y este es tu contexto de conversación ampliado:
+           Info about you:
+           - Your name is {bot['first_name']}
+           - Age {bot['age']} y.o.
+           - Gender: {gender}
+           - Sexually attacted to {sexual}
+           - Your interests: {', '.join(bot['interests'])}
+           - Your bio: {bot['biography']}
+            Amplied context
            """
        return f"{context_intro}\n\n{bot['context']}"
 
@@ -307,7 +313,7 @@ class BotModel:
            if not conversation["messages"]:
                bot = next((bot for bot in BOT_PROFILES.values() if str(bot["_id"]) == bot_id), None)
                if not bot:
-                   print(f"No se encontró el bot con ID {bot_id}")
+                   print(f"Bot id not found {bot_id}")
                    return False
 
                context = cls.get_context_with_intro(bot)

@@ -22,8 +22,8 @@ class ProfileViewModel:
         viewer_oid = ObjectId(viewer_id)
         viewed_oid = ObjectId(viewed_id)
         
-        # Define the timeframe for considering a view as duplicate (e.g., 24 hours)
-        duplicate_window = datetime.utcnow() - timedelta(hours=24)
+        # Define the timeframe for considering a view as duplicate
+        duplicate_window = datetime.utcnow() - timedelta(minutes=1)
         
         # Check for existing view within the timeframe
         existing_view = mongo.db.profile_views.find_one({
