@@ -85,7 +85,6 @@
 
 		if (newInterests.length <= Number(SUGGESTIONS_COMMON_INTERESTS)) {
 			error = `Please select at least ${SUGGESTIONS_COMMON_INTERESTS} interest`;
-			return;
 		}
 
 		interestsList = newInterests;
