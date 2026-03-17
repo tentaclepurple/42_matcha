@@ -4,18 +4,15 @@ from flask_cors import CORS
 app = create_app()
 
 cors_config = {
-    "origins": [
-        "http://localhost:5173",  # development frontend
-        "http://127.0.0.1:5173"   # common alias
-    ],
-    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],  # methods allowed
+    "origins": "*", 
+    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     "allow_headers": [
         "Content-Type",
         "Authorization",
         "Access-Control-Allow-Credentials"
     ],
-    "supports_credentials": True,  # mandatory for cookies to be allowed
-    "max_age": 3600  # time in seconds that preflight response should be cached
+    "supports_credentials": False,  # ← quitar si pones "*"
+    "max_age": 3600
 }
 
 CORS(app, resources={
